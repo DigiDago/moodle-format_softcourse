@@ -153,7 +153,7 @@
                                     color: unquote("brandcolor");
                                     opacity: 0;
                                     transition: opacity .5s ease;
-                                    font: 1rem;
+                                    font-size: 1rem;
                                 }
                                 .progress {
                                     display: inline-flex;
@@ -230,6 +230,26 @@
 
                     }
                 }
+            }
+        }
+    }
+
+    &.editing {
+        ul.softcourse {
+            li.section {
+                list-style-type: none;
+
+                .side {
+                    &.left,
+                    &.right {
+                        margin: 1rem;
+                    }
+                }
+
+                .summary {
+                    padding: 1rem;
+                }
+
             }
         }
     }

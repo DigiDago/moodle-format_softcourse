@@ -150,9 +150,5 @@
       width: auto; }
 #page-course-view-softcourse.editing ul.softcourse li.section {
   list-style-type: none; }
-  #page-course-view-softcourse.editing ul.softcourse li.section .side.left, #page-course-view-softcourse.editing ul.softcourse li.section .side.right {
-    margin: 1rem; }
-  #page-course-view-softcourse.editing ul.softcourse li.section .summary {
-    padding: 1rem; }
 
 /*# sourceMappingURL=styles.css.map */
