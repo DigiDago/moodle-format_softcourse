@@ -1,0 +1,26 @@
+<div id="softcourse-sections">
+    <ul id="softcourse-tabs">
+        {{$ sections }}
+            {{# sections}}
+                <a href="{{first_cm_url}}">
+                    <li role="tab" id="softcourse-section-{{ id }}" class="softcourse-section card">
+                        <div class="softcourse-section-img"><span><i class="fa fa-play"></i>  {{ start }}</span></div>
+                        <span class="softcourse-section-name">{{ name }}</span>
+                        <span class="softcourse-section-summary">{{{ summary }}}</span>
+                        <i class="fa fa-leanpub" data-toggle="tooltip" title="{{ countactivitiestooltip }}"></i>
+                        <span class="softcourse-activities-count">{{ countactivities }}</span>
+                        <div class="progress" data-toggle="tooltip" title="{{ progression }}">
+                            <div class="progress-bar" role="progressbar" style="width: {{ progression_percent }}%" aria-valuenow="{{ progression_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <span class="progress-percent">{{ progression_percent }}%</span>
+                    </li>
+                </a>
+            {{/sections}}
+        {{/ sections}}
+    </ul>
+</div>
+{{#js}}
+    require(['jquery','core/tooltip'], function($,tooltip) {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+{{/js}}
