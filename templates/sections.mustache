@@ -2,7 +2,7 @@
     <ul id="softcourse-tabs">
         {{$ sections }}
             {{# sections}}
-                <a href="{{first_cm_url}}">
+                <a href="{{#first_cm_url}}{{ first_cm_url }}{{/first_cm_url}}">
                     <li role="tab" id="softcourse-section-{{ id }}" class="softcourse-section card">
                         <div class="softcourse-section-img"><span><i class="fa fa-play"></i>  {{ start }}</span></div>
                         <span class="softcourse-section-name">{{ name }}</span>
