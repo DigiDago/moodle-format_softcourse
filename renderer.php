@@ -137,19 +137,19 @@ class format_softcourse_renderer extends format_section_renderer_base {
                 $markedthissection = get_string('markedthistopic');
                 $highlightoff = get_string('highlightoff');
                 $controls['highlight'] = array('url' => $url, "icon" => 'i/marked',
-                                               'name' => $highlightoff,
-                                               'pixattr' => array('class' => '', 'alt' => $markedthissection),
-                                               'attr' => array('class' => 'editing_highlight', 'title' => $markedthissection,
-                                                   'data-action' => 'removemarker'));
+                    'name' => $highlightoff,
+                    'pixattr' => array('class' => '', 'alt' => $markedthissection),
+                    'attr' => array('class' => 'editing_highlight', 'title' => $markedthissection,
+                        'data-action' => 'removemarker'));
             } else {
                 $url->param('marker', $section->section);
                 $markthissection = get_string('markedthistopic');
                 $highlight = get_string('highlight');
                 $controls['highlight'] = array('url' => $url, "icon" => 'i/marker',
-                                               'name' => $highlight,
-                                               'pixattr' => array('class' => '', 'alt' => $markthissection),
-                                               'attr' => array('class' => 'editing_highlight', 'title' => $markthissection,
-                                                   'data-action' => 'setmarker'));
+                    'name' => $highlight,
+                    'pixattr' => array('class' => '', 'alt' => $markthissection),
+                    'attr' => array('class' => 'editing_highlight', 'title' => $markthissection,
+                        'data-action' => 'setmarker'));
             }
         }
 
@@ -205,43 +205,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
         $numsections = $this->courseformat->get_last_section_number();
 
         if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
-            // Print stealth sections if present.
-            foreach ($this->modinfo->get_section_info_all() as $section => $thissection) {
-                echo $this->stealth_section_header($section);
-
-                echo $this->courserenderer->course_section_cm_list($course, $thissection, 0);
-                echo $this->stealth_section_footer();
-            }
-
-            echo $this->end_section_list();
-
-            echo html_writer::start_tag('div', array('id' => 'changenumsections', 'class' => 'mdl-right'));
-
-            // Increase number of sections.
-            $straddsection = get_string('increasesections', 'moodle');
-            $url = new moodle_url(
-                '/course/changenumsections.php',
-                array('courseid' => $this->course->id,
-                    'increase' => true,
-                    'sesskey' => sesskey(), )
-            );
-            $icon = $this->output->pix_icon('t/switch_plus', $straddsection);
-            echo html_writer::link($url, $icon.get_accesshide($straddsection), array('class' => 'increase-sections'));
-
-            if ($numsections > 0) {
-                // Reduce number of sections sections.
-                $strremovesection = get_string('reducesections', 'moodle');
-                $url = new moodle_url(
-                    '/course/changenumsections.php',
-                    array('courseid' => $this->course->id,
-                        'increase' => false,
-                        'sesskey' => sesskey(), )
-                );
-                $icon = $this->output->pix_icon('t/switch_minus', $strremovesection);
-                echo html_writer::link($url, $icon.get_accesshide($strremovesection), array('class' => 'reduce-sections'));
-            }
-
-            echo html_writer::end_tag('div');
+            parent::print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused);
         } else {
             echo $this->course_introduction();
             echo $this->course_sections();
@@ -312,33 +276,33 @@ class format_softcourse_renderer extends format_section_renderer_base {
 
         //Put tabs into a tabs readable by mustache
         foreach($sectionmods as $section) {
-               $s = new stdClass();
-               $s->name = $section->name;
-               $s->id = $section->id;
-               $s->summary = $section->summary;
-               $s->first_cm_url = $section->cm[0]->url;
-               $s->start = get_string('startcourse', 'format_softcourse');
-               $s->countactivitiestooltip = get_string('countactivities', 'format_softcourse');
-               $s->progression = get_string('progression', 'format_softcourse');
-               $s->countactivities = count($section->cm);
-               $nb_complete = 0;
-               $nb_completion = 0;
+            $s = new stdClass();
+            $s->name = $section->name;
+            $s->id = $section->id;
+            $s->summary = $section->summary;
+            $s->first_cm_url = $section->cm[0]->url;
+            $s->start = get_string('startcourse', 'format_softcourse');
+            $s->countactivitiestooltip = get_string('countactivities', 'format_softcourse');
+            $s->progression = get_string('progression', 'format_softcourse');
+            $s->countactivities = count($section->cm);
+            $nb_complete = 0;
+            $nb_completion = 0;
 
-               // Get completion of cms
-               foreach($section->cm as $cm) {
-                   $nb_completion += $cm->completion;
-                   $nb_complete += $completioninfo->get_data($cm, true)->completionstate;
-               }
+            // Get completion of cms
+            foreach($section->cm as $cm) {
+                $nb_completion += $cm->completion;
+                $nb_complete += $completioninfo->get_data($cm, true)->completionstate;
+            }
 
-               // Count the percent of cm complete
-               if($nb_completion != 0) {
-                   $percent_complete = $nb_complete * 100 / $nb_completion;
-               } else {
-                   $percent_complete = 100;
-               }
-               $s->progression_percent = intval($percent_complete);
+            // Count the percent of cm complete
+            if($nb_completion != 0) {
+                $percent_complete = $nb_complete * 100 / $nb_completion;
+            } else {
+                $percent_complete = 100;
+            }
+            $s->progression_percent = intval($percent_complete);
 
-               $sections[] = $s;
+            $sections[] = $s;
         }
 
         $template->sections = $sections;
