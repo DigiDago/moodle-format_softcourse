@@ -208,8 +208,9 @@ class format_softcourse_renderer extends format_section_renderer_base {
             parent::print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused);
         } else {
             echo $this->course_introduction();
-            echo $this->course_sections();
-
+            if($this->courseformat->get_format_options()['hideallsections'] == 0) {
+                echo $this->course_sections();
+            }
         }
     }
 
