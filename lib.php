@@ -109,14 +109,10 @@ class format_softcourse extends format_base {
         }
         if ($sectionno !== null) {
             if ($sr !== null) {
-                if ($sr) {
-                    $usercoursedisplay = COURSE_DISPLAY_MULTIPAGE;
-                    $sectionno = $sr;
-                } else {
-                    $usercoursedisplay = COURSE_DISPLAY_SINGLEPAGE;
-                }
+                $usercoursedisplay = COURSE_DISPLAY_MULTIPAGE;
+                $sectionno = $sr;
             } else {
-                $usercoursedisplay = $course->coursedisplay;
+                $usercoursedisplay = COURSE_DISPLAY_MULTIPAGE;
             }
             if ($sectionno != 0 && $usercoursedisplay == COURSE_DISPLAY_MULTIPAGE) {
                 $url->param('section', $sectionno);
@@ -217,7 +213,7 @@ class format_softcourse extends format_base {
      *
      * Soft Course format uses the following options:
      * - coursedisplay
-     * - hiddensections
+     * - hideallsections
      *
      * @param bool $foreditform
      * @return array of options
@@ -225,43 +221,26 @@ class format_softcourse extends format_base {
     public function course_format_options($foreditform = false) {
         static $courseformatoptions = false;
         if ($courseformatoptions === false) {
-            $courseconfig = get_config('moodlecourse');
             $courseformatoptions = array(
-                'hiddensections' => array(
-                    'default' => $courseconfig->hiddensections,
+                'hideallsections' => array(
+                    'default' => 0,
                     'type' => PARAM_INT,
-                ),
-                'coursedisplay' => array(
-                    'default' => $courseconfig->coursedisplay,
-                    'type' => PARAM_INT,
-                ),
+                )
             );
         }
-        if ($foreditform && !isset($courseformatoptions['coursedisplay']['label'])) {
+        if ($foreditform) {
             $courseformatoptionsedit = array(
-                'hiddensections' => array(
-                    'label' => new lang_string('hiddensections'),
-                    'help' => 'hiddensections',
-                    'help_component' => 'moodle',
+                'hideallsections' => array(
+                    'label' => new lang_string('hideallsections', "format_softcourse"),
+                    'help' => 'hideallsections',
+                    'help_component' => 'format_softcourse',
                     'element_type' => 'select',
                     'element_attributes' => array(
                         array(
-                            0 => new lang_string('hiddensectionscollapsed'),
-                            1 => new lang_string('hiddensectionsinvisible')
+                            0 => new lang_string('hideallsectionsno',"format_softcourse"),
+                            1 => new lang_string('hideallsectionsyes', "format_softcourse")
                         )
                     ),
-                ),
-                'coursedisplay' => array(
-                    'label' => new lang_string('coursedisplay'),
-                    'element_type' => 'select',
-                    'element_attributes' => array(
-                        array(
-                            COURSE_DISPLAY_SINGLEPAGE => new lang_string('coursedisplay_single'),
-                            COURSE_DISPLAY_MULTIPAGE => new lang_string('coursedisplay_multi')
-                        )
-                    ),
-                    'help' => 'coursedisplay',
-                    'help_component' => 'moodle',
                 )
             );
             $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
@@ -305,7 +284,7 @@ class format_softcourse extends format_base {
      * Updates format options for a course
      *
      * In case if course format was changed to 'softcourse', we try to copy options
-     * 'coursedisplay' and 'hiddensections' from the previous format.
+     * 'hideallsections' from the previous format.
      *
      * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data
      * @param stdClass $oldcourse if this function is called from {@link update_course()}

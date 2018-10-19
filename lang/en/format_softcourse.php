@@ -40,3 +40,8 @@ $string['privacy:metadata'] = 'The Soft Course format plugin does not store any 
 $string['startcourse'] = 'Start';
 $string['countactivities'] = "Count of activities";
 $string['progression'] = "Progression";
+$string['hideallsections'] = "Hide the sections";
+$string['hideallsections_help'] = "Enable hide the sections on the course page";
+$string['hideallsectionsno'] = "Not hide the sections";
+$string['hideallsectionsyes'] = "Hide the sections";
+
