@@ -227,11 +227,15 @@ class format_softcourse_renderer extends format_section_renderer_base {
         $firstsecttionnotempty = "";
         foreach($this->modinfo->get_cms() as $cm) {
             $section_id = $cm->get_section_info()->section;
-            if($section_id != 0) {
+            if($section_id != 0 && $cm->modname != "label") {
                 $template->start_url = $cm->url;
                 break;
             }
         }
+        if ($template->start_url == "") {
+            $template->disabledStart = "disabled";
+        }
+
 
         // Get the name of section 0
         $template->name = $this->modinfo->get_section_info_all()[0]->name;
@@ -280,7 +284,6 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $s->name = $section->name;
             $s->id = $section->id;
             $s->summary = $section->summary;
-            $s->first_cm_url = $section->cm[0]->url;
             $s->start = get_string('startcourse', 'format_softcourse');
             $s->countactivitiestooltip = get_string('countactivities', 'format_softcourse');
             $s->progression = get_string('progression', 'format_softcourse');
@@ -288,8 +291,12 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $nb_complete = 0;
             $nb_completion = 0;
 
+            $s->first_cm_url = "";
             // Get completion of cms
             foreach($section->cm as $cm) {
+                if ($cm->modname != "label" && $s->first_cm_url == "") {
+                    $s->first_cm_url = $cm->url;
+                }
                 $nb_completion += $cm->completion;
                 $nb_complete += $completioninfo->get_data($cm, true)->completionstate;
             }
