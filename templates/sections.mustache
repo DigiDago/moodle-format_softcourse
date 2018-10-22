@@ -9,10 +9,13 @@
                         <span class="softcourse-section-summary">{{{ summary }}}</span>
                         <i class="fa fa-leanpub" data-toggle="tooltip" title="{{ countactivitiestooltip }}"></i>
                         <span class="softcourse-activities-count">{{ countactivities }}</span>
+
+                        {{#progression}}
                         <div class="progress" data-toggle="tooltip" title="{{ progression }}">
                             <div class="progress-bar" role="progressbar" style="width: {{ progression_percent }}%" aria-valuenow="{{ progression_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <span class="progress-percent">{{ progression_percent }}%</span>
+                        {{/progression}}
                     </li>
                 </a>
             {{/sections}}
