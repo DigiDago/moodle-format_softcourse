@@ -287,7 +287,6 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $s->summary = $section->summary;
             $s->start = get_string('startcourse', 'format_softcourse');
             $s->countactivitiestooltip = get_string('countactivities', 'format_softcourse');
-            $s->progression = get_string('progression', 'format_softcourse');
             $s->countactivities = count($section->cm);
             $nb_complete = 0;
             $nb_completion = 0;
@@ -304,11 +303,12 @@ class format_softcourse_renderer extends format_section_renderer_base {
 
             // Count the percent of cm complete
             if($nb_completion != 0) {
+                $s->progression = get_string('progression', 'format_softcourse');
                 $percent_complete = $nb_complete * 100 / $nb_completion;
-            } else {
-                $percent_complete = 100;
+                $s->progression_percent = intval($percent_complete);
             }
-            $s->progression_percent = intval($percent_complete);
+
+
 
             $sections[] = $s;
         }
