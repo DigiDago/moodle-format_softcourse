@@ -241,8 +241,18 @@ class format_softcourse_renderer extends format_section_renderer_base {
         // Get the name of section 0
         $template->name = $this->modinfo->get_section_info_all()[0]->name;
 
+
         // Get the summary of the section 0
-        $template->summary = $this->modinfo->get_section_info_all()[0]->summary;
+        $sectionZero = $this->modinfo->get_section_info_all()[0];
+        $summary = $sectionZero->summary;
+        // Rewrite url of files (like pictures)
+        $context = context_course::instance($this->course->id);
+        $summarytext = file_rewrite_pluginfile_urls($summary, 'pluginfile.php',
+            $context->id, 'course', 'section', $sectionZero->id);
+        $options = new stdClass();
+        $options->noclean = true;
+        $options->overflowdiv = true;
+        $template->summary = format_text($summarytext, $sectionZero->summaryformat, $options);
 
         // Button Start
         $template->start = get_string('startcourse', 'format_softcourse');
