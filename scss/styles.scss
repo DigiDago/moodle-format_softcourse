@@ -47,9 +47,10 @@
                             text-decoration: none;
 
                             .softcourse-section {
-                                height: 150px;
                                 padding: 0;
-                                display: block;
+                                display: flex;
+                                flex-direction: row;
+                                flex-wrap: wrap;
                                 margin-top: 15px;
                                 transition: box-shadow 0.5s ease;
 
@@ -59,18 +60,19 @@
                                         0 4px 5px 0 rgba(0, 0, 0, .14),
                                         0 1px 10px 0 rgba(0, 0, 0, .12);
 
-
                                     .softcourse-section-img {
                                         span {
                                             opacity: 0.75;
                                         }
                                     }
 
-                                    .progress,
-                                    .progress-percent,
-                                    .fa-leanpub,
-                                    .softcourse-activities-count {
-                                        opacity: 1;
+                                    .softcourse-section-body {
+                                        .progress,
+                                        .progress-percent,
+                                        .fa-leanpub,
+                                        .softcourse-activities-count {
+                                            opacity: 1;
+                                        }
                                     }
                                 }
 
@@ -83,21 +85,33 @@
                                 .softcourse-section-img {
                                     display: inline-block;
                                     width: 250px;
-                                    height: 100%;
-                                    margin-right: 50px;
+                                    height: 150px;
                                     background-color: unquote("brandcolor");
-
-                                    span {
+                                    @media only screen and (max-width: 710px) {
+                                        width: 50px;
+                                    }
+                                    & > span {
                                         display: inline-block;
                                         position: absolute;
                                         color: white;
                                         text-transform: uppercase;
                                         bottom: 10px;
+                                        left: 0;
                                         font-size: 1.2rem;
                                         width: 250px;
                                         text-align: center;
                                         opacity: 0;
                                         transition: opacity 0.5s ease;
+
+                                        @media only screen and (max-width: 710px) {
+                                            top: 65px;
+                                            width: 50px;
+                                            font-size: 1.5rem;
+
+                                            span {
+                                                display: none;
+                                            }
+                                        }
                                     }
 
                                     &::before {
@@ -111,74 +125,87 @@
                                         transition: top 0.5s ease;
                                     }
                                 }
-
-                                .softcourse-section-name {
+                                .softcourse-section-body {
                                     display: inline-block;
-                                    position: absolute;
-                                    top: 15px;
-                                    font-size: 1.2rem;
-                                    text-decoration: none;
-                                    padding-right: 15px;
-                                    max-height: 30px;
-                                    text-overflow: ellipsis;
-                                    overflow: hidden;
-                                }
+                                    height: 150px;
+                                    padding-left: 50px;
+                                    flex: 1;
 
-                                .softcourse-section-summary {
-                                    display: inline-block;
-                                    position: absolute;
-                                    top: 45px;
-                                    padding-right: 15px;
-                                    max-height: 60px;
-                                    text-overflow: ellipsis;
-                                    overflow: hidden;
-                                    font-size: 0.8rem;
-                                }
-
-                                .fa-leanpub {
-                                    position: absolute;
-                                    bottom: 15px;
-                                    color: unquote("brandcolor");
-                                    opacity: 0;
-                                    transition: opacity .5s ease;
-                                    font-size: 1rem;
-
-                                    &::before {
+                                    .softcourse-section-name {
+                                        display: inline-block;
+                                        position: absolute;
+                                        top: 15px;
                                         font-size: 1.2rem;
+                                        text-decoration: none;
+                                        padding-right: 15px;
+                                        max-height: 30px;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
                                     }
-                                }
 
-                                .softcourse-activities-count {
-                                    position: absolute;
-                                    bottom: 11px;
-                                    left: 327px;
-                                    color: unquote("brandcolor");
-                                    opacity: 0;
-                                    transition: opacity .5s ease;
-                                    font-size: 1rem;
-                                }
-                                .progress {
-                                    display: inline-flex;
-                                    width: calc(75% - 250px);
-                                    position: absolute;
-                                    bottom: 15px;
-                                    right: 55px;
-                                    opacity: 0;
-                                    transition: opacity .5s ease;
+                                    .softcourse-section-summary {
+                                        display: inline-block;
+                                        position: absolute;
+                                        top: 45px;
+                                        padding-right: 15px;
+                                        max-height: 60px;
+                                        text-overflow: ellipsis;
+                                        overflow: hidden;
+                                        font-size: 0.8rem;
+                                    }
 
-                                    .progress-bar {
+                                    .fa-leanpub {
+                                        position: absolute;
+                                        bottom: 15px;
+                                        color: unquote("brandcolor");
+                                        opacity: 0;
+                                        transition: opacity .5s ease;
+                                        font-size: 1rem;
+
+                                        &::before {
+                                            font-size: 1.2rem;
+                                        }
+                                    }
+
+                                    .softcourse-activities-count {
+                                        position: absolute;
+                                        bottom: 11px;
+                                        left: 327px;
+                                        @media only screen and (max-width: 710px) {
+                                            left: 127px;
+                                        }
+                                        color: unquote("brandcolor");
+                                        opacity: 0;
+                                        transition: opacity .5s ease;
+                                        font-size: 1rem;
+                                    }
+                                    .progress {
                                         display: inline-flex;
-                                    }
-                                }
+                                        width: calc(100% - 450px);
+                                        position: absolute;
+                                        bottom: 15px;
+                                        right: 55px;
+                                        opacity: 0;
+                                        transition: opacity .5s ease;
 
-                                .progress-percent {
-                                    bottom: 13px;
-                                    position: absolute;
-                                    color: unquote("brandcolor");
-                                    margin-left: 5px;
-                                    right: 15px;
-                                    opacity: 0;
-                                    transition: opacity .5s ease;
+                                        @media only screen and (max-width: 710px) {
+                                            width: calc(75% - 150px);
+                                        }
+
+                                        .progress-bar {
+                                            display: inline-flex;
+                                        }
+                                    }
+
+                                    .progress-percent {
+                                        bottom: 13px;
+                                        position: absolute;
+                                        color: unquote("brandcolor");
+                                        margin-left: 5px;
+                                        right: 15px;
+                                        opacity: 0;
+                                        transition: opacity .5s ease;
+                                    }
                                 }
                             }
                         }
