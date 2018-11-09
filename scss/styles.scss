@@ -134,7 +134,7 @@
                                     .softcourse-section-name {
                                         display: inline-block;
                                         position: absolute;
-                                        top: 15px;
+                                        top: 10px;
                                         font-size: 1.2rem;
                                         text-decoration: none;
                                         padding-right: 15px;
@@ -146,12 +146,12 @@
                                     .softcourse-section-summary {
                                         display: inline-block;
                                         position: absolute;
-                                        top: 45px;
+                                        top: 40px;
                                         padding-right: 15px;
-                                        max-height: 60px;
+                                        max-height: 75px;
                                         text-overflow: ellipsis;
                                         overflow: hidden;
-                                        font-size: 0.8rem;
+                                        font-size: 0.75rem;
                                     }
 
                                     .fa-leanpub {
