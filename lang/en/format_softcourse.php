@@ -44,4 +44,4 @@ $string['hideallsections'] = "Hide the sections";
 $string['hideallsections_help'] = "Enable hide the sections on the course page";
 $string['hideallsectionsno'] = "Not hide the sections";
 $string['hideallsectionsyes'] = "Hide the sections";
-
+$string['update_img'] = "Edit the picture";

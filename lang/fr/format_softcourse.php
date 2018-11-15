@@ -44,3 +44,4 @@ $string['hideallsections'] = "Cacher les sections";
 $string['hideallsections_help'] = "Permet de cacher les sections sur la page de cours";
 $string['hideallsectionsno'] = "Ne pas cacher les sections";
 $string['hideallsectionsyes'] = "Cacher les sections";
+$string['update_img'] = "Modifier l'image";

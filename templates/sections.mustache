@@ -4,7 +4,21 @@
             {{# sections}}
                 <a href="{{#first_cm_url}}{{ first_cm_url }}{{/first_cm_url}}">
                     <li role="tab" id="softcourse-section-{{ id }}" class="softcourse-section card">
-                        <div class="softcourse-section-img"><span><i class="fa fa-play"></i>  <span>{{ start }}</span></span></div>
+                        <div class="softcourse-section-img {{#urlimg}} not-empty with_gradient{{/urlimg}}"
+                            {{#urlimg}} style="background-image: url({{ urlimg }})" {{/urlimg}}>
+                            <span><i class="fa fa-play"></i>  <span>{{ start }}</span></span>
+                            {{#update_img}}
+                                <i class="fa fa-edit update-img" data-toggle="tooltip" title="{{ update_img }}">
+                                    <input type="file" data-sectionid="{{ id }}" data-courseid="{{ courseid }}"
+                                           class="section-file">
+                                </i>
+
+                                <i class="fa fa-trash delete-img" data-toggle="tooltip" title="{{ delete_img }}">
+                                    <input type="button" data-sectionid="{{ id }}" data-courseid="{{ courseid }}"
+                                           class="section-delete-file">
+                                </i>
+                            {{/update_img}}
+                        </div>
                         <div class="softcourse-section-body">
                             <span class="softcourse-section-name">{{ name }}</span>
                             <span class="softcourse-section-summary">{{{ summary }}}</span>
