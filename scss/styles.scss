@@ -61,7 +61,9 @@
                                         0 1px 10px 0 rgba(0, 0, 0, .12);
 
                                     .softcourse-section-img {
-                                        span {
+                                        span,
+                                        .update-img,
+                                        .delete-img {
                                             opacity: 0.75;
                                         }
                                     }
@@ -70,7 +72,9 @@
                                         .progress,
                                         .progress-percent,
                                         .fa-leanpub,
-                                        .softcourse-activities-count {
+                                        .softcourse-activities-count,
+                                        .update-img,
+                                        .delete-img {
                                             opacity: 1;
                                         }
                                     }
@@ -89,6 +93,7 @@
                                     background-color: unquote("brandcolor");
                                     @media only screen and (max-width: 710px) {
                                         width: 50px;
+                                        background-image: none!important;
                                     }
                                     & > span {
                                         display: inline-block;
@@ -114,7 +119,83 @@
                                         }
                                     }
 
-                                    &::before {
+                                    & > i {
+                                        @media only screen and (max-width: 710px) {
+                                            display: none;
+                                        }
+                                    }
+
+                                    .update-img {
+                                        display: inline-block;
+                                        position: absolute;
+                                        color: white;
+                                        font-size: 1.2rem;
+                                        top: 0;
+                                        left: 200px;
+                                        opacity: 0;
+                                        transition: opacity 0.5s ease;
+                                        width: 50px;
+                                        height: 50px;
+
+                                        &:hover,
+                                        &:hover::before {
+                                            cursor: pointer;
+                                        }
+
+                                        &::before {
+                                            padding: 15px;
+                                            position: absolute;
+                                        }
+
+                                        input[type="file"] {
+                                            position: absolute;
+                                            opacity: 0;
+                                            width: 50px;
+                                            height: 50px;
+                                            left: 0;
+
+                                            &:hover {
+                                                cursor: pointer;
+                                            }
+                                        }
+                                    }
+
+                                    .delete-img {
+                                        display: inline-block;
+                                        position: absolute;
+                                        color: white;
+                                        font-size: 1.2rem;
+                                        top: 50px;
+                                        left: 200px;
+                                        opacity: 0;
+                                        transition: opacity 0.5s ease;
+                                        width: 50px;
+                                        height: 50px;
+
+                                        &:hover,
+                                        &:hover::before {
+                                            cursor: pointer;
+                                        }
+
+                                        &::before {
+                                            padding: 15px;
+                                            position: absolute;
+                                        }
+
+                                        input[type="button"] {
+                                            position: absolute;
+                                            opacity: 0;
+                                            width: 50px;
+                                            height: 50px;
+                                            left: 0;
+
+                                            &:hover {
+                                                cursor: pointer;
+                                            }
+                                        }
+                                    }
+
+                                    &:not(.not-empty)::before {
                                         content: "\f19d";
                                         font-family: "FontAwesome";
                                         position: absolute;
@@ -125,6 +206,7 @@
                                         transition: top 0.5s ease;
                                     }
                                 }
+
                                 .softcourse-section-body {
                                     display: inline-block;
                                     height: 150px;

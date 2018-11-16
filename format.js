@@ -23,7 +23,7 @@ M.course.format.get_config = function() {
         section_node : 'li',
         section_class : 'section'
     };
-}
+};
 
 /**
  * Swap section
@@ -31,7 +31,6 @@ M.course.format.get_config = function() {
  * @param {YUI} Y YUI3 instance
  * @param {string} node1 node to swap to
  * @param {string} node2 node to swap with
- * @return {NodeList} section list
  */
 M.course.format.swap_sections = function(Y, node1, node2) {
     var CSS = {
@@ -39,19 +38,19 @@ M.course.format.swap_sections = function(Y, node1, node2) {
         SECTIONADDMENUS : 'section_add_menus'
     };
 
-    var sectionlist = Y.Node.all('.'+CSS.COURSECONTENT+' '+M.course.format.get_section_selector(Y));
+    var sectionlist = Y.Node.all('.' + CSS.COURSECONTENT + ' ' + M.course.format.get_section_selector(Y));
     // Swap menus.
-    sectionlist.item(node1).one('.'+CSS.SECTIONADDMENUS).swap(sectionlist.item(node2).one('.'+CSS.SECTIONADDMENUS));
-}
+    sectionlist.item(node1).one('.' + CSS.SECTIONADDMENUS).swap(sectionlist.item(node2).one('.' + CSS.SECTIONADDMENUS));
+};
 
 /**
  * Process sections after ajax response
  *
  * @param {YUI} Y YUI3 instance
+ * @param {array} sectionlist
  * @param {array} response ajax response
  * @param {string} sectionfrom first affected section
  * @param {string} sectionto last affected section
- * @return void
  */
 M.course.format.process_sections = function(Y, sectionlist, response, sectionfrom, sectionto) {
     var CSS = {
@@ -61,7 +60,7 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
         SECTIONLEFTSIDE : '.left .section-handle .icon'
     };
 
-    if (response.action == 'move') {
+    if (response.action === 'move') {
         // If moving up swap around 'sectionfrom' and 'sectionto' so the that loop operates.
         if (sectionfrom > sectionto) {
             var temp = sectionto;
@@ -85,4 +84,70 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
             ele.setAttribute('title', newstr); // For FireFox as 'alt' is not refreshed.
         }
     }
-}
+};
+
+require(['jquery', 'core/ajax'], function($, ajax) {
+    $('.section-file').on('change', function(event){
+        var sectionid = $(this).data('sectionid');
+        var courseid = $(this).data('courseid');
+        if (courseid) {
+            var file = event.target.files[0]; // Get only 1st file.
+            var filedata = null;
+            // Check if img.
+            if (!file.type.match('image.*')) {
+                return;
+            }
+            var that = this;
+            var reader = new FileReader();
+            reader.onload = (function(file) {
+                return function(e) {
+                    filedata = e.target.result;
+                    $(that).parent().parent().css('background-image', 'url(' + filedata + ')');
+                    $(that).parent().parent().addClass('not-empty');
+                    var imagedata = filedata.split('base64,')[1];
+                    var filename = file.name;
+                    ajax.call([
+                        {
+                            methodname: 'format_softcourse_update_section_image',
+                            args: {
+                                courseid: courseid,
+                                sectionid: sectionid,
+                                imagedata: imagedata,
+                                filename: filename
+                            },
+                            done: function(response) {},
+                            fail: function(response) {
+                                console.error(response);
+                            }
+                        }
+                    ], true, true);
+                };
+            })(file);
+            // Read img.
+            reader.readAsDataURL(file);
+        }
+    });
+
+
+    $('.section-delete-file').on('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var sectionid = $(this).data('sectionid');
+        var courseid = $(this).data('courseid');
+        $(this).parent().parent().css('background-image', 'none');
+        $(this).parent().parent().removeClass('not-empty');
+        ajax.call([
+            {
+                methodname: 'format_softcourse_delete_section_image',
+                args: {
+                    courseid: courseid,
+                    sectionid: sectionid
+                },
+                done: function(response) {},
+                fail: function(response) {
+                    console.error(response);
+                }
+            }
+        ], true, true);
+    });
+});

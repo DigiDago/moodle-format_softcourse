@@ -410,3 +410,17 @@ function format_softcourse_inplace_editable($itemtype, $itemid, $newvalue) {
         return course_get_format($section->course)->inplace_editable_update_section_name($section, $itemtype, $newvalue);
     }
 }
+
+function format_softcourse_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
+    if($filearea == 'sectionimage') {
+        $relativepath = implode('/', $args);
+        $contextid = $context->id;
+        $fullpath = "/$contextid/format_softcourse/$filearea/$relativepath";
+        $fs = get_file_storage();
+        $file = $fs->get_file_by_hash(sha1($fullpath));
+        if ($file) {
+            send_stored_file($file, $lifetime, 0, $forcedownload, $options);
+            return true;
+        }
+    }
+}

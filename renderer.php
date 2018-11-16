@@ -272,6 +272,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
         $sections = [];
         $sectionmods = [];
         $completioninfo = new completion_info($COURSE);
+        $context = context_course::instance($this->course->id);
 
         //Assiociation tabs : section[id_of_section] = cm
         foreach($this->modinfo->get_cms() as $cm) {
@@ -294,10 +295,29 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $s = new stdClass();
             $s->name = $section->name;
             $s->id = $section->id;
+            $s->courseid = $this->course->id;
             $s->summary = $section->summary;
             $s->start = get_string('startcourse', 'format_softcourse');
             $s->countactivitiestooltip = get_string('countactivities', 'format_softcourse');
             $s->countactivities = count($section->cm);
+            if(has_capability('moodle/course:update', $context)) {
+                $s->update_img = get_string('update_img', 'format_softcourse');
+            }
+
+            // Render the iamge section
+            $fs = get_file_storage();
+            $file = $fs->get_area_files($context->id, 'format_softcourse', 'sectionimage', $s->id, "itemid, filepath, filename", false);
+            if ($file) {
+                $s->urlimg = \moodle_url::make_pluginfile_url(
+                    end($file)->get_contextid(),
+                    end($file)->get_component(),
+                    end($file)->get_filearea(),
+                    end($file)->get_itemid(),
+                    end($file)->get_filepath(),
+                    end($file)->get_filename()
+                );
+            }
+
             $nb_complete = 0;
             $nb_completion = 0;
 
