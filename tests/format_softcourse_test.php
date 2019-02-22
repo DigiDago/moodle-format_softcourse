@@ -125,7 +125,7 @@ class format_softcoure_testcase extends advanced_testcase {
      * Test web service updating section name
      */
     public function test_update_inplace_editable() {
-        global $CFG, $DB, $PAGE;
+        global $CFG, $DB;
         require_once($CFG->dirroot . '/lib/external/externallib.php');
 
         $this->resetAfterTest();
@@ -222,7 +222,6 @@ class format_softcoure_testcase extends advanced_testcase {
 
         $weeksformat = course_get_format($course->id);
         $this->assertEquals($enddate, $weeksformat->get_default_course_enddate($courseform->get_quick_form()));
-
     }
 
     /**
@@ -231,8 +230,6 @@ class format_softcoure_testcase extends advanced_testcase {
     public function test_get_view_url() {
         global $CFG;
         $this->resetAfterTest();
-
-        $linkcoursesections = $CFG->linkcoursesections;
 
         // Generate a course with two sections (0 and 1) and two modules.
         $generator = $this->getDataGenerator();

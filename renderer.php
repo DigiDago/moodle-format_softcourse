@@ -49,14 +49,15 @@ class format_softcourse_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function __construct(moodle_page $page, $target) {
-        global $PAGE, $DB;
         parent::__construct($page, $target);
         $this->course = $page->course;
         $this->courseformat = course_get_format($this->course);
         $this->modinfo = get_fast_modinfo($this->course);
 
-        // Since format_softcourse_renderer::section_edit_controls() only displays the 'Set current section' control when editing mode is on
-        // we need to be sure that the link 'Turn editing mode on' is available for a user who does not have any other managing capability.
+        // Since format_softcourse_renderer::section_edit_controls() only displays
+        // the 'Set current section' control when editing mode is on
+        // we need to be sure that the link 'Turn editing mode on' is available for a user
+        // who does not have any other managing capability.
         $page->set_other_editing_capability('moodle/course:setcurrentsection');
     }
 
@@ -200,15 +201,14 @@ class format_softcourse_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused) {
-        global $PAGE, $OUTPUT;
+        global $PAGE;
         $context = context_course::instance($this->course->id);
-        $numsections = $this->courseformat->get_last_section_number();
 
         if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
             parent::print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused);
         } else {
             echo $this->course_introduction();
-            if($this->courseformat->get_format_options()['hideallsections'] == 0) {
+            if ($this->courseformat->get_format_options()['hideallsections'] == 0) {
                 echo $this->course_sections();
             }
         }
@@ -220,15 +220,11 @@ class format_softcourse_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function course_introduction() {
-        global $OUTPUT;
-
         $template = $template = new stdClass();
 
-        $firstcm = "";
-        $firstsecttionnotempty = "";
-        foreach($this->modinfo->get_cms() as $cm) {
-            $section_id = $cm->get_section_info()->section;
-            if($section_id != 0 && $cm->modname != "label") {
+        foreach ($this->modinfo->get_cms() as $cm) {
+            $sectionid = $cm->get_section_info()->section;
+            if ($sectionid != 0 && $cm->modname != "label") {
                 $template->start_url = $cm->url;
                 break;
             }
@@ -237,24 +233,23 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $template->disabledStart = "disabled";
         }
 
-
-        // Get the name of section 0
+        // Get the name of section 0.
         $template->name = $this->modinfo->get_section_info_all()[0]->name;
 
+        // Get the summary of the section 0.
+        $sectionzero = $this->modinfo->get_section_info_all()[0];
+        $summary = $sectionzero->summary;
 
-        // Get the summary of the section 0
-        $sectionZero = $this->modinfo->get_section_info_all()[0];
-        $summary = $sectionZero->summary;
-        // Rewrite url of files (like pictures)
+        // Rewrite url of files (like pictures).
         $context = context_course::instance($this->course->id);
         $summarytext = file_rewrite_pluginfile_urls($summary, 'pluginfile.php',
-            $context->id, 'course', 'section', $sectionZero->id);
+            $context->id, 'course', 'section', $sectionzero->id);
         $options = new stdClass();
         $options->noclean = true;
         $options->overflowdiv = true;
-        $template->summary = format_text($summarytext, $sectionZero->summaryformat, $options);
+        $template->summary = format_text($summarytext, $sectionzero->summaryformat, $options);
 
-        // Button Start
+        // Button Start.
         $template->start = get_string('startcourse', 'format_softcourse');
 
         return $this->render_from_template('format_softcourse/introduction', $template);
@@ -266,7 +261,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function course_sections() {
-        global $OUTPUT, $COURSE;
+        global $COURSE;
 
         $template = $template = new stdClass();
         $sections = [];
@@ -274,24 +269,24 @@ class format_softcourse_renderer extends format_section_renderer_base {
         $completioninfo = new completion_info($COURSE);
         $context = context_course::instance($this->course->id);
 
-        //Assiociation tabs : section[id_of_section] = cm
-        foreach($this->modinfo->get_cms() as $cm) {
-            $id_section = $cm->get_section_info()->section;
-            if($id_section != 0) {
-                $info = $this->modinfo->get_section_info_all()[$id_section];
-                if(!isset($sectionmods[$id_section])) {
-                    $sectionmods[$id_section] = new stdClass();;
-                    $sectionmods[$id_section]->cm = [];
-                    $sectionmods[$id_section]->id = $id_section;
-                    $sectionmods[$id_section]->name = $info->name;
-                    $sectionmods[$id_section]->summary = $info->summary;
+        // Assiociation tabs : section[id_of_section] = cm.
+        foreach ($this->modinfo->get_cms() as $cm) {
+            $idsection = $cm->get_section_info()->section;
+            if ($idsection != 0) {
+                $info = $this->modinfo->get_section_info_all()[$idsection];
+                if (!isset($sectionmods[$idsection])) {
+                    $sectionmods[$idsection] = new stdClass();
+                    $sectionmods[$idsection]->cm = [];
+                    $sectionmods[$idsection]->id = $idsection;
+                    $sectionmods[$idsection]->name = $info->name;
+                    $sectionmods[$idsection]->summary = $info->summary;
                 }
-                $sectionmods[$id_section]->cm[] = $cm;
+                $sectionmods[$idsection]->cm[] = $cm;
             }
         }
 
-        //Put tabs into a tabs readable by mustache
-        foreach($sectionmods as $section) {
+        // Put tabs into a tabs readable by mustache.
+        foreach ($sectionmods as $section) {
             $s = new stdClass();
             $s->name = $section->name;
             $s->id = $section->id;
@@ -300,13 +295,14 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $s->start = get_string('startcourse', 'format_softcourse');
             $s->countactivitiestooltip = get_string('countactivities', 'format_softcourse');
             $s->countactivities = count($section->cm);
-            if(has_capability('moodle/course:update', $context)) {
+            if (has_capability('moodle/course:update', $context)) {
                 $s->update_img = get_string('update_img', 'format_softcourse');
             }
 
-            // Render the iamge section
+            // Render the iamge section.
             $fs = get_file_storage();
-            $file = $fs->get_area_files($context->id, 'format_softcourse', 'sectionimage', $s->id, "itemid, filepath, filename", false);
+            $file = $fs->get_area_files($context->id, 'format_softcourse', 'sectionimage', $s->id,
+                                        "itemid, filepath, filename", false);
             if ($file) {
                 $s->urlimg = \moodle_url::make_pluginfile_url(
                     end($file)->get_contextid(),
@@ -318,27 +314,25 @@ class format_softcourse_renderer extends format_section_renderer_base {
                 );
             }
 
-            $nb_complete = 0;
-            $nb_completion = 0;
+            $nbcomplete = 0;
+            $nbcompletion = 0;
 
             $s->first_cm_url = "";
-            // Get completion of cms
-            foreach($section->cm as $cm) {
+            // Get completion of cms.
+            foreach ($section->cm as $cm) {
                 if ($cm->modname != "label" && $s->first_cm_url == "") {
                     $s->first_cm_url = $cm->url;
                 }
-                $nb_completion += $cm->completion;
-                $nb_complete += $completioninfo->get_data($cm, true)->completionstate;
+                $nbcompletion += $cm->completion;
+                $nbcomplete += $completioninfo->get_data($cm, true)->completionstate;
             }
 
-            // Count the percent of cm complete
-            if($nb_completion != 0) {
+            // Count the percent of cm complete.
+            if ($nbcompletion != 0) {
                 $s->progression = get_string('progression', 'format_softcourse');
-                $percent_complete = $nb_complete * 100 / $nb_completion;
-                $s->progression_percent = intval($percent_complete);
+                $percentcomplete = $nbcomplete * 100 / $nbcompletion;
+                $s->progression_percent = intval($percentcomplete);
             }
-
-
 
             $sections[] = $s;
         }

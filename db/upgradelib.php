@@ -88,17 +88,13 @@ function format_softcourse_upgrade_hide_extra_sections($courseid, $numsections) 
         FROM {course_sections}
         WHERE course = ? AND section > ?
         ORDER BY section DESC', [$courseid, $numsections]);
-    $candelete = true;
     $tohide = [];
     $todelete = [];
     foreach ($sections as $section) {
-        if ($candelete && (!empty($section->summary) || !empty($section->sequence) || !empty($section->name))) {
-            $candelete = false;
-        }
-        if ($candelete) {
-            $todelete[] = $section->id;
-        } else if ($section->visible) {
+        if (!empty($section->summary) || !empty($section->sequence) || !empty($section->name)) {
             $tohide[] = $section->id;
+        } else {
+            $todelete[] = $section->id;
         }
     }
     if ($todelete) {

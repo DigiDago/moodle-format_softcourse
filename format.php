@@ -32,7 +32,7 @@ $context = context_course::instance($course->id);
 // Retrieve course format option fields and add them to the $course object.
 $course = course_get_format($course)->get_course();
 
-if (($marker >=0) && has_capability('moodle/course:setcurrentsection', $context) && confirm_sesskey()) {
+if (($marker >= 0) && has_capability('moodle/course:setcurrentsection', $context) && confirm_sesskey()) {
     $course->marker = $marker;
     course_set_marker($course->id, $marker);
 }
@@ -44,5 +44,5 @@ $renderer = $PAGE->get_renderer('format_softcourse');
 
 $renderer->print_multiple_section_page($course, null, null, null, null);
 
-// Include course format js module
+// Include course format js module.
 $PAGE->requires->js('/course/format/softcourse/format.js');

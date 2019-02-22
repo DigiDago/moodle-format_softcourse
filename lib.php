@@ -67,7 +67,7 @@ class format_softcourse extends format_base {
      *
      * If the section number is 0, it will use the string with key = section0name from the course format's lang file.
      * If the section number is not 0, the base implementation of format_base::get_default_section_name which uses
-     * the string with the key = 'sectionname' from the course format's lang file + the section number will be used.
+     * the string with  the key = 'sectionname' from the course format's lang file + the section number will be used.
      *
      * @param stdClass $section Section object from database or just field course_sections section
      * @return string The default value for the section name.
@@ -148,7 +148,7 @@ class format_softcourse extends format_base {
      */
     public function extend_course_navigation($navigation, navigation_node $node) {
         global $PAGE;
-        // if section is specified in course/view.php, make sure it is expanded in navigation
+        // If section is specified in course/view.php, make sure it is expanded in navigation.
         if ($navigation->includesectionnum === false) {
             $selectedsection = optional_param('section', null, PARAM_INT);
             if ($selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') &&
@@ -157,7 +157,7 @@ class format_softcourse extends format_base {
             }
         }
 
-        // check if there are callbacks to extend course navigation
+        // Check if there are callbacks to extend course navigation.
         parent::extend_course_navigation($navigation, $node);
 
         // We want to remove the general section if it is empty.
@@ -181,7 +181,7 @@ class format_softcourse extends format_base {
      *
      * @return array This will be passed in ajax respose
      */
-    function ajax_section_move() {
+    public function ajax_section_move() {
         global $PAGE;
         $titles = array();
         $course = $this->get_course();
@@ -229,7 +229,7 @@ class format_softcourse extends format_base {
             );
         }
         if ($foreditform) {
-            $courseformatoptionsedit = array(
+            $optionsedit = array(
                 'hideallsections' => array(
                     'label' => new lang_string('hideallsections', "format_softcourse"),
                     'help' => 'hideallsections',
@@ -237,13 +237,13 @@ class format_softcourse extends format_base {
                     'element_type' => 'select',
                     'element_attributes' => array(
                         array(
-                            0 => new lang_string('hideallsectionsno',"format_softcourse"),
+                            0 => new lang_string('hideallsectionsno', "format_softcourse"),
                             1 => new lang_string('hideallsectionsyes', "format_softcourse")
                         )
                     ),
                 )
             );
-            $courseformatoptions = array_merge_recursive($courseformatoptions, $courseformatoptionsedit);
+            $courseformatoptions = array_merge_recursive($courseformatoptions, $optionsedit);
         }
         return $courseformatoptions;
     }
@@ -412,7 +412,7 @@ function format_softcourse_inplace_editable($itemtype, $itemid, $newvalue) {
 }
 
 function format_softcourse_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
-    if($filearea == 'sectionimage') {
+    if ($filearea == 'sectionimage') {
         $relativepath = implode('/', $args);
         $contextid = $context->id;
         $fullpath = "/$contextid/format_softcourse/$filearea/$relativepath";

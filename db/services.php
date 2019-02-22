@@ -23,6 +23,8 @@
  * @author      Jordan Kesraoui
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 // We defined the web service functions to install.
 $functions = array(
     'format_softcourse_update_section_image' => array(
