@@ -13,10 +13,9 @@ env:
  global:
   - MOODLE_BRANCH=master
   - IGNORE_PATHS=amd/build,amd/src/bootstrap.js
-  - IGNORE_NAMES=*.txt,moodle.css,moodle-rtl.css,moodle_min.css,editor.css,editor_min.css
+  - IGNORE_NAMES=*.txt,moodle.css,moodle-rtl.css,moodle_min.css,editor.css,editor_min.css,Gruntfile.js
 
  matrix:
-  - DB=pgsql
   - DB=mysqli
 
 before_install:
@@ -35,4 +34,4 @@ script:
   - moodle-plugin-ci codechecker
   - moodle-plugin-ci csslint
   - moodle-plugin-ci jshint
-  - moodle-plugin-ci phpunit
+  #- moodle-plugin-ci phpunit

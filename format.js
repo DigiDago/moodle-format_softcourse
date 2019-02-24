@@ -1,4 +1,4 @@
-// Javascript functions for Soft Course format
+// Javascript functions for Soft Course format.
 
 M.course = M.course || {};
 
@@ -74,12 +74,12 @@ M.course.format.process_sections = function(Y, sectionlist, response, sectionfro
         for (var i = sectionfrom; i <= sectionto; i++) {
             // Update section title.
             var content = Y.Node.create('<span>' + response.sectiontitles[i] + '</span>');
-            sectionlist.item(i).all('.'+CSS.SECTIONNAME).setHTML(content);
+            sectionlist.item(i).all('.' + CSS.SECTIONNAME).setHTML(content);
             // Update move icon.
             ele = sectionlist.item(i).one(SELECTORS.SECTIONLEFTSIDE);
             str = ele.getAttribute('alt');
             stridx = str.lastIndexOf(' ');
-            newstr = str.substr(0, stridx +1) + i;
+            newstr = str.substr(0, stridx + 1) + i;
             ele.setAttribute('alt', newstr);
             ele.setAttribute('title', newstr); // For FireFox as 'alt' is not refreshed.
         }
@@ -115,9 +115,8 @@ require(['jquery', 'core/ajax'], function($, ajax) {
                                 imagedata: imagedata,
                                 filename: filename
                             },
-                            done: function(response) {},
                             fail: function(response) {
-                                console.error(response);
+                                window.console.error(response);
                             }
                         }
                     ], true, true);
@@ -127,7 +126,6 @@ require(['jquery', 'core/ajax'], function($, ajax) {
             reader.readAsDataURL(file);
         }
     });
-
 
     $('.section-delete-file').on('click', function(event) {
         event.preventDefault();
@@ -143,9 +141,8 @@ require(['jquery', 'core/ajax'], function($, ajax) {
                     courseid: courseid,
                     sectionid: sectionid
                 },
-                done: function(response) {},
                 fail: function(response) {
-                    console.error(response);
+                    window.console.error(response);
                 }
             }
         ], true, true);

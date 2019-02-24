@@ -58,36 +58,35 @@ class format_softcourse_external extends external_api {
      * @throws restricted_context_exception
      * @throws stored_file_creation_exception
      */
-    public static function update_section_image($courseid, $sectionid, $imagedata, $filename){
+    public static function update_section_image($courseid, $sectionid, $imagedata, $filename) {
         global $CFG;
         $params = self::validate_parameters(self::update_section_image_parameters(),
             array(
-                'courseid'      =>  $courseid,
-                'sectionid'     =>  $sectionid,
-                'imagedata'     =>  $imagedata,
-                'filename'      =>  $filename
+                'courseid'      => $courseid,
+                'sectionid'     => $sectionid,
+                'imagedata'     => $imagedata,
+                'filename'      => $filename
             ));
         $success = false;
-        $file = "";
 
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
 
-        // Verify if context exist
+        // Verify if context exist.
         if ($context) {
             $course = get_course($params['courseid']);
             $modinfo = get_fast_modinfo($course);
             $coursesection = $modinfo->get_section_info($params['sectionid'], MUST_EXIST);
 
-            // Verify if the course section exist
-            if($coursesection) {
+            // Verify if the course section exist.
+            if ($coursesection) {
                 $fs = get_file_storage();
                 $ext = strtolower(pathinfo($params['filename'], PATHINFO_EXTENSION));
-                // Rename to sectionimage_sectionid
+                // Rename to sectionimage_sectionid.
                 $filename = 'sectionimage_'.$params['courseid'].'-'.$params['sectionid'].'.'.$ext;
                 // Check size.
                 $binary = base64_decode($params['imagedata']);
-                if(strlen($binary) > get_max_upload_file_size($CFG->maxbytes)) {
+                if (strlen($binary) > get_max_upload_file_size($CFG->maxbytes)) {
                     throw new \moodle_exception('error:maxsizeerror', 'format_softcourse');
                 }
                 $fileinfo = array(
@@ -101,7 +100,7 @@ class format_softcourse_external extends external_api {
                 $fs->delete_area_files($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'], $params['sectionid']);
                 // Create new one.
                 $storedfile = $fs->create_file_from_string($fileinfo, $binary);
-                if($storedfile) {
+                if ($storedfile) {
                     $success = true;
                 }
             }
@@ -148,29 +147,27 @@ class format_softcourse_external extends external_api {
      * @throws moodle_exception
      * @throws invalid_parameter_exception
      */
-    public static function delete_section_image($courseid, $sectionid){
-        global $CFG;
+    public static function delete_section_image($courseid, $sectionid) {
         $params = self::validate_parameters(self::delete_section_image_parameters(),
             array(
-                'courseid'      =>  $courseid,
-                'sectionid'     =>  $sectionid
+                'courseid'      => $courseid,
+                'sectionid'     => $sectionid
             ));
         $success = false;
-        $file = "";
 
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
 
-        // Verify if context exist
+        // Verify if context exist.
         if ($context) {
             $course = get_course($params['courseid']);
             $modinfo = get_fast_modinfo($course);
             $coursesection = $modinfo->get_section_info($params['sectionid'], MUST_EXIST);
 
-            // Verify if the course section exist
-            if($coursesection) {
+            // Verify if the course section exist.
+            if ($coursesection) {
                 $fs = get_file_storage();
-                // Delete the file
+                // Delete the file.
                 $success = $fs->delete_area_files($context->id, 'format_softcourse', 'sectionimage', $params['sectionid']);
             }
         }
