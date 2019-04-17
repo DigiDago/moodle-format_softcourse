@@ -27,342 +27,341 @@
             @extend .card-whithout-bg;
             padding-top: 0;
 
-            .course-content {
-                #softcourse-introduction {
-                    padding: 30px;
+        }
+        .course-content {
+            #softcourse-introduction {
+                padding: 30px;
 
-                    #softcourse-start-button {
-                        margin-top: 15px;
-                        max-width: 220px;
+                #softcourse-start-button {
+                    margin-top: 15px;
+                    max-width: 220px;
 
-                        button {
-                            width: 100%;
-                        }
+                    button {
+                        width: 100%;
                     }
                 }
+            }
 
-                #softcourse-sections {
-                    margin-top: 50px;
-                    padding: 0;
+            #softcourse-sections {
+                margin-top: 50px;
+                padding: 0;
 
-                    #softcourse-tabs {
-                        padding-left: 0;
+                #softcourse-tabs {
+                    padding-left: 0;
 
-                        & > a {
-                            color: inherit;
-                            text-decoration: none;
+                    & > a {
+                        color: inherit;
+                        text-decoration: none;
 
-                            .softcourse-section {
-                                display: flex;
-                                flex-direction: row;
-                                flex-wrap: wrap;
-                                margin-top: 15px;
-                                padding: 0;
-                                transition: box-shadow 0.5s ease;
+                        .softcourse-section {
+                            display: flex;
+                            flex-direction: row;
+                            flex-wrap: wrap;
+                            margin-top: 15px;
+                            padding: 0;
+                            transition: box-shadow 0.5s ease;
 
-                                &:hover {
-                                    box-shadow:
-                                        0 2px 4px -1px rgba(0, 0, 0, .15),
-                                        0 4px 5px 0 rgba(0, 0, 0, .14),
-                                        0 1px 10px 0 rgba(0, 0, 0, .12);
-                                    cursor: pointer;
-
-                                    .softcourse-section-img {
-
-                                        .delete-img,
-                                        span,
-                                        .update-img {
-                                            opacity: 0.75;
-                                        }
-                                    }
-
-                                    .softcourse-section-body {
-                                        .delete-img,
-                                        .fa-leanpub,
-                                        .progress,
-                                        .progress-percent,
-                                        .softcourse-activities-count,
-                                        .update-img {
-                                            opacity: 1;
-                                        }
-                                    }
-                                }
-
-                                &:active {
-                                    box-shadow:
-                                        0 5px 5px -3px rgba(0, 0, 0, .2),
-                                        0 8px 10px 1px rgba(0, 0, 0, .14),
-                                        0 3px 10px 2px rgba(0, 0, 0, .12);
-                                }
+                            &:hover {
+                                box-shadow:
+                                    0 2px 4px -1px rgba(0, 0, 0, .15),
+                                    0 4px 5px 0 rgba(0, 0, 0, .14),
+                                    0 1px 10px 0 rgba(0, 0, 0, .12);
+                                cursor: pointer;
 
                                 .softcourse-section-img {
+
+                                    .delete-img,
+                                    span,
+                                    .update-img {
+                                        opacity: 0.75;
+                                    }
+                                }
+
+                                .softcourse-section-body {
+                                    .delete-img,
+                                    .fa-leanpub,
+                                    .progress,
+                                    .progress-percent,
+                                    .softcourse-activities-count,
+                                    .update-img {
+                                        opacity: 1;
+                                    }
+                                }
+                            }
+
+                            &:active {
+                                box-shadow:
+                                    0 5px 5px -3px rgba(0, 0, 0, .2),
+                                    0 8px 10px 1px rgba(0, 0, 0, .14),
+                                    0 3px 10px 2px rgba(0, 0, 0, .12);
+                            }
+
+                                .softcourse-section-img {
+                                    background-color: orange;
                                     background-color: unquote("brandcolor");
                                     background-position: center;
                                     background-repeat: no-repeat;
                                     background-size: contain;
-
                                     display: inline-block;
                                     height: 150px;
                                     width: 250px;
-                                   
+
                                     @media only screen and (max-width: 710px) {
                                         background-image: none!important;
                                         width: 50px;
                                     }
 
-                                    & > span {
-                                        bottom: 10px;
-                                        color: white;
-                                        display: inline-block;
-                                        font-size: 1.2rem;
-                                        left: 0;
-                                        opacity: 0;
-                                        position: absolute;
-                                        transition: opacity 0.5s ease;
-                                        text-align: center;
-                                        text-transform: uppercase;
-                                        width: 250px;
+                                & > span {
+                                    bottom: 10px;
+                                    color: white;
+                                    display: inline-block;
+                                    font-size: 1.2rem;
+                                    left: 0;
+                                    opacity: 0;
+                                    position: absolute;
+                                    transition: opacity 0.5s ease;
+                                    text-align: center;
+                                    text-transform: uppercase;
+                                    width: 250px;
 
-                                        @media only screen and (max-width: 710px) {
-                                            font-size: 1.5rem;
-                                            top: 65px;
-                                            width: 50px;
+                                    @media only screen and (max-width: 710px) {
+                                        font-size: 1.5rem;
+                                        top: 65px;
+                                        width: 50px;
 
-                                            span {
-                                                display: none;
-                                            }
-                                        }
-                                    }
-
-                                    & > i {
-
-                                        @media only screen and (max-width: 710px) {
+                                        span {
                                             display: none;
                                         }
                                     }
+                                }
 
-                                    .update-img {
-                                        color: white;
-                                        display: inline-block;
-                                        height: 50px;
-                                        font-size: 1.2rem;
-                                        left: 200px;
-                                        opacity: 0;
-                                        position: absolute;
-                                        top: 0;
-                                        transition: opacity 0.5s ease;
-                                        width: 50px;
+                                & > i {
 
-                                        &:hover,
-                                        &:hover::before {
-                                            cursor: pointer;
-                                        }
-
-                                        &::before {
-                                            padding: 15px;
-                                            position: absolute;
-                                        }
-
-                                        input[type="file"] {
-                                            height: 50px;
-                                            left: 0;
-                                            opacity: 0;
-                                            position: absolute;
-                                            width: 50px;
-
-                                            &:hover {
-                                                cursor: pointer;
-                                            }
-                                        }
-                                    }
-
-                                    .delete-img {
-                                        color: white;
-                                        display: inline-block;
-                                        font-size: 1.2rem;
-                                        height: 50px;
-                                        left: 200px;
-                                        opacity: 0;
-                                        position: absolute;
-                                        top: 50px;
-                                        transition: opacity 0.5s ease;
-                                        width: 50px;
-
-                                        &:hover,
-                                        &:hover::before {
-                                            cursor: pointer;
-                                        }
-
-                                        &::before {
-                                            padding: 15px;
-                                            position: absolute;
-                                        }
-
-                                        input[type="button"] {
-                                            height: 50px;
-                                            left: 0;
-                                            opacity: 0;
-                                            position: absolute;
-                                            width: 50px;
-
-                                            &:hover {
-                                                cursor: pointer;
-                                            }
-                                        }
-                                    }
-
-                                    &:not(.not-empty)::before {
-                                        color: white;
-                                        content: "\f19d";
-                                        font-family: "FontAwesome";
-                                        font-size: 100px;
-                                        left: 60px;
-                                        position: absolute;
-                                        top: -15px;
-                                        transition: top 0.5s ease;
+                                    @media only screen and (max-width: 710px) {
+                                        display: none;
                                     }
                                 }
 
-                                .softcourse-section-body {
+                                .update-img {
+                                    color: white;
                                     display: inline-block;
-                                    flex: 1;
-                                    height: 150px;
-                                    padding-left: 50px;
+                                    height: 50px;
+                                    font-size: 1.2rem;
+                                    left: 200px;
+                                    opacity: 0;
+                                    position: absolute;
+                                    top: 0;
+                                    transition: opacity 0.5s ease;
+                                    width: 50px;
 
-                                    .softcourse-section-name {
-                                        display: inline-block;
-                                        font-size: 1.2rem;
-                                        max-height: 30px;
-                                        overflow: hidden;
-                                        padding-right: 15px;
-                                        position: absolute;
-                                        text-decoration: none;
-                                        text-overflow: ellipsis;
-                                        top: 10px;
+                                    &:hover,
+                                    &:hover::before {
+                                        cursor: pointer;
                                     }
 
-                                    .softcourse-section-summary {
-                                        display: inline-block;
-                                        font-size: 0.75rem;
-                                        max-height: 75px;
-                                        overflow: hidden;
-                                        padding-right: 15px;
+                                    &::before {
+                                        padding: 15px;
                                         position: absolute;
-                                        text-overflow: ellipsis;
-                                        top: 40px;
                                     }
 
-                                    .fa-leanpub {
-                                        bottom: 15px;
-                                        color: unquote("brandcolor");
-                                        font-size: 1rem;
+                                    input[type="file"] {
+                                        height: 50px;
+                                        left: 0;
                                         opacity: 0;
                                         position: absolute;
-                                        transition: opacity .5s ease;
+                                        width: 50px;
 
-                                        &::before {
-                                            font-size: 1.2rem;
+                                        &:hover {
+                                            cursor: pointer;
                                         }
-                                    }
-
-                                    .softcourse-activities-count {
-                                        bottom: 11px;
-                                        color: unquote("brandcolor");
-                                        font-size: 1rem;
-                                        left: 327px;
-                                        opacity: 0;
-                                        position: absolute;
-                                        transition: opacity .5s ease;
-
-                                        @media only screen and (max-width: 710px) {
-                                            left: 127px;
-                                        }
-                                    }
-
-                                    .progress {
-                                        bottom: 15px;
-                                        display: inline-flex;
-                                        opacity: 0;
-                                        position: absolute;
-                                        right: 55px;
-                                        transition: opacity .5s ease;
-                                        width: calc(100% - 450px);
-
-                                        @media only screen and (max-width: 710px) {
-                                            width: calc(75% - 150px);
-                                        }
-
-                                        .progress-bar {
-                                            display: inline-flex;
-                                        }
-                                    }
-
-                                    .progress-percent {
-                                        bottom: 13px;
-                                        color: unquote("brandcolor");
-                                        margin-left: 5px;
-                                        opacity: 0;
-                                        position: absolute;
-                                        right: 15px;
-                                        transition: opacity .5s ease;
                                     }
                                 }
+
+                                .delete-img {
+                                    color: white;
+                                    display: inline-block;
+                                    font-size: 1.2rem;
+                                    height: 50px;
+                                    left: 200px;
+                                    opacity: 0;
+                                    position: absolute;
+                                    top: 50px;
+                                    transition: opacity 0.5s ease;
+                                    width: 50px;
+
+                                    &:hover,
+                                    &:hover::before {
+                                        cursor: pointer;
+                                    }
+
+                                    &::before {
+                                        padding: 15px;
+                                        position: absolute;
+                                    }
+
+                                    input[type="button"] {
+                                        height: 50px;
+                                        left: 0;
+                                        opacity: 0;
+                                        position: absolute;
+                                        width: 50px;
+
+                                        &:hover {
+                                            cursor: pointer;
+                                        }
+                                    }
+                                }
+
+                                &:not(.not-empty)::before {
+                                    color: white;
+                                    content: "\f19d";
+                                    font-family: "FontAwesome";
+                                    font-size: 100px;
+                                    left: 60px;
+                                    position: absolute;
+                                    top: -15px;
+                                    transition: top 0.5s ease;
+                                }
                             }
-                        }
-                    }
-                }
 
-                #ul.softcourse {
-                    list-style: none;
-                    margin: 0;
+                            .softcourse-section-body {
+                                display: inline-block;
+                                flex: 1;
+                                height: 150px;
+                                padding-left: 50px;
 
-                    li.section {
+                                .softcourse-section-name {
+                                    display: inline-block;
+                                    font-size: 1.2rem;
+                                    max-height: 30px;
+                                    overflow: hidden;
+                                    padding-right: 15px;
+                                    position: absolute;
+                                    text-decoration: none;
+                                    text-overflow: ellipsis;
+                                    top: 10px;
+                                }
 
-                        .content {
-                            margin: 0 40px;
-                        }
+                                .softcourse-section-summary {
+                                    display: inline-block;
+                                    font-size: 0.75rem;
+                                    max-height: 75px;
+                                    overflow: hidden;
+                                    padding-right: 15px;
+                                    position: absolute;
+                                    text-overflow: ellipsis;
+                                    top: 40px;
+                                }
 
-                        .left,
-                        .right {
-                            padding: 0 6px;
-                            width: 40px;
-                        }
+                                .fa-leanpub {
+                                    bottom: 15px;
+                                    color: unquote("brandcolor");
+                                    font-size: 1rem;
+                                    opacity: 0;
+                                    position: absolute;
+                                    transition: opacity .5s ease;
 
-                        .left {
-                            padding-top: 22px;
-                            text-align: right;
+                                    &::before {
+                                        font-size: 1.2rem;
+                                    }
+                                }
 
-                            .section-handle img.icon {
-                                padding: 0;
-                                vertical-align: baseline;
-                            }
-                        }
+                                .softcourse-activities-count {
+                                    bottom: 11px;
+                                    color: unquote("brandcolor");
+                                    font-size: 1rem;
+                                    left: 327px;
+                                    opacity: 0;
+                                    position: absolute;
+                                    transition: opacity .5s ease;
 
-                        .section_action_menu {
+                                    @media only screen and (max-width: 710px) {
+                                        left: 127px;
+                                    }
+                                }
 
-                            .textmenu,
-                            .menu-action-text {
-                                white-space: nowrap;
+                                .progress {
+                                    bottom: 15px;
+                                    display: inline-flex;
+                                    opacity: 0;
+                                    position: absolute;
+                                    right: 55px;
+                                    transition: opacity .5s ease;
+                                    width: calc(100% - 450px);
+
+                                    @media only screen and (max-width: 710px) {
+                                        width: calc(75% - 150px);
+                                    }
+
+                                    .progress-bar {
+                                        display: inline-flex;
+                                    }
+                                }
+
+                                .progress-percent {
+                                    bottom: 13px;
+                                    color: unquote("brandcolor");
+                                    margin-left: 5px;
+                                    opacity: 0;
+                                    position: absolute;
+                                    right: 15px;
+                                    transition: opacity .5s ease;
+                                }
                             }
                         }
                     }
                 }
             }
 
-            &.jsenabled {
+            #ul.softcourse {
+                list-style: none;
+                margin: 0;
 
-                .course-content {
+                li.section {
 
-                    ul.softcourse {
+                    .content {
+                        margin: 0 40px;
+                    }
 
-                        li.section {
+                    .left,
+                    .right {
+                        padding: 0 6px;
+                        width: 40px;
+                    }
 
-                            .left,
-                            .right {
-                                width: auto;
-                            }
+                    .left {
+                        padding-top: 22px;
+                        text-align: right;
+
+                        .section-handle img.icon {
+                            padding: 0;
+                            vertical-align: baseline;
                         }
+                    }
 
+                    .section_action_menu {
+
+                        .textmenu,
+                        .menu-action-text {
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+        }
+
+        &.jsenabled {
+
+            .course-content {
+
+                ul.softcourse {
+
+                    li.section {
+
+                        .left,
+                        .right {
+                            width: auto;
+                        }
                     }
                 }
             }
