@@ -96,17 +96,20 @@
                                     0 3px 10px 2px rgba(0, 0, 0, .12);
                             }
 
-                            .softcourse-section-img {
-                                background-color: orange;
-                                background-color: unquote("brandcolor");
-                                display: inline-block;
-                                height: 150px;
-                                width: 250px;
+                                .softcourse-section-img {
+                                    background-color: orange;
+                                    background-color: unquote("brandcolor");
+                                    background-position: center;
+                                    background-repeat: no-repeat;
+                                    background-size: contain;
+                                    display: inline-block;
+                                    height: 150px;
+                                    width: 250px;
 
-                                @media only screen and (max-width: 710px) {
-                                    background-image: none!important;
-                                    width: 50px;
-                                }
+                                    @media only screen and (max-width: 710px) {
+                                        background-image: none!important;
+                                        width: 50px;
+                                    }
 
                                 & > span {
                                     bottom: 10px;
@@ -360,7 +363,6 @@
                             width: auto;
                         }
                     }
-
                 }
             }
         }
