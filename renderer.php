@@ -294,7 +294,8 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $s->summary = $section->summary;
             $s->start = get_string('startcourse', 'format_softcourse');
             $s->countactivitiestooltip = get_string('countactivities', 'format_softcourse');
-            $s->countactivities = count($section->cm);
+            $s->countactivities = 0;
+
             if (has_capability('moodle/course:update', $context)) {
                 $s->update_img = get_string('update_img', 'format_softcourse');
             }
@@ -318,6 +319,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $nbcompletion = 0;
 
             $s->first_cm_url = "";
+            $s->countactivities = 0;
             // Get completion of cms.
             foreach ($section->cm as $cm) {
                 if ($cm->modname != "label" && $s->first_cm_url == "") {
@@ -325,6 +327,9 @@ class format_softcourse_renderer extends format_section_renderer_base {
                 }
                 $nbcompletion += $cm->completion;
                 $nbcomplete += $completioninfo->get_data($cm, true)->completionstate;
+                if ($cm->deletioninprogress == 0 and $cm->visible == 1) {
+                    $s->countactivities += 1;
+                }
             }
 
             // Count the percent of cm complete.
