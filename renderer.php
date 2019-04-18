@@ -327,7 +327,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
                 }
                 $nbcompletion += $cm->completion;
                 $nbcomplete += $completioninfo->get_data($cm, true)->completionstate;
-                if ($cm->deletioninprogress == 0 and $cm->visible == 1) {
+                if ($cm->deletioninprogress == 0 and $cm->visible == 1 and $cm->modname != "label") {
                     $s->countactivities += 1;
                 }
             }
