@@ -1,6 +1,6 @@
 Introduction
 ============
-Softcourse is a course format for Moodle. Softcourse is a course format that display sections with onlye an image and an optional text on the course homepage.
+Softcourse is a course format for Moodle. Softcourse is a course format that display sections with only an image and an optional text on the course homepage.
 
 Required version of Moodle
 ==========================
@@ -49,6 +49,4 @@ See Changes.md.
 Us
 ==
 Pimenko Team
-Jordan Kesraoui
-Clement Prudhomme
 
