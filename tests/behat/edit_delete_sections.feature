@@ -80,14 +80,14 @@ Feature: Sections can be edited and deleted in softcourse format
 
   @javascript
   Scenario: Adding sections in softcourse format
-    When I follow "Add softcourse"
+    When I follow "Add sections"
     Then the field "Number of sections" matches value "1"
-    And I press "Add softcourse"
+    And I press "Add sections"
     And I should see "Section 6" in the "li#section-6" "css_element"
     And "li#section-7" "css_element" should not exist
-    And I follow "Add softcourse"
+    And I follow "Add sections"
     And I set the field "Number of sections" to "3"
-    And I press "Add softcourse"
+    And I press "Add sections"
     And I should see "Section 7" in the "li#section-7" "css_element"
     And I should see "Section 8" in the "li#section-8" "css_element"
     And I should see "Section 9" in the "li#section-9" "css_element"
