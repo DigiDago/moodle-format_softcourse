@@ -325,7 +325,9 @@ class format_softcourse_renderer extends format_section_renderer_base {
                 if ($cm->modname != "label" && $s->first_cm_url == "") {
                     $s->first_cm_url = $cm->url;
                 }
-                $nbcompletion += $cm->completion;
+                if ($cm->completion > 0) {
+                    $nbcompletion++;
+                }
                 $nbcomplete += $completioninfo->get_data($cm, true)->completionstate;
                 if ($cm->deletioninprogress == 0 and $cm->visible == 1 and $cm->modname != "label") {
                     $s->countactivities += 1;
