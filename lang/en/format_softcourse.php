@@ -18,7 +18,7 @@
  * Strings for component 'format_softcourse', language 'en', branch 'MOODLE_35_STABLE'
  *
  * @package   format_softcourse
- * @copyright 2018 Digidago <contact@digidago.com>
+ * @copyright 2018 Pimenko <contact@pimneko.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -37,10 +37,17 @@ $string['hidefromothers'] = 'Hide section';
 $string['showfromothers'] = 'Show section';
 $string['privacy:metadata'] = 'The Soft Course format plugin does not store any personal data.';
 $string['startcourse'] = 'Start';
-$string['countactivities'] = "Count of activities";
-$string['progression'] = "Progression";
-$string['hideallsections'] = "Hide the sections";
-$string['hideallsections_help'] = "Enable hide the sections on the course page";
-$string['hideallsectionsno'] = "Not hide the sections";
-$string['hideallsectionsyes'] = "Hide the sections";
-$string['update_img'] = "Edit the picture";
+$string['countactivities'] = 'Count of activities';
+$string['progression'] = 'Progression';
+$string['hideallsections'] = 'Hide the sections';
+$string['hideallsections_help'] = 'Enable hide the sections on the course page';
+$string['hideallsectionsno'] = 'Not hide the sections';
+$string['hideallsectionsyes'] = 'Hide the sections';
+$string['update_img'] = 'Edit image';
+$string['delete_img'] = 'Delete image';
+$string['introduction'] = 'Introduction';
+$string['introduction_help'] = 'Introduction displayed on the course view';
+$string['hidesectionzero'] = 'Hide the section 0';
+$string['hidesectionzero_help'] = 'Enable hide the section 0 on the course page';
+$string['hidesectionzerono'] = 'Not hide the section 0';
+$string['hidesectionzeroyes'] = 'Hide the section 0';

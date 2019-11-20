@@ -17,10 +17,10 @@
 /**
  * External format_softcourse API
  *
- * @package     format_softcourse
- * @copyright   DigiDago 2018
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author      Jordan Kesraoui
+ * @package format_softcourse
+ * @copyright 2019 Pimenko <contact@pimenko.com>
+ * @author 2019 Pimenko <contact@pimenko.com>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
