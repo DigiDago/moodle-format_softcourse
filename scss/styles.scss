@@ -14,14 +14,6 @@
 
     #region-main {
 
-        &:not(.has-blocks) {
-            width: calc(100% - 265px);
-
-            @media (max-width: 1199px) {
-                width: 100%;
-            }
-        }
-
         & > .card {
 
             @extend .card-whithout-bg;

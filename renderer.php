@@ -18,7 +18,7 @@
  * Renderer for outputting the Soft Course format.
  *
  * @package format_softcourse
- * @copyright 2018 Digidago <contact@digidago.com>
+ * @copyright 2018 Pimenko <contact@pimneko.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @since Moodle 3.5
  */
@@ -220,11 +220,11 @@ class format_softcourse_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function course_introduction() {
-        $template = $template = new stdClass();
+        $template = new stdClass();
+        $template->start_url = "";
 
         foreach ($this->modinfo->get_cms() as $cm) {
-            $sectionid = $cm->get_section_info()->section;
-            if ($sectionid != 0 && $cm->modname != "label") {
+            if ($cm->uservisible && !$cm->is_stealth() || !empty($cm->url)) {
                 $template->start_url = $cm->url;
                 break;
             }
@@ -236,18 +236,20 @@ class format_softcourse_renderer extends format_section_renderer_base {
         // Get the name of section 0.
         $template->name = $this->modinfo->get_section_info_all()[0]->name;
 
-        // Get the summary of the section 0.
-        $sectionzero = $this->modinfo->get_section_info_all()[0];
-        $summary = $sectionzero->summary;
+        // Get the introduction.
+        $summary = $this->courseformat->get_format_options()['introduction'];
 
         // Rewrite url of files (like pictures).
         $context = context_course::instance($this->course->id);
+
         $summarytext = file_rewrite_pluginfile_urls($summary, 'pluginfile.php',
-            $context->id, 'course', 'section', $sectionzero->id);
+            $context->id, 'course', 'introduction', 0);
+
+        $summarytext = $summary;
         $options = new stdClass();
         $options->noclean = true;
         $options->overflowdiv = true;
-        $template->summary = format_text($summarytext, $sectionzero->summaryformat, $options);
+        $template->summary = format_text($summarytext, 1, $options);
 
         // Button Start.
         $template->start = get_string('startcourse', 'format_softcourse');
@@ -272,7 +274,9 @@ class format_softcourse_renderer extends format_section_renderer_base {
         // Assiociation tabs : section[id_of_section] = cm.
         foreach ($this->modinfo->get_cms() as $cm) {
             $idsection = $cm->get_section_info()->section;
-            if ($idsection != 0) {
+
+            // Hide the section 0 if the course format option is set to "Hide the section 0".
+            if (!($idsection == 0 && $this->courseformat->get_format_options()['hidesectionzero'] == 1)) {
                 $info = $this->modinfo->get_section_info_all()[$idsection];
                 if (!isset($sectionmods[$idsection])) {
                     $sectionmods[$idsection] = new stdClass();
@@ -298,6 +302,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
 
             if (has_capability('moodle/course:update', $context)) {
                 $s->update_img = get_string('update_img', 'format_softcourse');
+                $s->delete_img = get_string('delete_img', 'format_softcourse');
             }
 
             // Render the iamge section.
@@ -322,7 +327,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $s->countactivities = 0;
             // Get completion of cms.
             foreach ($section->cm as $cm) {
-                if ($cm->modname != "label" && $s->first_cm_url == "") {
+                if ($cm->uservisible && !$cm->is_stealth() || !empty($cm->url)) {
                     $s->first_cm_url = $cm->url;
                 }
                 if ($cm->completion > 0) {

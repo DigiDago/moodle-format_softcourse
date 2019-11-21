@@ -19,7 +19,7 @@
  *
  * @package   format_softcourse
  * @category  backup
- * @copyright 2018 Digidago <contact@digidago.com>
+ * @copyright 2018 Pimenko <contact@pimneko.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,7 +32,7 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @package   format_softcourse
  * @category  backup
- * @copyright 22018 Digidago <contact@digidago.com>
+ * @copyright 2018 Pimenko <contact@pimneko.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_format_softcourse_plugin extends restore_format_plugin {

@@ -28,20 +28,22 @@ defined('MOODLE_INTERNAL') || die();
 // We defined the web service functions to install.
 $functions = array(
     'format_softcourse_update_section_image' => array(
-        'classname'   => 'format_softcourse_external',
-        'methodname'  => 'update_section_image',
-        'classpath'   => 'course/format/softcourse/externallib.php',
-        'description' => 'Update the section image',
-        'type'        => 'write',
-        'ajax'        => true
+        'classname'     => 'format_softcourse_external',
+        'methodname'    => 'update_section_image',
+        'classpath'     => 'course/format/softcourse/externallib.php',
+        'description'   => 'Update the section image',
+        'type'          => 'write',
+        'capabilities'  => 'moodle/course:update',
+        'ajax'          => true
     ),
     'format_softcourse_delete_section_image' => array(
-        'classname'   => 'format_softcourse_external',
-        'methodname'  => 'delete_section_image',
-        'classpath'   => 'course/format/softcourse/externallib.php',
-        'description' => 'Delete the section image',
-        'type'        => 'write',
-        'ajax'        => true
+        'classname'     => 'format_softcourse_external',
+        'methodname'    => 'delete_section_image',
+        'classpath'     => 'course/format/softcourse/externallib.php',
+        'description'   => 'Delete the section image',
+        'type'          => 'write',
+        'capabilities'  => 'moodle/course:update',
+        'ajax'          => true
     )
 );
 

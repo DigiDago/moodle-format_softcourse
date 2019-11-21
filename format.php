@@ -18,8 +18,8 @@
  * Soft Course format.  Display the whole course as "softcourse" made of modules.
  *
  * @package format_softcourse
- * @copyright 2018 Digidago <contact@digidago.com>
- * @author 2018 Digidago <contact@digidago.com>
+ * @copyright 2019 Pimenko <contact@pimenko.com>
+ * @author 2019 Pimenko <contact@pimenko.com>
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -45,4 +45,4 @@ $renderer = $PAGE->get_renderer('format_softcourse');
 $renderer->print_multiple_section_page($course, null, null, null, null);
 
 // Include course format js module.
-$PAGE->requires->js('/course/format/softcourse/format.js');
+$PAGE->requires->js_call_amd('format_softcourse/actions', 'init');

@@ -7,11 +7,6 @@
   .card-whithout-bg form[action="."], #page-course-view-softcourse #region-main > .card form[action="."] {
     margin: 0; }
 
-#page-course-view-softcourse #region-main:not(.has-blocks) {
-  width: calc(100% - 265px); }
-  @media (max-width: 1199px) {
-    #page-course-view-softcourse #region-main:not(.has-blocks) {
-      width: 100%; } }
 #page-course-view-softcourse #region-main > .card {
   padding-top: 0; }
 #page-course-view-softcourse #region-main .course-content #softcourse-introduction {

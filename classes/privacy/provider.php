@@ -17,7 +17,7 @@
  * Privacy Subsystem implementation for format_softcourse.
  *
  * @package    format_softcourse
- * @copyright  2018 Digidago <contact@digidago.com>
+ * @copyright  2018 Pimenko <contact@pimneko.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace format_softcourse\privacy;

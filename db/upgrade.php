@@ -58,6 +58,35 @@ function xmldb_format_softcourse_upgrade($oldversion) {
 
         upgrade_plugin_savepoint(true, 2018030900, 'format', 'softcourse');
     }
+    if ($oldversion < 2019103100) {
+
+        // Get all sections 0 of courses having softcourse course format.
+        $sectionsrequest = 'SELECT s.id, s.course, s.summary
+                            FROM {course_sections} s
+                            INNER JOIN {course} c ON s.course = c.id
+                            WHERE c.format = "softcourse"
+                            AND s.section = 0';
+        $sections = $DB->get_records_sql($sectionsrequest, []);
+
+        // Insert the summary of section 0 in the new course format option.
+        foreach ($sections as $section) {
+            $courseformatoption = new stdClass();
+            $courseformatoption->courseid = $section->course;
+            $courseformatoption->format = 'introduction';
+            $courseformatoption->sectionid = 0;
+            $courseformatoption->name = 'introduction';
+            $courseformatoption->value = $section->summary;
+            $DB->insert_record('course_format_options', $courseformatoption);
+        }
+
+        // Delete the summary of sections 0 of courses having softcourse course format.
+        $deleterequest = 'UPDATE {course_sections} SET summary = ""
+                          WHERE course IN (SELECT id FROM {course} WHERE format = :format)
+                          AND section = 0';
+        $DB->execute($deleterequest, ['format' => 'softcourse']);
+
+        upgrade_plugin_savepoint(true, 2019103100, 'format', 'softcourse');
+    }
 
     return true;
 }

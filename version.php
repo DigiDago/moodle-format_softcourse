@@ -19,14 +19,14 @@
  *
  * @package    format
  * @subpackage softcourse
- * @copyright  2018 Digidago <contact@digidago.com>
+ * @copyright  2018 Pimenko <contact@pimneko.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2018111500;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2019103100;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2018050800;        // Requires this Moodle version.
 $plugin->component = 'format_softcourse';    // Full name of the plugin (used for diagnostics).
-$plugin->release = '1.0';
+$plugin->release = '2.0';
 $plugin->maturity = MATURITY_STABLE;
