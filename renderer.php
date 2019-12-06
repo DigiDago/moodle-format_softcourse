@@ -233,9 +233,6 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $template->disabledStart = "disabled";
         }
 
-        // Get the name of section 0.
-        $template->name = $this->modinfo->get_section_info_all()[0]->name;
-
         // Get the introduction.
         $summary = $this->courseformat->get_format_options()['introduction'];
 
@@ -327,7 +324,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $s->countactivities = 0;
             // Get completion of cms.
             foreach ($section->cm as $cm) {
-                if ($cm->uservisible && !$cm->is_stealth() || !empty($cm->url)) {
+                if ($cm->uservisible && !$cm->is_stealth() || !empty($cm->url) && $s->first_cm_url == '') {
                     $s->first_cm_url = $cm->url;
                 }
                 if ($cm->completion > 0) {
