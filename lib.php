@@ -276,6 +276,18 @@ function format_softcourse_inplace_editable($itemtype, $itemid, $newvalue) {
     }
 }
 
+/**
+ * Softcourse plugin function function
+ *
+ * @param $course
+ * @param $cm
+ * @param $context
+ * @param $filearea
+ * @param $args
+ * @param $forcedownload
+ * @param array $options
+ * @return bool
+ */
 function format_softcourse_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
     if ($filearea == 'sectionimage' || $filearea == 'introduction') {
         $relativepath = implode('/', $args);

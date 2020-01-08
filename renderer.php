@@ -35,10 +35,19 @@ require_once($CFG->dirroot.'/course/format/renderer.php');
  */
 class format_softcourse_renderer extends format_section_renderer_base {
 
+    /**
+     * @var stdClass Course
+     */
     private $course;
 
+    /**
+     * @var stdClass Course format
+     */
     private $courseformat = null;
 
+    /**
+     * @var stdClass Mod info
+     */
     private $modinfo = null;
 
     /**
