@@ -71,10 +71,14 @@
                             cursor: pointer;
 
                             .softcourse-section-img {
+                                .delete-img,
+                                .update-img {
+                                    z-index: 1;
+                                }
 
                                 .delete-img,
-                                span,
-                                .update-img {
+                                .update-img,
+                                span {
                                     opacity: 0.75;
                                 }
                             }

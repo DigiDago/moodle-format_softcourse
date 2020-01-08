@@ -71,6 +71,7 @@ class format_softcourse_external extends external_api {
 
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
+        require_capability('moodle/course:update', $context);
 
         // Verify if context exist.
         if ($context) {
@@ -157,6 +158,7 @@ class format_softcourse_external extends external_api {
 
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
+        require_capability('moodle/course:update', $context);
 
         // Verify if context exist.
         if ($context) {

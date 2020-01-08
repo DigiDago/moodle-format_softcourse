@@ -44,8 +44,11 @@
         box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.15), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
         cursor: pointer; }
         #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section:hover .softcourse-section-img .delete-img,
-        #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section:hover .softcourse-section-img span,
         #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section:hover .softcourse-section-img .update-img {
+          z-index: 1; }
+        #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section:hover .softcourse-section-img .delete-img,
+        #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section:hover .softcourse-section-img .update-img,
+        #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section:hover .softcourse-section-img span {
           opacity: 0.75; }
         #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section:hover .softcourse-section-body .delete-img,
         #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section:hover .softcourse-section-body .fa-leanpub,
