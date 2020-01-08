@@ -27,6 +27,15 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once("$CFG->libdir/externallib.php");
 
+/**
+ * External format_softcourse API class
+ *
+ *
+ * @package format_softcourse
+ * @copyright 2019 Pimenko <contact@pimenko.com>
+ * @author 2019 Pimenko <contact@pimenko.com>
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class format_softcourse_external extends external_api {
 
     /**
@@ -71,6 +80,7 @@ class format_softcourse_external extends external_api {
 
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
+        require_capability('moodle/course:update', $context);
 
         // Verify if context exist.
         if ($context) {
@@ -157,6 +167,8 @@ class format_softcourse_external extends external_api {
 
         $context = \context_course::instance($params['courseid']);
         self::validate_context($context);
+        require_capability('moodle/course:update', $context);
+        require_capability('moodle/course:update', $context);
 
         // Verify if context exist.
         if ($context) {
