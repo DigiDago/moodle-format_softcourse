@@ -21,7 +21,7 @@
  * @copyright  2019 Pimenko <contact@pimenko.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/ajax', 'theme_boost/tooltip'], function($, ajax) {
+define(['jquery', 'core/ajax', 'theme_boost/bootstrap/tooltip'], function($, ajax) {
     /**
      * Updating of an image of a section.
      */
