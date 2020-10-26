@@ -125,9 +125,8 @@ class format_softcourse_renderer extends format_section_renderer_base {
      * @return array of edit control items
      */
     protected function section_edit_control_items($course, $section, $onsectionpage = false) {
-        global $PAGE;
-
-        if (!$PAGE->user_is_editing()) {
+        
+        if (!$this->page->user_is_editing()) {
             return array();
         }
 
@@ -210,10 +209,9 @@ class format_softcourse_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused) {
-        global $PAGE;
         $context = context_course::instance($this->course->id);
 
-        if ($PAGE->user_is_editing() and has_capability('moodle/course:update', $context)) {
+        if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
             parent::print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused);
         } else {
             echo $this->course_introduction();
