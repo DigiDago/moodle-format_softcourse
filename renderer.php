@@ -125,7 +125,6 @@ class format_softcourse_renderer extends format_section_renderer_base {
      * @return array of edit control items
      */
     protected function section_edit_control_items($course, $section, $onsectionpage = false) {
-        
         if (!$this->page->user_is_editing()) {
             return array();
         }
