@@ -23,9 +23,8 @@
  * @since Moodle 3.5
  */
 
-
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot.'/course/format/renderer.php');
+require_once($CFG->dirroot . '/course/format/renderer.php');
 
 /**
  * Basic renderer for softcourse format.
@@ -71,30 +70,6 @@ class format_softcourse_renderer extends format_section_renderer_base {
     }
 
     /**
-     * Generate the starting container html for a list of sections
-     * @return string HTML to output.
-     */
-    protected function start_section_list() {
-        return html_writer::start_tag('ul', array('class' => 'softcourse'));
-    }
-
-    /**
-     * Generate the closing container html for a list of sections
-     * @return string HTML to output.
-     */
-    protected function end_section_list() {
-        return html_writer::end_tag('ul');
-    }
-
-    /**
-     * Generate the title for this section page
-     * @return string the page title
-     */
-    protected function page_title() {
-        return get_string('topicoutline');
-    }
-
-    /**
      * Generate the section title, wraps it in a link to the section page if page is to be displayed on a separate page
      *
      * @param stdClass $section The course_section entry from DB
@@ -117,72 +92,6 @@ class format_softcourse_renderer extends format_section_renderer_base {
     }
 
     /**
-     * Generate the edit control items of a section
-     *
-     * @param stdClass $course The course entry from DB
-     * @param stdClass $section The course_section entry from DB
-     * @param bool $onsectionpage true if being printed on a section page
-     * @return array of edit control items
-     */
-    protected function section_edit_control_items($course, $section, $onsectionpage = false) {
-        if (!$this->page->user_is_editing()) {
-            return array();
-        }
-
-        $coursecontext = context_course::instance($course->id);
-
-        if ($onsectionpage) {
-            $url = course_get_url($course, $section->section);
-        } else {
-            $url = course_get_url($course);
-        }
-        $url->param('sesskey', sesskey());
-
-        $controls = array();
-        if ($section->section && has_capability('moodle/course:setcurrentsection', $coursecontext)) {
-            if ($course->marker == $section->section) {  // Show the "light globe" on/off.
-                $url->param('marker', 0);
-                $markedthissection = get_string('markedthistopic');
-                $highlightoff = get_string('highlightoff');
-                $controls['highlight'] = array('url' => $url, "icon" => 'i/marked',
-                    'name' => $highlightoff,
-                    'pixattr' => array('class' => '', 'alt' => $markedthissection),
-                    'attr' => array('class' => 'editing_highlight', 'title' => $markedthissection,
-                        'data-action' => 'removemarker'));
-            } else {
-                $url->param('marker', $section->section);
-                $markthissection = get_string('markedthistopic');
-                $highlight = get_string('highlight');
-                $controls['highlight'] = array('url' => $url, "icon" => 'i/marker',
-                    'name' => $highlight,
-                    'pixattr' => array('class' => '', 'alt' => $markthissection),
-                    'attr' => array('class' => 'editing_highlight', 'title' => $markthissection,
-                        'data-action' => 'setmarker'));
-            }
-        }
-
-        $parentcontrols = parent::section_edit_control_items($course, $section, $onsectionpage);
-
-        // If the edit key exists, we are going to insert our controls after it.
-        if (array_key_exists("edit", $parentcontrols)) {
-            $merged = array();
-            // We can't use splice because we are using associative arrays.
-            // Step through the array and merge the arrays.
-            foreach ($parentcontrols as $key => $action) {
-                $merged[$key] = $action;
-                if ($key == "edit") {
-                    // If we have come to the edit key, merge these controls here.
-                    $merged = array_merge($merged, $controls);
-                }
-            }
-
-            return $merged;
-        } else {
-            return array_merge($controls, $parentcontrols);
-        }
-    }
-
-    /**
      * Output the html for a single section page .
      *
      * @param stdClass $course The course entry from DB
@@ -195,29 +104,6 @@ class format_softcourse_renderer extends format_section_renderer_base {
      */
     public function print_single_section_page($course, $sections, $mods, $modnames, $modnamesused, $displaysection) {
         echo $this->course_introduction();
-    }
-
-    /**
-     * Output the html for a multiple section page.
-     *
-     * @param stdClass $course The course entry from DB
-     * @param array $sections (argument not used)
-     * @param array $mods (argument not used)
-     * @param array $modnames (argument not used)
-     * @param array $modnamesused (argument not used)
-     * @throws moodle_exception
-     */
-    public function print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused) {
-        $context = context_course::instance($this->course->id);
-
-        if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
-            parent::print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused);
-        } else {
-            echo $this->course_introduction();
-            if ($this->courseformat->get_format_options()['hideallsections'] == 0) {
-                echo $this->course_sections();
-            }
-        }
     }
 
     /**
@@ -246,7 +132,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
         $context = context_course::instance($this->course->id);
 
         $summarytext = file_rewrite_pluginfile_urls($summary, 'pluginfile.php',
-            $context->id, 'course', 'introduction', 0);
+                $context->id, 'course', 'introduction', 0);
 
         $summarytext = $summary;
         $options = new stdClass();
@@ -258,6 +144,29 @@ class format_softcourse_renderer extends format_section_renderer_base {
         $template->start = get_string('startcourse', 'format_softcourse');
 
         return $this->render_from_template('format_softcourse/introduction', $template);
+    }
+
+    /**
+     * Output the html for a multiple section page.
+     *
+     * @param stdClass $course The course entry from DB
+     * @param array $sections (argument not used)
+     * @param array $mods (argument not used)
+     * @param array $modnames (argument not used)
+     * @param array $modnamesused (argument not used)
+     * @throws moodle_exception
+     */
+    public function print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused) {
+        $context = context_course::instance($this->course->id);
+
+        if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
+            parent::print_multiple_section_page($course, $sections, $mods, $modnames, $modnamesused);
+        } else {
+            echo $this->course_introduction();
+            if ($this->courseformat->get_format_options()['hideallsections'] == 0) {
+                echo $this->course_sections();
+            }
+        }
     }
 
     /**
@@ -295,7 +204,11 @@ class format_softcourse_renderer extends format_section_renderer_base {
         // Put tabs into a tabs readable by mustache.
         foreach ($sectionmods as $section) {
             $s = new stdClass();
-            $s->name = $section->name;
+            $s->name = format_string(
+                    $section->name,
+                    true,
+                    array('context' => context_course::instance($this->course->id))
+            );
             $s->id = $section->id;
             $s->courseid = $this->course->id;
             $s->summary = $section->summary;
@@ -311,15 +224,15 @@ class format_softcourse_renderer extends format_section_renderer_base {
             // Render the iamge section.
             $fs = get_file_storage();
             $file = $fs->get_area_files($context->id, 'format_softcourse', 'sectionimage', $s->id,
-                                        "itemid, filepath, filename", false);
+                    "itemid, filepath, filename", false);
             if ($file) {
                 $s->urlimg = \moodle_url::make_pluginfile_url(
-                    end($file)->get_contextid(),
-                    end($file)->get_component(),
-                    end($file)->get_filearea(),
-                    end($file)->get_itemid(),
-                    end($file)->get_filepath(),
-                    end($file)->get_filename()
+                        end($file)->get_contextid(),
+                        end($file)->get_component(),
+                        end($file)->get_filearea(),
+                        end($file)->get_itemid(),
+                        end($file)->get_filepath(),
+                        end($file)->get_filename()
                 );
             }
 
@@ -355,5 +268,98 @@ class format_softcourse_renderer extends format_section_renderer_base {
         $template->sections = $sections;
 
         return $this->render_from_template('format_softcourse/sections', $template);
+    }
+
+    /**
+     * Generate the starting container html for a list of sections
+     *
+     * @return string HTML to output.
+     */
+    protected function start_section_list() {
+        return html_writer::start_tag('ul', array('class' => 'softcourse'));
+    }
+
+    /**
+     * Generate the closing container html for a list of sections
+     *
+     * @return string HTML to output.
+     */
+    protected function end_section_list() {
+        return html_writer::end_tag('ul');
+    }
+
+    /**
+     * Generate the title for this section page
+     *
+     * @return string the page title
+     */
+    protected function page_title() {
+        return get_string('topicoutline');
+    }
+
+    /**
+     * Generate the edit control items of a section
+     *
+     * @param stdClass $course The course entry from DB
+     * @param stdClass $section The course_section entry from DB
+     * @param bool $onsectionpage true if being printed on a section page
+     * @return array of edit control items
+     */
+    protected function section_edit_control_items($course, $section, $onsectionpage = false) {
+        if (!$this->page->user_is_editing()) {
+            return array();
+        }
+
+        $coursecontext = context_course::instance($course->id);
+
+        if ($onsectionpage) {
+            $url = course_get_url($course, $section->section);
+        } else {
+            $url = course_get_url($course);
+        }
+        $url->param('sesskey', sesskey());
+
+        $controls = array();
+        if ($section->section && has_capability('moodle/course:setcurrentsection', $coursecontext)) {
+            if ($course->marker == $section->section) {  // Show the "light globe" on/off.
+                $url->param('marker', 0);
+                $markedthissection = get_string('markedthistopic');
+                $highlightoff = get_string('highlightoff');
+                $controls['highlight'] = array('url' => $url, "icon" => 'i/marked',
+                        'name' => $highlightoff,
+                        'pixattr' => array('class' => '', 'alt' => $markedthissection),
+                        'attr' => array('class' => 'editing_highlight', 'title' => $markedthissection,
+                                'data-action' => 'removemarker'));
+            } else {
+                $url->param('marker', $section->section);
+                $markthissection = get_string('markedthistopic');
+                $highlight = get_string('highlight');
+                $controls['highlight'] = array('url' => $url, "icon" => 'i/marker',
+                        'name' => $highlight,
+                        'pixattr' => array('class' => '', 'alt' => $markthissection),
+                        'attr' => array('class' => 'editing_highlight', 'title' => $markthissection,
+                                'data-action' => 'setmarker'));
+            }
+        }
+
+        $parentcontrols = parent::section_edit_control_items($course, $section, $onsectionpage);
+
+        // If the edit key exists, we are going to insert our controls after it.
+        if (array_key_exists("edit", $parentcontrols)) {
+            $merged = array();
+            // We can't use splice because we are using associative arrays.
+            // Step through the array and merge the arrays.
+            foreach ($parentcontrols as $key => $action) {
+                $merged[$key] = $action;
+                if ($key == "edit") {
+                    // If we have come to the edit key, merge these controls here.
+                    $merged = array_merge($merged, $controls);
+                }
+            }
+
+            return $merged;
+        } else {
+            return array_merge($controls, $parentcontrols);
+        }
     }
 }
