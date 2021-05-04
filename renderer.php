@@ -250,11 +250,13 @@ class format_softcourse_renderer extends format_section_renderer_base {
                     $nbcompletion++;
                 }
                 $nbcomplete += $completioninfo->get_data($cm, true)->completionstate;
-                if ($cm->deletioninprogress == 0 && $cm->visible == 1 && $cm->modname != "label") {
+                if ($cm->deletioninprogress == 0
+                        && $cm->visible == 1
+                        && $cm->modname != "label"
+                        && $cm->visibleoncoursepage == 1) {
                     $s->countactivities += 1;
                 }
             }
-
             // Count the percent of cm complete.
             if ($nbcompletion != 0) {
                 $s->progression = get_string('progression', 'format_softcourse');
