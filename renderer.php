@@ -186,7 +186,6 @@ class format_softcourse_renderer extends format_section_renderer_base {
         // Assiociation tabs : section[id_of_section] = cm.
         foreach ($this->modinfo->get_cms() as $cm) {
             $idsection = $cm->get_section_info()->section;
-
             // Hide the section 0 if the course format option is set to "Hide the section 0".
             if (!($idsection == 0 && $this->courseformat->get_format_options()['hidesectionzero'] == 1)) {
                 $info = $this->modinfo->get_section_info_all()[$idsection];
@@ -196,13 +195,22 @@ class format_softcourse_renderer extends format_section_renderer_base {
                     $sectionmods[$idsection]->id = $idsection;
                     $sectionmods[$idsection]->name = $info->name;
                     $sectionmods[$idsection]->summary = $info->summary;
+                    $sectionmods[$idsection]->visible = $info->visible;
                 }
                 $sectionmods[$idsection]->cm[] = $cm;
             }
         }
-
         // Put tabs into a tabs readable by mustache.
         foreach ($sectionmods as $section) {
+            // We check case were section are hidden.
+            // We check case were section have only one hidden activity.
+            if ($section->visible == 0) {
+                continue;
+            } else if (count($section->cm) == 1
+                    && ($section->cm[0]->visible == 1 || $section->cm[0]->visibleoncoursepage == 1)
+            ) {
+                continue;
+            }
             $s = new stdClass();
             $s->name = format_string(
                     $section->name,
