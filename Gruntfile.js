@@ -60,11 +60,15 @@ module.exports = function (grunt) {
                 }],
                 options: {report: 'none'}
             }
+        },
+        stylelint: {
+            all: ['scss/*.scss']
         }
     });
 
     // Register NPM tasks.
     grunt.loadNpmTasks('grunt-contrib-uglify-es');
+    grunt.loadNpmTasks("grunt-stylelint");
 
     // Register JS tasks.
     grunt.registerTask('amd', ['uglify']);
