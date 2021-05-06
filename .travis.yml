@@ -10,19 +10,19 @@ services:
     - mysql
 
 php:
- - 7.2
+ - 7.3
 
 env:
  global:
-  - MOODLE_BRANCH=master
+  - MOODLE_BRANCH=MOODLE_310_STABLE
   - IGNORE_PATHS=amd/build,amd/src/bootstrap.js
   - IGNORE_NAMES=*.txt,moodle.css,moodle-rtl.css,moodle_min.css,editor.css,editor_min.css,Gruntfile.js
   - DB=mysqli
 
 matrix:
-  - php: 7.2
-    env: DB=mysqli   TASK=PHPUNIT
-    
+  - php: 7.3
+    env: DB=mysqli TASK=PHPUNIT
+
 cache:
   directories:
     - $HOME/.composer/cache
