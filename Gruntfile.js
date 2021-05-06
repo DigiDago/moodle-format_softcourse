@@ -24,7 +24,7 @@
  * Grunt configuration
  */
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     let path = require('path'),
         cwd = process.env.PWD || process.cwd(),
         inAMD = path.basename(cwd) === 'amd';
@@ -42,13 +42,12 @@ module.exports = function(grunt) {
      * @param {String} srcPath the  matched src path
      * @return {String} The rewritten destination path.
      */
-    let uglifyRename = function(destPath, srcPath) {
+    let uglifyRename = function (destPath, srcPath) {
         destPath = srcPath.replace('src', 'build');
         destPath = destPath.replace('.js', '.min.js');
         destPath = path.resolve(cwd, destPath);
         return destPath;
     };
-
 
     // Project configuration.
     grunt.initConfig({
@@ -63,9 +62,6 @@ module.exports = function(grunt) {
             }
         }
     });
-
-
-
 
     // Register NPM tasks.
     grunt.loadNpmTasks('grunt-contrib-uglify-es');
