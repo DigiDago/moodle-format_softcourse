@@ -1,6 +1,6 @@
 .card-whithout-bg, #page-course-view-softcourse #region-main > .card {
-  border: none;
   background-color: transparent;
+  border: none;
   margin-bottom: 0;
   min-height: 0;
   padding: 0; }
@@ -9,27 +9,40 @@
 
 #page-course-view-softcourse #region-main > .card {
   padding-top: 0; }
+
 #page-course-view-softcourse #region-main .course-content #softcourse-introduction {
   padding: 30px; }
   #page-course-view-softcourse #region-main .course-content #softcourse-introduction #softcourse-start-button {
+    -moz-appearance: button;
+    -webkit-appearance: button;
+    appearance: button;
+    color: initial;
     margin-top: 15px;
-    max-width: 220px; }
-    #page-course-view-softcourse #region-main .course-content #softcourse-introduction #softcourse-start-button button {
-      width: 100%; }
+    max-width: 220px;
+    text-decoration: none;
+    width: 100%; }
+    #page-course-view-softcourse #region-main .course-content #softcourse-introduction #softcourse-start-button[aria-disabled=true] {
+      cursor: not-allowed;
+      display: inline-block;
+      /* For IE11/ MS Edge bug */
+      opacity: 0.5;
+      pointer-events: none;
+      text-decoration: none; }
+
 #page-course-view-softcourse #region-main .course-content #softcourse-sections {
   margin-top: 50px;
   padding: 0; }
   #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs {
-    padding-left: 0;
     color: inherit;
+    padding-left: 0;
     text-decoration: none; }
     #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section {
       display: flex;
       flex-direction: row;
-      position: relative;
       flex-wrap: wrap;
       margin-top: 15px;
       padding: 0;
+      position: relative;
       transition: box-shadow 0.5s ease; }
       #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section:hover {
         box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.15), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12); }
@@ -50,7 +63,6 @@
       #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section:active {
         box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 10px 2px rgba(0, 0, 0, 0.12); }
       #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-img {
-        background-color: orange;
         background-color: brandcolor;
         background-position: center;
         background-repeat: no-repeat;
@@ -60,7 +72,7 @@
         width: 250px; }
         @media only screen and (max-width: 710px) {
           #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-img {
-            background-image: none !important;
+            background-image: none;
             width: 50px; } }
         #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-img > span {
           bottom: 10px;
@@ -70,9 +82,9 @@
           left: 0;
           opacity: 0;
           position: absolute;
-          transition: opacity 0.5s ease;
           text-align: center;
           text-transform: uppercase;
+          transition: opacity 0.5s ease;
           width: 250px; }
           @media only screen and (max-width: 710px) {
             #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-img > span {
@@ -87,8 +99,8 @@
         #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-img .update-img {
           color: white;
           display: inline-block;
-          height: 50px;
           font-size: 1.2rem;
+          height: 50px;
           left: 200px;
           opacity: 0;
           position: absolute;
@@ -206,6 +218,7 @@
           position: absolute;
           right: 15px;
           transition: opacity .5s ease; }
+
 #page-course-view-softcourse #region-main .course-content #ul.softcourse {
   list-style: none;
   margin: 0; }
@@ -224,9 +237,11 @@
   #page-course-view-softcourse #region-main .course-content #ul.softcourse li.section .section_action_menu .textmenu,
   #page-course-view-softcourse #region-main .course-content #ul.softcourse li.section .section_action_menu .menu-action-text {
     white-space: nowrap; }
+
 #page-course-view-softcourse #region-main.jsenabled .course-content ul.softcourse li.section .left,
 #page-course-view-softcourse #region-main.jsenabled .course-content ul.softcourse li.section .right {
   width: auto; }
+
 #page-course-view-softcourse.editing ul.softcourse li.section {
   list-style-type: none; }
   #page-course-view-softcourse.editing ul.softcourse li.section .side.left, #page-course-view-softcourse.editing ul.softcourse li.section .side.right {

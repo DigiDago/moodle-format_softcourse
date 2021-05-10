@@ -29,6 +29,8 @@ module.exports = function (grunt) {
         cwd = process.env.PWD || process.cwd(),
         inAMD = path.basename(cwd) === 'amd';
 
+    const sass = require('node-sass');
+
     // Globbing pattern for matching all AMD JS source files.
     let amdSrc = [inAMD ? cwd + '/src/*.js' : '**/amd/src/*.js'];
 
@@ -62,11 +64,36 @@ module.exports = function (grunt) {
             }
         },
         stylelint: {
-            all: ['scss/*.scss']
-        }
+            scss: {
+                options: {
+                    configFile: '',
+                    formatter: 'string',
+                    ignoreDisables: false,
+                    failOnError: true,
+                    outputFile: '',
+                    reportNeedlessDisables: false,
+                    fix: false,
+                    syntax: 'scss'
+                },
+                src: ['scss/*.scss']
+            }
+        },
+        sass: {
+            // Compile moodle styles.
+            options: {
+                implementation: sass,
+                sourceMap: true
+            },
+            dist: {
+                files: {
+                    'styles.css':'scss/styles.scss'
+                }
+            }
+        },
     });
 
     // Register NPM tasks.
+    grunt.loadNpmTasks("grunt-sass");
     grunt.loadNpmTasks('grunt-contrib-uglify-es');
     grunt.loadNpmTasks("grunt-stylelint");
 

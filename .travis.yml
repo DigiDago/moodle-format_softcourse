@@ -28,6 +28,7 @@ php:
 env:
  global:
   - MOODLE_BRANCH=MOODLE_310_STABLE
+  - IGNORE_PATHS=node_modules/*
  matrix:
   - DB=pgsql
   - DB=mysqli
@@ -43,6 +44,7 @@ before_install:
  - composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^3
  # Update the $PATH so scripts from this project can be called easily.
  - export PATH="$(cd ci/bin; pwd):$(cd ci/vendor/bin; pwd):$PATH"
+ - export IGNORE_PATHS=moodle/tests/fixtures,moodle/Sniffs
 
 # This lists steps that are run for installation and setup.
 install:

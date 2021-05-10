@@ -113,16 +113,19 @@ class format_softcourse_renderer extends format_section_renderer_base {
      */
     public function course_introduction() {
         $template = new stdClass();
-        $template->start_url = "";
+        $template->start_url = null;
 
         foreach ($this->modinfo->get_cms() as $cm) {
-            if ($cm->uservisible && !$cm->is_stealth() || !empty($cm->url)) {
-                $template->start_url = $cm->url;
+            if ($cm->uservisible && !$cm->is_stealth() || !empty($cm->url) && $cm->deletioninprogress == 0) {
+                if ($cm->modname == 'resource') {
+                    $cm->url->param("forceview", 1);
+                }
+                $template->start_url = $cm->url->out(false);
                 break;
             }
         }
         if ($template->start_url == "") {
-            $template->disabledStart = "disabled";
+            $template->disabledStart = "true";
         }
 
         // Get the introduction.
@@ -132,7 +135,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
         $context = context_course::instance($this->course->id);
 
         $summarytext = file_rewrite_pluginfile_urls($summary, 'pluginfile.php',
-                $context->id, 'course', 'introduction', 0);
+            $context->id, 'course', 'introduction', 0);
 
         $summarytext = $summary;
         $options = new stdClass();
@@ -207,15 +210,15 @@ class format_softcourse_renderer extends format_section_renderer_base {
             if ($section->visible == 0) {
                 continue;
             } else if (count($section->cm) == 1
-                    && ($section->cm[0]->visible == 1 || $section->cm[0]->visibleoncoursepage == 1)
+                && ($section->cm[0]->visible == 1 || $section->cm[0]->visibleoncoursepage == 1)
             ) {
                 continue;
             }
             $s = new stdClass();
             $s->name = format_string(
-                    $section->name,
-                    true,
-                    array('context' => context_course::instance($this->course->id))
+                $section->name,
+                true,
+                array('context' => context_course::instance($this->course->id))
             );
             $s->id = $section->id;
             $s->courseid = $this->course->id;
@@ -232,15 +235,15 @@ class format_softcourse_renderer extends format_section_renderer_base {
             // Render the iamge section.
             $fs = get_file_storage();
             $file = $fs->get_area_files($context->id, 'format_softcourse', 'sectionimage', $s->id,
-                    "itemid, filepath, filename", false);
+                "itemid, filepath, filename", false);
             if ($file) {
                 $s->urlimg = \moodle_url::make_pluginfile_url(
-                        end($file)->get_contextid(),
-                        end($file)->get_component(),
-                        end($file)->get_filearea(),
-                        end($file)->get_itemid(),
-                        end($file)->get_filepath(),
-                        end($file)->get_filename()
+                    end($file)->get_contextid(),
+                    end($file)->get_component(),
+                    end($file)->get_filearea(),
+                    end($file)->get_itemid(),
+                    end($file)->get_filepath(),
+                    end($file)->get_filename()
                 );
             }
 
@@ -252,16 +255,16 @@ class format_softcourse_renderer extends format_section_renderer_base {
             // Get completion of cms.
             foreach ($section->cm as $cm) {
                 if (($cm->uservisible && !$cm->is_stealth() || !empty($cm->url)) && $s->first_cm_url == '') {
-                    $s->first_cm_url = $cm->url;
+                    if ($cm->modname == 'resource') {
+                        $cm->url->param('forceview', 1);
+                    }
+                    $s->first_cm_url = $cm->url->out(false);
                 }
                 if ($cm->completion > 0) {
                     $nbcompletion++;
                 }
                 $nbcomplete += $completioninfo->get_data($cm, true)->completionstate;
-                if ($cm->deletioninprogress == 0
-                        && $cm->visible == 1
-                        && $cm->modname != "label"
-                        && $cm->visibleoncoursepage == 1) {
+                if ($cm->deletioninprogress == 0 && $cm->visible == 1 && $cm->modname != "label" && $cm->visibleoncoursepage == 1) {
                     $s->countactivities += 1;
                 }
             }
@@ -336,19 +339,19 @@ class format_softcourse_renderer extends format_section_renderer_base {
                 $markedthissection = get_string('markedthistopic');
                 $highlightoff = get_string('highlightoff');
                 $controls['highlight'] = array('url' => $url, "icon" => 'i/marked',
-                        'name' => $highlightoff,
-                        'pixattr' => array('class' => '', 'alt' => $markedthissection),
-                        'attr' => array('class' => 'editing_highlight', 'title' => $markedthissection,
-                                'data-action' => 'removemarker'));
+                    'name' => $highlightoff,
+                    'pixattr' => array('class' => '', 'alt' => $markedthissection),
+                    'attr' => array('class' => 'editing_highlight', 'title' => $markedthissection,
+                        'data-action' => 'removemarker'));
             } else {
                 $url->param('marker', $section->section);
                 $markthissection = get_string('markedthistopic');
                 $highlight = get_string('highlight');
                 $controls['highlight'] = array('url' => $url, "icon" => 'i/marker',
-                        'name' => $highlight,
-                        'pixattr' => array('class' => '', 'alt' => $markthissection),
-                        'attr' => array('class' => 'editing_highlight', 'title' => $markthissection,
-                                'data-action' => 'setmarker'));
+                    'name' => $highlight,
+                    'pixattr' => array('class' => '', 'alt' => $markthissection),
+                    'attr' => array('class' => 'editing_highlight', 'title' => $markthissection,
+                        'data-action' => 'setmarker'));
             }
         }
 

@@ -1,6 +1,9 @@
+$brandcolorsoftcourse: orange;
+$brandcolorsoftcourse: unquote("brandcolor");
+
 .card-whithout-bg {
-    border: none;
     background-color: transparent;
+    border: none;
     margin-bottom: 0;
     min-height: 0;
     padding: 0;
@@ -20,16 +23,28 @@
             padding-top: 0;
 
         }
+
         .course-content {
             #softcourse-introduction {
                 padding: 30px;
 
                 #softcourse-start-button {
+                    -moz-appearance: button;
+                    -webkit-appearance: button;
+                    appearance: button;
+
+                    color: initial;
                     margin-top: 15px;
                     max-width: 220px;
+                    text-decoration: none;
+                    width: 100%;
 
-                    button {
-                        width: 100%;
+                    &[aria-disabled=true] {
+                        cursor: not-allowed;
+                        display: inline-block; /* For IE11/ MS Edge bug */
+                        opacity: 0.5;
+                        pointer-events: none;
+                        text-decoration: none;
                     }
                 }
             }
@@ -39,17 +54,17 @@
                 padding: 0;
 
                 #softcourse-tabs {
-                    padding-left: 0;
                     color: inherit;
+                    padding-left: 0;
                     text-decoration: none;
 
                     .softcourse-section {
                         display: flex;
                         flex-direction: row;
-                        position: relative;
                         flex-wrap: wrap;
                         margin-top: 15px;
                         padding: 0;
+                        position: relative;
                         transition: box-shadow 0.5s ease;
 
                         &:hover {
@@ -92,8 +107,7 @@
                         }
 
                         .softcourse-section-img {
-                            background-color: orange;
-                            background-color: unquote("brandcolor");
+                            background-color: $brandcolorsoftcourse;
                             background-position: center;
                             background-repeat: no-repeat;
                             background-size: contain;
@@ -102,7 +116,7 @@
                             width: 250px;
 
                             @media only screen and (max-width: 710px) {
-                                background-image: none !important;
+                                background-image: none;
                                 width: 50px;
                             }
 
@@ -114,9 +128,9 @@
                                 left: 0;
                                 opacity: 0;
                                 position: absolute;
-                                transition: opacity 0.5s ease;
                                 text-align: center;
                                 text-transform: uppercase;
+                                transition: opacity 0.5s ease;
                                 width: 250px;
 
                                 @media only screen and (max-width: 710px) {
@@ -140,8 +154,8 @@
                             .update-img {
                                 color: white;
                                 display: inline-block;
-                                height: 50px;
                                 font-size: 1.2rem;
+                                height: 50px;
                                 left: 200px;
                                 opacity: 0;
                                 position: absolute;
@@ -250,7 +264,7 @@
 
                             .fa-leanpub {
                                 bottom: 15px;
-                                color: unquote("brandcolor");
+                                color: $brandcolorsoftcourse;
                                 font-size: 1rem;
                                 opacity: 0;
                                 position: absolute;
@@ -263,7 +277,7 @@
 
                             .softcourse-activities-count {
                                 bottom: 11px;
-                                color: unquote("brandcolor");
+                                color: $brandcolorsoftcourse;
                                 font-size: 1rem;
                                 left: 327px;
                                 opacity: 0;
@@ -295,7 +309,7 @@
 
                             .progress-percent {
                                 bottom: 13px;
-                                color: unquote("brandcolor");
+                                color: $brandcolorsoftcourse;
                                 margin-left: 5px;
                                 opacity: 0;
                                 position: absolute;

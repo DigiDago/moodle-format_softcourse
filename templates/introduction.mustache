@@ -1,6 +1,52 @@
+{{!
+    This file is part of DigiBoard
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_softcourse/templates/introduction
+
+    Block template for softcourse introduction
+
+    This template is used to generate a basic display for the softcourse introduction.
+
+    Classes required for JS:
+    * none
+
+    Context variables required for this template:
+    * summary string
+    * start_url object moodle_url
+    * start string
+    * disabledStart string
+}}
+
 <div id="softcourse-introduction" class="card">
     <div id="softcourse-summary">{{{ summary }}}</div>
-    <a id="softcourse-start-button" {{#start_url}} href="{{ start_url }}" {{/start_url}}>
-        <button class="btn btn-secondary" {{#disabledStart}}{{disabledStart}}{{/disabledStart}}>{{ start }}</button>
-    </a>
+        <a class="btn btn-secondary" id="softcourse-start-button"
+            {{#disabledStart}} aria-disabled="{{disabledStart}}" {{/disabledStart}}
+            {{#start_url}} href="{{ start_url }}" {{/start_url}}
+            {{^start_url}} href="#" {{/start_url}}
+        >
+            {{ start }}
+        </a>
 </div>
+
+{{#js}}
+    document.body.addEventListener('click', function (event) {
+    // filter out clicks on any other elements
+        if (event.target.nodeName == 'A' && event.target.getAttribute('aria-disabled') == 'true') {
+            event.preventDefault();
+        }
+    });
+{{/js}}
