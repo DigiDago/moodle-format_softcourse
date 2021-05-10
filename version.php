@@ -17,8 +17,7 @@
 /**
  * Version details
  *
- * @package    format
- * @subpackage softcourse
+ * @package    format_softcourse
  * @copyright  2018 Pimenko <contact@pimneko.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
