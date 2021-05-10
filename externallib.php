@@ -39,42 +39,22 @@ require_once("$CFG->libdir/externallib.php");
 class format_softcourse_external extends external_api {
 
     /**
-     * Returns description of method parameters
+     * Update the image of the section passed in parameters.
      *
-     * @return external_function_parameters
+     * @param $courseid int Course id.
+     * @param $sectionid int Section id who updated.
+     * @param $imagedata string Image data updated.
+     * @param $filename string File name of the image updated.
+     * @return array Array of warnings and status result.
      */
-    public static function update_section_image_parameters() {
-        $parameters = [
-            'courseid' => new \external_value(PARAM_INT, 'Course id', VALUE_REQUIRED),
-            'sectionid' => new \external_value(PARAM_INT, 'Section id', VALUE_REQUIRED),
-            'imagedata' => new \external_value(PARAM_TEXT, 'Image data', VALUE_REQUIRED),
-            'filename' => new \external_value(PARAM_TEXT, 'File name of the image', VALUE_REQUIRED)
-        ];
-        return new \external_function_parameters($parameters);
-    }
-
-    /**
-     * Update the image of the section passed in parameters
-     *
-     * @param $courseid
-     * @param $sectionid int Section id who updated
-     * @param $imagedata string Image data updated
-     * @param $filename string File name of the image updated
-     * @return array of warnings and status result
-     * @throws file_exception
-     * @throws invalid_parameter_exception
-     * @throws moodle_exception
-     * @throws restricted_context_exception
-     * @throws stored_file_creation_exception
-     */
-    public static function update_section_image($courseid, $sectionid, $imagedata, $filename) {
+    public static function update_section_image($courseid, $sectionid, $imagedata, $filename): array {
         global $CFG;
         $params = self::validate_parameters(self::update_section_image_parameters(),
             array(
-                'courseid'      => $courseid,
-                'sectionid'     => $sectionid,
-                'imagedata'     => $imagedata,
-                'filename'      => $filename
+                'courseid' => $courseid,
+                'sectionid' => $sectionid,
+                'imagedata' => $imagedata,
+                'filename' => $filename
             ));
         $success = false;
 
@@ -93,7 +73,7 @@ class format_softcourse_external extends external_api {
                 $fs = get_file_storage();
                 $ext = strtolower(pathinfo($params['filename'], PATHINFO_EXTENSION));
                 // Rename to sectionimage_sectionid.
-                $filename = 'sectionimage_'.$params['courseid'].'-'.$params['sectionid'].'.'.$ext;
+                $filename = 'sectionimage_' . $params['courseid'] . '-' . $params['sectionid'] . '.' . $ext;
                 // Check size.
                 $binary = base64_decode($params['imagedata']);
                 if (strlen($binary) > get_max_upload_file_size($CFG->maxbytes)) {
@@ -122,9 +102,24 @@ class format_softcourse_external extends external_api {
     }
 
     /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function update_section_image_parameters() {
+        $parameters = [
+            'courseid' => new \external_value(PARAM_INT, 'Course id', VALUE_REQUIRED),
+            'sectionid' => new \external_value(PARAM_INT, 'Section id', VALUE_REQUIRED),
+            'imagedata' => new \external_value(PARAM_TEXT, 'Image data', VALUE_REQUIRED),
+            'filename' => new \external_value(PARAM_TEXT, 'File name of the image', VALUE_REQUIRED)
+        ];
+        return new \external_function_parameters($parameters);
+    }
+
+    /**
      * Returns description of method result value
      *
-     * @return external_description
+     * @return external_single_structure
      * @since Moodle 2.2
      */
     public static function update_section_image_returns() {
@@ -136,32 +131,17 @@ class format_softcourse_external extends external_api {
     }
 
     /**
-     * Returns description of method parameters
-     *
-     * @return external_function_parameters
-     */
-    public static function delete_section_image_parameters() {
-        $parameters = [
-            'courseid' => new \external_value(PARAM_INT, 'Course id', VALUE_REQUIRED),
-            'sectionid' => new \external_value(PARAM_INT, 'Section id', VALUE_REQUIRED),
-        ];
-        return new \external_function_parameters($parameters);
-    }
-
-    /**
      * Delete the image of the section
      *
-     * @param $courseid
+     * @param $courseid int Course id
      * @param $sectionid int Section id who updated
-     * @return array of warnings and status result
-     * @throws moodle_exception
-     * @throws invalid_parameter_exception
+     * @return array Array of warnings and status result.
      */
-    public static function delete_section_image($courseid, $sectionid) {
+    public static function delete_section_image($courseid, $sectionid): array {
         $params = self::validate_parameters(self::delete_section_image_parameters(),
             array(
-                'courseid'      => $courseid,
-                'sectionid'     => $sectionid
+                'courseid' => $courseid,
+                'sectionid' => $sectionid
             ));
         $success = false;
 
@@ -189,11 +169,23 @@ class format_softcourse_external extends external_api {
         return $result;
     }
 
+    /**
+     * Returns description of method parameters
+     *
+     * @return external_function_parameters
+     */
+    public static function delete_section_image_parameters() {
+        $parameters = [
+            'courseid' => new \external_value(PARAM_INT, 'Course id', VALUE_REQUIRED),
+            'sectionid' => new \external_value(PARAM_INT, 'Section id', VALUE_REQUIRED),
+        ];
+        return new \external_function_parameters($parameters);
+    }
 
     /**
      * Returns description of method result value
      *
-     * @return external_description
+     * @return external_single_structure
      * @since Moodle 2.2
      */
     public static function delete_section_image_returns() {
@@ -203,5 +195,4 @@ class format_softcourse_external extends external_api {
         ];
         return new \external_single_structure($keys, 'sectionimagedelete');
     }
-
 }

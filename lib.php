@@ -149,7 +149,7 @@ class format_softcourse extends format_topics {
     /**
      * Adds format options elements to the course/section edit form.
      *
-     * This function is called from {@link course_edit_form::definition_after_data()}.
+     * This function is called from {@see course_edit_form::definition_after_data()}.
      *
      * @param MoodleQuickForm $mform form the elements are added to.
      * @param bool $forsection 'true' if this is a section edit form, 'false' if this is course edit form.
@@ -222,8 +222,8 @@ class format_softcourse extends format_topics {
      * In case if course format was changed to 'topics', we try to copy options
      * 'coursedisplay' and 'hiddensections' from the previous format.
      *
-     * @param stdClass|array $data return value from {@link moodleform::get_data()} or array with data
-     * @param stdClass $oldcourse if this function is called from {@link update_course()}
+     * @param stdClass|array $data return value from {@see moodleform::get_data()} or array with data
+     * @param stdClass $oldcourse if this function is called from {@see update_course()}
      *     this object contains information about the course before update
      * @return bool whether there were any changes to the options values
      */
@@ -274,19 +274,20 @@ function format_softcourse_inplace_editable($itemtype, $itemid, $newvalue) {
             array($itemid, 'softcourse'), MUST_EXIST);
         return course_get_format($section->course)->inplace_editable_update_section_name($section, $itemtype, $newvalue);
     }
+    return null;
 }
 
 /**
  * Softcourse plugin function function
  *
- * @param $course
- * @param $cm
- * @param $context
- * @param $filearea
- * @param $args
- * @param $forcedownload
- * @param array $options
- * @return bool
+ * @param stdClass $course The course object.
+ * @param stdClass $cm The cm object.
+ * @param context $context The context object.
+ * @param string $filearea The file area.
+ * @param array $args List of arguments.
+ * @param bool $forcedownload Whether or not to force the download of the file.
+ * @param array $options Array of options.
+ * @return void|false
  */
 function format_softcourse_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
     if ($filearea == 'sectionimage' || $filearea == 'introduction') {
