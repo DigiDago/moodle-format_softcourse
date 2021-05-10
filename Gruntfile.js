@@ -76,6 +76,12 @@ module.exports = function (grunt) {
                     syntax: 'scss'
                 },
                 src: ['scss/*.scss']
+            },
+            less: {
+                src: ['less/*.less']
+            },
+            css: {
+                src: ['css/*.css']
             }
         },
         sass: {
