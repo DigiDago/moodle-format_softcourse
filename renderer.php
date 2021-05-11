@@ -210,7 +210,7 @@ class format_softcourse_renderer extends format_section_renderer_base {
             if ($section->visible == 0) {
                 continue;
             } else if (count($section->cm) == 1
-                && ($section->cm[0]->visible == 1 || $section->cm[0]->visibleoncoursepage == 1)
+                && ($section->cm[0]->visible == 0 || $section->cm[0]->visibleoncoursepage == 0)
             ) {
                 continue;
             }
