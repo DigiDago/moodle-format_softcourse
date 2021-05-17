@@ -198,7 +198,9 @@ class format_softcourse_renderer extends format_section_renderer_base {
                     $sectionmods[$idsection]->id = $idsection;
                     $sectionmods[$idsection]->name = $info->name;
                     $sectionmods[$idsection]->summary = $info->summary;
+                    $sectionmods[$idsection]->uservisible = $info->uservisible;
                     $sectionmods[$idsection]->visible = $info->visible;
+                    $sectionmods[$idsection]->available = $info->available;
                 }
                 $sectionmods[$idsection]->cm[] = $cm;
             }
@@ -207,10 +209,12 @@ class format_softcourse_renderer extends format_section_renderer_base {
         foreach ($sectionmods as $section) {
             // We check case were section are hidden.
             // We check case were section have only one hidden activity.
-            if ($section->visible == 0) {
+            if ($section->visible == 0 || $section->uservisible == false || $section->available == false) {
                 continue;
             } else if (count($section->cm) == 1
-                && ($section->cm[0]->visible == 0 || $section->cm[0]->visibleoncoursepage == 0)
+                && ($section->cm[0]->visible == 0
+                    || $section->cm[0]->visibleoncoursepage == 0
+                    || $section->cm[0]->uservisible == false || $section->cm[0]->available == false)
             ) {
                 continue;
             }
@@ -254,7 +258,8 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $s->countactivities = 0;
             // Get completion of cms.
             foreach ($section->cm as $cm) {
-                if (($cm->uservisible && !$cm->is_stealth() || !empty($cm->url)) && $s->first_cm_url == '') {
+                if ( $cm->available && ($cm->uservisible && !$cm->is_stealth()
+                         || !empty($cm->url)) && $s->first_cm_url == '') {
                     if ($cm->modname == 'resource') {
                         $cm->url->param('forceview', 1);
                     }
@@ -264,7 +269,10 @@ class format_softcourse_renderer extends format_section_renderer_base {
                     $nbcompletion++;
                 }
                 $nbcomplete += $completioninfo->get_data($cm, true)->completionstate;
-                if ($cm->deletioninprogress == 0 && $cm->visible == 1 && $cm->modname != "label" && $cm->visibleoncoursepage == 1) {
+                if ($cm->deletioninprogress == 0 && $cm->visible == 1
+                    && $cm->modname != "label" && $cm->visibleoncoursepage == 1
+                    && $cm->uservisible == true
+                    && $cm->available == true) {
                     $s->countactivities += 1;
                 }
             }
