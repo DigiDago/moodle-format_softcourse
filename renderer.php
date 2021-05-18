@@ -282,8 +282,10 @@ class format_softcourse_renderer extends format_section_renderer_base {
                 $percentcomplete = $nbcomplete * 100 / $nbcompletion;
                 $s->progression_percent = intval($percentcomplete);
             }
-
-            $sections[] = $s;
+            $s->hasmodules = ($s->countactivities > 0);
+            if ($s->hasmodules) {
+                $sections[] = $s;
+            }
         }
 
         $template->sections = $sections;
