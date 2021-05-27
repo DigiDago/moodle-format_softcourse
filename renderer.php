@@ -116,7 +116,8 @@ class format_softcourse_renderer extends format_section_renderer_base {
         $template->start_url = null;
 
         foreach ($this->modinfo->get_cms() as $cm) {
-            if ($cm->uservisible && !$cm->is_stealth() || !empty($cm->url) && $cm->deletioninprogress == 0) {
+            if ($cm->uservisible && !$cm->is_stealth() && $cm->modname != 'label'
+                || !empty($cm->url) && $cm->deletioninprogress == 0) {
                 if ($cm->modname == 'resource') {
                     $cm->url->param("forceview", 1);
                 }
@@ -258,8 +259,8 @@ class format_softcourse_renderer extends format_section_renderer_base {
             $s->countactivities = 0;
             // Get completion of cms.
             foreach ($section->cm as $cm) {
-                if ( $cm->available && ($cm->uservisible && !$cm->is_stealth()
-                         || !empty($cm->url)) && $s->first_cm_url == '') {
+                if ( $cm->available && ($cm->uservisible && !$cm->is_stealth() && $cm->modname != 'label'
+                         || !empty($cm->url)) && $s->first_cm_url == '' ) {
                     if ($cm->modname == 'resource') {
                         $cm->url->param('forceview', 1);
                     }
