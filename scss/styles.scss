@@ -1,5 +1,5 @@
-$brandcolorsoftcoursedefault: orange;
 $brandcolorsoftcoursebrand: unquote("brandcolor");
+$brandcolorsoftcoursedefault: orange;
 
 .card-whithout-bg {
     background-color: transparent;
@@ -68,10 +68,9 @@ $brandcolorsoftcoursebrand: unquote("brandcolor");
                         transition: box-shadow 0.5s ease;
 
                         &:hover {
-                            box-shadow:
-                                0 2px 4px -1px rgba(0, 0, 0, .15),
-                                0 4px 5px 0 rgba(0, 0, 0, .14),
-                                0 1px 10px 0 rgba(0, 0, 0, .12);
+                            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .15),
+                            0 4px 5px 0 rgba(0, 0, 0, .14),
+                            0 1px 10px 0 rgba(0, 0, 0, .12);
 
                             .softcourse-section-img {
 
@@ -100,19 +99,14 @@ $brandcolorsoftcoursebrand: unquote("brandcolor");
                         }
 
                         &:active {
-                            box-shadow:
-                                0 5px 5px -3px rgba(0, 0, 0, .2),
-                                0 8px 10px 1px rgba(0, 0, 0, .14),
-                                0 3px 10px 2px rgba(0, 0, 0, .12);
+                            box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2),
+                            0 8px 10px 1px rgba(0, 0, 0, .14),
+                            0 3px 10px 2px rgba(0, 0, 0, .12);
                         }
 
                         .softcourse-section-img {
-                            @if $brandcolorsoftcoursebrand != unquote("brandcolor") {
-                                background-color: $brandcolorsoftcoursebrand;
-                            }
-                            @else {
-                                background-color: $brandcolorsoftcoursedefault;
-                            }
+                            background-color: $brandcolorsoftcoursedefault;
+                            background-color: $brandcolorsoftcoursebrand;
                             background-position: center;
                             background-repeat: no-repeat;
                             background-size: contain;
@@ -269,12 +263,8 @@ $brandcolorsoftcoursebrand: unquote("brandcolor");
 
                             .fa-leanpub {
                                 bottom: 15px;
-                                @if $brandcolorsoftcoursebrand != unquote("brandcolor") {
-                                    color: $brandcolorsoftcoursebrand;
-                                }
-                                @else {
-                                    color: $brandcolorsoftcoursedefault;
-                                }
+                                color: $brandcolorsoftcoursedefault;
+                                color: $brandcolorsoftcoursebrand;
                                 font-size: 1rem;
                                 opacity: 0;
                                 position: absolute;
@@ -287,12 +277,8 @@ $brandcolorsoftcoursebrand: unquote("brandcolor");
 
                             .softcourse-activities-count {
                                 bottom: 11px;
-                                @if $brandcolorsoftcoursebrand != unquote("brandcolor") {
-                                    color: $brandcolorsoftcoursebrand;
-                                }
-                                @else {
-                                    color: $brandcolorsoftcoursedefault;
-                                }
+                                color: $brandcolorsoftcoursedefault;
+                                color: $brandcolorsoftcoursebrand;
                                 font-size: 1rem;
                                 left: 327px;
                                 opacity: 0;
@@ -324,12 +310,8 @@ $brandcolorsoftcoursebrand: unquote("brandcolor");
 
                             .progress-percent {
                                 bottom: 13px;
-                                @if $brandcolorsoftcoursebrand != unquote("brandcolor") {
-                                    color: $brandcolorsoftcoursebrand;
-                                }
-                                @else {
-                                    color: $brandcolorsoftcoursedefault;
-                                }
+                                color: $brandcolorsoftcoursedefault;
+                                color: $brandcolorsoftcoursebrand;
                                 margin-left: 5px;
                                 opacity: 0;
                                 position: absolute;
