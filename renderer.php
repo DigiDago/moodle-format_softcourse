@@ -227,7 +227,10 @@ class format_softcourse_renderer extends format_section_renderer_base {
             );
             $s->id = $section->id;
             $s->courseid = $this->course->id;
-            $s->summary = $section->summary;
+            $options = new stdClass();
+            $options->noclean = true;
+            $options->overflowdiv = true;
+            $s->summary = format_text($section->summary, 1, $options);
             $s->start = get_string('startcourse', 'format_softcourse');
             $s->countactivitiestooltip = get_string('countactivities', 'format_softcourse');
             $s->countactivities = 0;
@@ -290,7 +293,6 @@ class format_softcourse_renderer extends format_section_renderer_base {
         }
 
         $template->sections = $sections;
-
         return $this->render_from_template('format_softcourse/sections', $template);
     }
 
