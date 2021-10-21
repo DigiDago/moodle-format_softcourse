@@ -47,6 +47,8 @@
     function texttruncate(id) {
         var selector = document.getElementsByClassName(id);
         if (selector != null && selector.length > 0) {
+            var truncate = false;
+
             for (var i = 0; i < selector.length; i++) {
                 var el = selector[i];
                 if (el != null && el.innerHTML.length > 0) {
@@ -64,7 +66,11 @@
                     }
                     while(el.scrollHeight > el.offsetHeight) {
                         wordArray.pop();
-                        el.innerHTML = wordArray.join(' ') + '...';
+                        el.innerHTML = wordArray.join(' ');
+                        truncate = true;
+                    }
+                    if(truncate) {
+                        document.querySelector('.softcourse-section-summary div :last-child').append('...');
                     }
                 }
             }
