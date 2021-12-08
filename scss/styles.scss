@@ -17,6 +17,15 @@ $brandcolorsoftcoursedefault: orange;
 
     #region-main {
 
+        .stretched-link {
+            color: $brandcolorsoftcoursedefault;
+            color: $brandcolorsoftcoursebrand;
+            display: flex;
+            text-decoration: none;
+            width: 100%;
+            z-index: 1;
+        }
+
         & > .card {
 
             @extend .card-whithout-bg;
@@ -73,10 +82,16 @@ $brandcolorsoftcoursedefault: orange;
                             0 1px 10px 0 rgba(0, 0, 0, .12);
 
                             .softcourse-section-img {
+                                z-index: 3;
 
                                 .delete-img,
-                                .update-img {
-                                    z-index: 1;
+                                .update-img,
+                                span {
+                                    z-index: 4;
+
+                                    &:hover {
+                                        color: #fff;
+                                    }
                                 }
 
                                 .delete-img,
@@ -110,13 +125,14 @@ $brandcolorsoftcoursedefault: orange;
                             background-position: center;
                             background-repeat: no-repeat;
                             background-size: contain;
-                            display: inline-block;
+                            display: flex;
                             height: 150px;
-                            width: 250px;
+                            min-width: 250px;
 
                             @media only screen and (max-width: 710px) {
                                 background-image: none;
-                                width: 50px;
+                                max-width: 50px;
+                                width: 100%;
                             }
 
                             & > span {
@@ -183,6 +199,10 @@ $brandcolorsoftcoursedefault: orange;
                                         cursor: pointer;
                                     }
                                 }
+
+                                @media only screen and (max-width: 710px) {
+                                    display: none;
+                                }
                             }
 
                             .delete-img {
@@ -218,6 +238,10 @@ $brandcolorsoftcoursedefault: orange;
                                         cursor: pointer;
                                     }
                                 }
+
+                                @media only screen and (max-width: 710px) {
+                                    display: none;
+                                }
                             }
 
                             &:not(.not-empty)::before {
@@ -225,33 +249,39 @@ $brandcolorsoftcoursedefault: orange;
                                 content: "\f19d";
                                 font-family: "FontAwesome";
                                 font-size: 100px;
-                                left: 60px;
-                                position: absolute;
-                                top: -15px;
+                                text-align: center;
                                 transition: top 0.5s ease;
+                                width: 100%;
+
+                                @media only screen and (max-width: 710px) {
+                                    display: none;
+                                }
                             }
                         }
 
                         .softcourse-section-body {
-                            display: inline-block;
+                            color: #000;
+                            display: flex;
                             flex: 1;
+                            flex-direction: column;
                             height: 150px;
                             margin-left: 50px;
+                            padding: 10px 10px 10px 0;
                             position: relative;
+                            width: 100%;
+                            z-index: 0;
 
                             .softcourse-section-name {
-                                display: inline-block;
+                                display: flex;
                                 font-size: 1.2rem;
                                 max-height: 30px;
                                 max-width: 100%;
                                 overflow: hidden;
                                 padding-right: 15px;
-                                position: absolute;
                                 text-decoration: none;
                                 text-overflow: ellipsis;
-                                top: 10px;
                                 white-space: nowrap;
-                                width: auto;
+                                width: 100%;
                             }
 
                             .softcourse-section-summary {
@@ -259,11 +289,8 @@ $brandcolorsoftcoursedefault: orange;
                                 font-size: 0.75rem;
                                 height: 100%;
                                 max-height: 75px;
-                                overflow: hidden;
                                 padding-right: 15px;
-                                position: absolute;
-                                text-overflow: ellipsis;
-                                top: 40px;
+                                width: 100%;
 
                                 p {
                                     height: 100%;
@@ -271,10 +298,8 @@ $brandcolorsoftcoursedefault: orange;
                             }
 
                             .softcourse-section-info {
-                                bottom: 0;
-                                display: inline-block;
+                                display: flex;
                                 height: 30px;
-                                position: absolute;
                                 width: 100%;
                             }
 
@@ -334,6 +359,10 @@ $brandcolorsoftcoursedefault: orange;
                                 position: absolute;
                                 right: 15px;
                                 transition: opacity .5s ease;
+                            }
+
+                            @media only screen and (max-width: 710px) {
+                                margin-left: 30px;
                             }
                         }
                     }

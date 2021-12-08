@@ -18,7 +18,7 @@
  * Plugin Web Service API
  *
  * @package     format_softcourse
- * @copyright   DigiDago 2018
+ * @copyright   Pimenko 2021 <contact@pimneko.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @author      Jordan Kesraoui
  */
