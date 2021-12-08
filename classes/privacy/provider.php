@@ -13,22 +13,20 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Privacy Subsystem implementation for format_softcourse.
  *
  * @package    format_softcourse
- * @copyright  2018 Pimenko <contact@pimneko.com>
+ * @copyright  2021 Pimenko <contact@pimneko.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace format_softcourse\privacy;
 defined('MOODLE_INTERNAL') || die();
-/**
- * Privacy Subsystem for format_softcourse implementing null_provider.
- *
- * @copyright  2018 Carlos Escobedo <carlos@moodle.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+
 class provider implements \core_privacy\local\metadata\null_provider {
+
     /**
      * Get the language string identifier with the component's language
      * file to explain why this plugin stores no data.

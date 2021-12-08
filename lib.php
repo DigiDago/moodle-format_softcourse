@@ -24,7 +24,9 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-require_once($CFG->dirroot. '/course/format/topics/lib.php');
+require_once($CFG->dirroot . '/course/format/lib.php');
+
+use core\output\inplace_editable;
 
 /**
  * Main class for the Soft Course format
@@ -33,8 +35,63 @@ require_once($CFG->dirroot. '/course/format/topics/lib.php');
  * @copyright  2019 Pimenko <contact@pimenko.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class format_softcourse extends format_topics {
+class format_softcourse extends core_courseformat\base {
 
+    /**
+     * Returns true if this course format uses sections.
+     *
+     * @return bool
+     */
+    public function uses_sections() {
+        return true;
+    }
+
+    /**
+     * Returns true if this course format uses course index
+     *
+     * This function may be called without specifying the course id
+     * i.e. in course_index_drawer()
+     *
+     * @return bool
+     */
+    public function uses_course_index() {
+        return true;
+    }
+
+    /**
+     * Returns true if this course format is compatible with content components.
+     *
+     * Using components means the content elements can watch the frontend course state and
+     * react to the changes. Formats with component compatibility can have more interactions
+     * without refreshing the page, like having drag and drop from the course index to reorder
+     * sections and activities.
+     *
+     * @return bool if the format is compatible with components.
+     */
+    public function supports_components() {
+        return true;
+    }
+
+    /**
+     * Indicates whether the course format supports the creation of a news forum.
+     *
+     * @return bool
+     */
+    public function supports_news() {
+        return true;
+    }
+
+    /**
+     * Whether this format allows to delete sections.
+     *
+     * Do not call this function directly, instead use {@link course_can_delete_section()}
+     *
+     * @param int|stdClass|section_info $section
+     * @return bool
+     */
+    public function can_delete_section($section) {
+        return true;
+    }
 
     /**
      * The URL to use for the specified course (with section)
@@ -60,13 +117,11 @@ class format_softcourse extends format_topics {
             $sectionno = $section;
         }
         if ($sectionno !== null) {
+            $usercoursedisplay = COURSE_DISPLAY_MULTIPAGE;
             if ($sr !== null) {
-                $usercoursedisplay = COURSE_DISPLAY_MULTIPAGE;
                 $sectionno = $sr;
-            } else {
-                $usercoursedisplay = COURSE_DISPLAY_MULTIPAGE;
             }
-            if ($sectionno != 0 && $usercoursedisplay == COURSE_DISPLAY_MULTIPAGE) {
+            if ($sectionno != 0) {
                 $url->param('section', $sectionno);
             } else {
                 if (empty($CFG->linkcoursesections) && !empty($options['navigation'])) {
@@ -76,74 +131,6 @@ class format_softcourse extends format_topics {
             }
         }
         return $url;
-    }
-
-    /**
-     * Definitions of the additional options that this course format uses for course
-     *
-     * Soft Course format uses the following options:
-     * - coursedisplay
-     * - hideallsections
-     *
-     * @param bool $foreditform
-     * @return array of options
-     */
-    public function course_format_options($foreditform = false) {
-        static $courseformatoptions = false;
-        if ($courseformatoptions === false) {
-            $courseformatoptions = [
-                    'hideallsections' => [
-                            'default' => 0,
-                            'type' => PARAM_INT
-                    ],
-                    'hidesectionzero' => [
-                            'default' => 0,
-                            'type' => PARAM_INT
-                    ],
-
-                    'introduction' => [
-                            'default' => '',
-                            'type' => PARAM_RAW
-                    ]
-            ];
-        }
-        if ($foreditform) {
-            $optionsedit = [
-                    'hideallsections' => [
-                            'label' => new lang_string('hideallsections', "format_softcourse"),
-                            'help' => 'hideallsections',
-                            'help_component' => 'format_softcourse',
-                            'element_type' => 'select',
-                            'element_attributes' => [
-                                    [
-                                            0 => new lang_string('hideallsectionsno', "format_softcourse"),
-                                            1 => new lang_string('hideallsectionsyes', "format_softcourse")
-                                    ]
-                            ]
-                    ],
-                    'hidesectionzero' => [
-                            'label' => new lang_string('hidesectionzero', "format_softcourse"),
-                            'help' => 'hidesectionzero',
-                            'help_component' => 'format_softcourse',
-                            'element_type' => 'select',
-                            'element_attributes' => [
-                                    [
-                                            0 => new lang_string('hidesectionzerono', "format_softcourse"),
-                                            1 => new lang_string('hidesectionzeroyes', "format_softcourse")
-                                    ]
-                            ]
-                    ],
-                    'introduction' => [
-                            'label' => new lang_string('introduction', "format_softcourse"),
-                            'help' => 'introduction',
-                            'help_component' => 'format_softcourse',
-                            'element_type' => 'editor',
-                            'maxfiles' => EDITOR_UNLIMITED_FILES
-                    ]
-            ];
-            $courseformatoptions = array_merge_recursive($courseformatoptions, $optionsedit);
-        }
-        return $courseformatoptions;
     }
 
     /**
@@ -157,6 +144,7 @@ class format_softcourse extends format_topics {
      */
     public function create_edit_form_elements(&$mform, $forsection = false) {
         global $COURSE;
+
         $elements = parent::create_edit_form_elements($mform, $forsection);
 
         if (!$forsection && (empty($COURSE->id) || $COURSE->id == SITEID)) {
@@ -165,7 +153,7 @@ class format_softcourse extends format_topics {
             // The "Number of sections" option is no longer available when editing course, instead teachers should
             // delete and add sections when needed.
             $courseconfig = get_config('moodlecourse');
-            $max = (int)$courseconfig->maxsections;
+            $max = (int) $courseconfig->maxsections;
             $element = $mform->addElement('select', 'numsections', get_string('numberweeks'), range(0, $max ?: 52));
             $mform->setType('numsections', PARAM_INT);
             if (is_null($mform->getElementValue('numsections'))) {
@@ -185,6 +173,270 @@ class format_softcourse extends format_topics {
     }
 
     /**
+     * Returns the information about the ajax support in the given source format.
+     *
+     * The returned object's property (boolean)capable indicates that
+     * the course format supports Moodle course ajax features.
+     *
+     * @return stdClass
+     */
+    public function supports_ajax() {
+        $ajaxsupport = new stdClass();
+        $ajaxsupport->capable = true;
+        return $ajaxsupport;
+    }
+
+    /**
+     * Loads all of the course sections into the navigation.
+     *
+     * @param global_navigation $navigation
+     * @param navigation_node $node The course node within the navigation
+     * @return void
+     */
+    public function extend_course_navigation($navigation, navigation_node $node) {
+        global $PAGE;
+        // If section is specified in course/view.php, make sure it is expanded in navigation.
+        if ($navigation->includesectionnum === false) {
+            $selectedsection = optional_param('section', null, PARAM_INT);
+            if ($selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') &&
+                $PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)) {
+                $navigation->includesectionnum = $selectedsection;
+            }
+        }
+
+        // Check if there are callbacks to extend course navigation.
+        parent::extend_course_navigation($navigation, $node);
+
+        // We want to remove the general section if it is empty.
+        $modinfo = get_fast_modinfo($this->get_course());
+        $sections = $modinfo->get_sections();
+        if (!isset($sections[0])) {
+            // The general section is empty to find the navigation node for it we need to get its ID.
+            $section = $modinfo->get_section_info(0);
+            $generalsection = $node->get($section->id, navigation_node::TYPE_SECTION);
+            if ($generalsection) {
+                // We found the node - now remove it.
+                $generalsection->remove();
+            }
+        }
+    }
+
+    /**
+     * Updates format options for a course
+     *
+     * In case if course format was changed to 'topics', we try to copy options
+     * 'coursedisplay' and 'hiddensections' from the previous format.
+     *
+     * @param stdClass|array $data return value from {@see moodleform::get_data()} or array with data
+     * @param stdClass $oldcourse if this function is called from {@see update_course()}
+     *     this object contains information about the course before update
+     * @return bool whether there were any changes to the options values
+     */
+    public function update_course_format_options($data, $oldcourse = null) {
+        $data = (array) $data;
+        if ($oldcourse !== null) {
+            $oldcourse = (array) $oldcourse;
+            $options = $this->course_format_options();
+            foreach ($options as $key => $unused) {
+                if (!array_key_exists($key, $data)) {
+                    if (array_key_exists($key, $oldcourse)) {
+                        $data[$key] = $oldcourse[$key];
+                    }
+                }
+            }
+        }
+
+        // Managing of image in the introduction.
+        if (isset($data['introduction']) && $introductiondraftid = file_get_submitted_draft_itemid('introduction')) {
+            $context = context_course::instance($this->courseid);
+            $options = array('subdirs' => false);
+
+            // Retrieve the image in the draftfilearea and put it into the introduction filearea of the plugin.
+            $data['introduction']['text'] = file_save_draft_area_files($introductiondraftid, $context->id,
+                'format_softcourse', 'introduction', time(), null, $data['introduction']['text']);
+            $data['introduction']['text'] = file_rewrite_pluginfile_urls($data['introduction']['text'], 'pluginfile.php',
+                $context->id, 'format_softcourse', 'introduction', time());
+        }
+
+        return $this->update_format_options($data);
+    }
+
+    /**
+     * Definitions of the additional options that this course format uses for course
+     *
+     * Soft Course format uses the following options:
+     * - coursedisplay
+     * - hideallsections
+     *
+     * @param bool $foreditform
+     * @return array of options
+     */
+    public function course_format_options($foreditform = false) {
+        static $courseformatoptions = false;
+        if ($courseformatoptions === false) {
+            $courseconfig = get_config('moodlecourse');
+            $courseformatoptions = [
+                'hideallsections' => [
+                    'default' => 0,
+                    'type' => PARAM_INT
+                ],
+                'hidesectionzero' => [
+                    'default' => 0,
+                    'type' => PARAM_INT
+                ],
+
+                'introduction' => [
+                    'default' => '',
+                    'type' => PARAM_RAW
+                ],
+                'coursedisplay' => [
+                    'default' => 0,
+                    'type' => PARAM_INT,
+                ]
+            ];
+        }
+        if ($foreditform) {
+            $optionsedit = [
+                'hideallsections' => [
+                    'label' => new lang_string('hideallsections', "format_softcourse"),
+                    'help' => 'hideallsections',
+                    'help_component' => 'format_softcourse',
+                    'element_type' => 'select',
+                    'element_attributes' => [
+                        [
+                            0 => new lang_string('hideallsectionsno', "format_softcourse"),
+                            1 => new lang_string('hideallsectionsyes', "format_softcourse")
+                        ]
+                    ]
+                ],
+                'hidesectionzero' => [
+                    'label' => new lang_string('hidesectionzero', "format_softcourse"),
+                    'help' => 'hidesectionzero',
+                    'help_component' => 'format_softcourse',
+                    'element_type' => 'select',
+                    'element_attributes' => [
+                        [
+                            0 => new lang_string('hidesectionzerono', "format_softcourse"),
+                            1 => new lang_string('hidesectionzeroyes', "format_softcourse")
+                        ]
+                    ]
+                ],
+                'introduction' => [
+                    'label' => new lang_string('introduction', "format_softcourse"),
+                    'help' => 'introduction',
+                    'help_component' => 'format_softcourse',
+                    'element_type' => 'editor',
+                    'maxfiles' => EDITOR_UNLIMITED_FILES
+                ],
+                'coursedisplay' => [
+                    'label' => new lang_string('coursedisplay'),
+                    'element_type' => 'select',
+                    'element_attributes' => [
+                        [
+                            COURSE_DISPLAY_SINGLEPAGE => new lang_string('coursedisplay_single'),
+                        ],
+                    ],
+                    'help' => 'coursedisplay',
+                    'help_component' => 'moodle',
+                ],
+            ];
+            $courseformatoptions = array_merge_recursive($courseformatoptions, $optionsedit);
+        }
+        return $courseformatoptions;
+    }
+
+    /**
+     * Custom action after section has been moved in AJAX mode.
+     *
+     * Used in course/rest.php
+     *
+     * @return array This will be passed in ajax respose
+     */
+    public function ajax_section_move() {
+        global $PAGE;
+        $titles = [];
+        $course = $this->get_course();
+        $modinfo = get_fast_modinfo($course);
+        $renderer = $this->get_renderer($PAGE);
+        if ($renderer && ($sections = $modinfo->get_section_info_all())) {
+            foreach ($sections as $number => $section) {
+                $titles[$number] = $renderer->section_title($section, $course);
+            }
+        }
+        return ['sectiontitles' => $titles, 'action' => 'move'];
+    }
+
+    /**
+     * Callback used in WS core_course_edit_section when teacher performs an AJAX action on a section (show/hide).
+     *
+     * Access to the course is already validated in the WS but the callback has to make sure
+     * that particular action is allowed by checking capabilities
+     *
+     * Course formats should register.
+     *
+     * @param section_info|stdClass $section
+     * @param string $action
+     * @param int $sr
+     * @return null|array any data for the Javascript post-processor (must be json-encodeable)
+     */
+    public function section_action($section, $action, $sr) {
+        global $PAGE;
+
+        // For show/hide actions call the parent method and return the new content for .section_availability element.
+        $rv = parent::section_action($section, $action, $sr);
+        $renderer = $PAGE->get_renderer('format_softcourse');
+
+        if (!($section instanceof section_info)) {
+            $modinfo = $this->get_modinfo();
+            $section = $modinfo->get_section_info($section->section);
+        }
+        $elementclass = $this->get_output_classname('content\\section\\availability');
+        $availability = new $elementclass($this, $section);
+
+        $rv['section_availability'] = $renderer->render($availability);
+        return $rv;
+    }
+
+    /**
+     * Returns the display name of the given section that the course prefers.
+     *
+     * Use section name is specified by user. Otherwise use default ("Topic #").
+     *
+     * @param int|stdClass $section Section object from database or just field section.section
+     * @return string Display name that the course format prefers, e.g. "Topic 2"
+     */
+    public function get_section_name($section) {
+        $section = $this->get_section($section);
+        // If section name is not 'custom' we won't display it.
+        if ((string) $section->name !== '') {
+            return format_string($section->name, true,
+                ['context' => context_course::instance($this->courseid)]);
+        } else {
+            return $this->get_default_section_name($section);
+        }
+    }
+
+    /**
+     * Returns the default section name for the softcourse course format.
+     *
+     * If the section number is 0, it will use the string with key = section0name from the course format's lang file.
+     * If the section number is not 0, the base implementation of course_format::get_default_section_name which uses
+     * the string with the key = 'sectionname' from the course format's lang file + the section number will be used.
+     *
+     * @param stdClass $section Section object from database or just field course_sections section
+     * @return string The default value for the section name.
+     */
+    public function get_default_section_name($section) {
+        if ($section->section == 0) {
+            // Return the general section.
+            return get_string('section0name', 'format_softcourse');
+        } else {
+            // Return default section name.
+            return parent::get_default_section_name($section);
+        }
+    }
+
+    /**
      * Prepares values of course or section format options before storing them in DB
      *
      * If an option has invalid value it is not returned
@@ -193,7 +445,7 @@ class format_softcourse extends format_topics {
      * @param int|null $sectionid null if it is course format option
      * @return array array of options that have valid values
      */
-    protected function validate_format_options(array $rawdata, int $sectionid = null) : array {
+    protected function validate_format_options(array $rawdata, int $sectionid = null): array {
         if (!$sectionid) {
             $allformatoptions = $this->course_format_options(true);
         } else {
@@ -215,46 +467,6 @@ class format_softcourse extends format_topics {
         }
         return $data;
     }
-
-    /**
-     * Updates format options for a course
-     *
-     * In case if course format was changed to 'topics', we try to copy options
-     * 'coursedisplay' and 'hiddensections' from the previous format.
-     *
-     * @param stdClass|array $data return value from {@see moodleform::get_data()} or array with data
-     * @param stdClass $oldcourse if this function is called from {@see update_course()}
-     *     this object contains information about the course before update
-     * @return bool whether there were any changes to the options values
-     */
-    public function update_course_format_options($data, $oldcourse = null) {
-        $data = (array)$data;
-        if ($oldcourse !== null) {
-            $oldcourse = (array)$oldcourse;
-            $options = $this->course_format_options();
-            foreach ($options as $key => $unused) {
-                if (!array_key_exists($key, $data)) {
-                    if (array_key_exists($key, $oldcourse)) {
-                        $data[$key] = $oldcourse[$key];
-                    }
-                }
-            }
-        }
-
-        // Managing of image in the introduction.
-        if (isset($data['introduction']) &&  $introductiondraftid = file_get_submitted_draft_itemid('introduction')) {
-            $context = context_course::instance($this->courseid);
-            $options = array('subdirs' => false);
-
-            // Retrieve the image in the draftfilearea and put it into the introduction filearea of the plugin.
-            $data['introduction']['text'] = file_save_draft_area_files($introductiondraftid, $context->id,
-                    'format_softcourse', 'introduction', time(), null, $data['introduction']['text']);
-            $data['introduction']['text'] = file_rewrite_pluginfile_urls($data['introduction']['text'], 'pluginfile.php',
-                    $context->id, 'format_softcourse', 'introduction',  time());
-        }
-
-        return $this->update_format_options($data);
-    }
 }
 
 /**
@@ -263,7 +475,7 @@ class format_softcourse extends format_topics {
  * @param string $itemtype
  * @param int $itemid
  * @param mixed $newvalue
- * @return \core\output\inplace_editable
+ * @return inplace_editable
  */
 function format_softcourse_inplace_editable($itemtype, $itemid, $newvalue) {
     global $DB, $CFG;
