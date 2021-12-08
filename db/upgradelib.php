@@ -18,7 +18,7 @@
  * Upgrade scripts for course format "Soft Course"
  *
  * @package    format_softcourse
- * @copyright  2018 Pimenko <contact@pimneko.com>
+ * @copyright  2021 Pimenko <contact@pimneko.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
