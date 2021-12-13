@@ -111,6 +111,7 @@ class renderer extends section_renderer {
             $options->noclean = true;
             $options->overflowdiv = true;
             $data->coursesummary = format_text($COURSE->summary, 1, $options);
+
             return $this->render_from_template('format_softcourse/content', $data);
         }
     }
