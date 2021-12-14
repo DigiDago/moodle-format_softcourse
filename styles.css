@@ -89,8 +89,8 @@
         @media only screen and (max-width: 710px) {
           #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-img {
             background-image: none;
-            max-width: 50px;
-            width: 100%; } }
+            width: 50px;
+            min-width: 50px; } }
         #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-img > span {
           bottom: 10px;
           color: white;
@@ -187,10 +187,10 @@
         margin-left: 50px;
         padding: 10px 10px 10px 0;
         position: relative;
-        width: 100%;
+        width: calc(100% - 300px);
         z-index: 0; }
         #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-body .softcourse-section-name {
-          display: flex;
+          display: inline-block;
           font-size: 1.2rem;
           max-height: 30px;
           max-width: 100%;
@@ -249,7 +249,8 @@
           transition: opacity .5s ease; }
         @media only screen and (max-width: 710px) {
           #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-body {
-            margin-left: 30px; } }
+            margin-left: 30px;
+            width: calc(100% - 80px); } }
 
 #page-course-view-softcourse #region-main .course-content #ul.softcourse {
   list-style: none;

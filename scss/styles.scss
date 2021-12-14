@@ -131,8 +131,8 @@ $brandcolorsoftcoursedefault: orange;
 
                             @media only screen and (max-width: 710px) {
                                 background-image: none;
-                                max-width: 50px;
-                                width: 100%;
+                                width: 50px;
+                                min-width: 50px;
                             }
 
                             & > span {
@@ -268,11 +268,11 @@ $brandcolorsoftcoursedefault: orange;
                             margin-left: 50px;
                             padding: 10px 10px 10px 0;
                             position: relative;
-                            width: 100%;
+                            width: calc(100% - 300px);
                             z-index: 0;
 
                             .softcourse-section-name {
-                                display: flex;
+                                display: inline-block;
                                 font-size: 1.2rem;
                                 max-height: 30px;
                                 max-width: 100%;
@@ -352,6 +352,7 @@ $brandcolorsoftcoursedefault: orange;
 
                             @media only screen and (max-width: 710px) {
                                 margin-left: 30px;
+                                width: calc(100% - 80px);
                             }
                         }
                     }
