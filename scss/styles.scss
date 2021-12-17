@@ -24,6 +24,7 @@ $brandcolorsoftcoursedefault: orange;
             text-decoration: none;
             width: 100%;
             z-index: 1;
+            overflow: hidden;
         }
 
         & > .card {
@@ -291,6 +292,7 @@ $brandcolorsoftcoursedefault: orange;
                                 max-height: 75px;
                                 padding-right: 15px;
                                 width: 100%;
+                                overflow: hidden;
 
                                 p {
                                     height: 100%;

@@ -13,7 +13,8 @@
   display: flex;
   text-decoration: none;
   width: 100%;
-  z-index: 1; }
+  z-index: 1;
+  overflow: hidden; }
 
 #page-course-view-softcourse #region-main > .card {
   padding-top: 0; }
@@ -206,7 +207,8 @@
           height: 100%;
           max-height: 75px;
           padding-right: 15px;
-          width: 100%; }
+          width: 100%;
+          overflow: hidden; }
           #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-body .softcourse-section-summary p {
             height: 100%; }
         #page-course-view-softcourse #region-main .course-content #softcourse-sections #softcourse-tabs .softcourse-section .softcourse-section-body .softcourse-section-info {
