@@ -298,42 +298,42 @@ class format_softcourse extends core_courseformat\base {
         if ($foreditform) {
             $optionsedit = [
                 'hideallsections' => [
-                    'label' => new lang_string('hideallsections', "format_softcourse"),
+                    'label' => get_string('hideallsections', "format_softcourse"),
                     'help' => 'hideallsections',
                     'help_component' => 'format_softcourse',
                     'element_type' => 'select',
                     'element_attributes' => [
                         [
-                            0 => new lang_string('hideallsectionsno', "format_softcourse"),
-                            1 => new lang_string('hideallsectionsyes', "format_softcourse")
+                            0 => get_string('hideallsectionsno', "format_softcourse"),
+                            1 => get_string('hideallsectionsyes', "format_softcourse")
                         ]
                     ]
                 ],
                 'hidesectionzero' => [
-                    'label' => new lang_string('hidesectionzero', "format_softcourse"),
+                    'label' => get_string('hidesectionzero', "format_softcourse"),
                     'help' => 'hidesectionzero',
                     'help_component' => 'format_softcourse',
                     'element_type' => 'select',
                     'element_attributes' => [
                         [
-                            0 => new lang_string('hidesectionzerono', "format_softcourse"),
-                            1 => new lang_string('hidesectionzeroyes', "format_softcourse")
+                            0 => get_string('hidesectionzerono', "format_softcourse"),
+                            1 => get_string('hidesectionzeroyes', "format_softcourse")
                         ]
                     ]
                 ],
                 'introduction' => [
-                    'label' => new lang_string('introduction', "format_softcourse"),
+                    'label' => get_string('introduction', "format_softcourse"),
                     'help' => 'introduction',
                     'help_component' => 'format_softcourse',
                     'element_type' => 'editor',
                     'maxfiles' => EDITOR_UNLIMITED_FILES
                 ],
                 'coursedisplay' => [
-                    'label' => new lang_string('coursedisplay'),
+                    'label' => get_string('coursedisplay'),
                     'element_type' => 'select',
                     'element_attributes' => [
                         [
-                            COURSE_DISPLAY_SINGLEPAGE => new lang_string('coursedisplay_single'),
+                            COURSE_DISPLAY_SINGLEPAGE => get_string('coursedisplay_single'),
                         ],
                     ],
                     'help' => 'coursedisplay',

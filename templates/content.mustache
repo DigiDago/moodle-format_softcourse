@@ -48,6 +48,10 @@
 </div>
 
 {{#js}}
+    require(['core_courseformat/local/content'], function(component) {
+    component.init('{{uniqid}}-course-format', {}, {{sectionreturn}});
+    });
+
     document.body.addEventListener('click', function (event) {
         // filter out clicks on any other elements
         if (event.target.nodeName == 'A' && event.target.getAttribute('aria-disabled') == 'true') {
