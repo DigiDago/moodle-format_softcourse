@@ -15,20 +15,22 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_softcourse/templates/introduction
+    @template format_softcourse/templates/content
 
-    Block template for softcourse introduction
+    Block template for softcourse content
 
-    This template is used to generate a basic display for the softcourse introduction.
+    This template is used to generate a basic display for the softcourse content.
 
     Classes required for JS:
     * none
 
     Context variables required for this template:
-    * summary string
+    * coursesummary string
     * start_url object moodle_url
     * start string
     * disabledStart string
+    * initialsection object section
+    * sections object of section
 }}
 
 <div id="softcourse-introduction" class="card">
