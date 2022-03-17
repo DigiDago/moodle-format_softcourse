@@ -47,6 +47,7 @@ class section extends section_base {
         $format = $this->format;
 
         $data = parent::export_for_template($output);
+        $data->start_url = null;
 
         $course = $format->get_course();
         $modinfo = get_fast_modinfo($course);
@@ -143,6 +144,9 @@ class section extends section_base {
                 if ($cm->cminfo->modname == 'resource') {
                     $cm->cminfo->url->param('forceview', 1);
                 }
+                if ($data->start_url == null) {
+                    $data->start_url = $cm->cminfo->url->out(false);
+                }
                 $data->first_cm_url = $cm->cminfo->url->out(false);
             }
             if ($cm->cminfo->completion > 0) {
@@ -161,6 +165,10 @@ class section extends section_base {
             $data->progression = get_string('progression', 'format_softcourse');
             $percentcomplete = $nbcomplete * 100 / $nbcompletion;
             $data->progression_percent = intval($percentcomplete);
+        }
+
+        if ($data->start_url == null) {
+            $data->disabledStart = 'true';
         }
 
         return $data;
