@@ -17,7 +17,6 @@
  * Various actions on sections like update image, delete image, ...
  *
  * @module     format_softcourse/actions
- * @package    format_softcourse
  * @copyright  2019 Pimenko <contact@pimenko.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -29,7 +28,6 @@ define(['jquery', 'core/ajax', 'theme_boost/bootstrap/tooltip'], function($, aja
         $('.section-file').on('change', function(event) {
             let sectionid = event.target.dataset.sectionid;
             let courseid = event.target.dataset.courseid;
-            console.log(courseid);
             if (courseid) {
                 let file = event.target.files[0]; // Get only 1st file.
                 let filedata = null;
