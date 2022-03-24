@@ -21,10 +21,10 @@ $brandcolorsoftcoursedefault: orange;
             color: $brandcolorsoftcoursedefault;
             color: $brandcolorsoftcoursebrand;
             display: flex;
+            overflow: hidden;
             text-decoration: none;
             width: 100%;
             z-index: 1;
-            overflow: hidden;
         }
 
         & > .card {
@@ -132,8 +132,8 @@ $brandcolorsoftcoursedefault: orange;
 
                             @media only screen and (max-width: 710px) {
                                 background-image: none;
-                                width: 50px;
                                 min-width: 50px;
+                                width: 50px;
                             }
 
                             & > span {
@@ -290,9 +290,9 @@ $brandcolorsoftcoursedefault: orange;
                                 font-size: 0.75rem;
                                 height: 100%;
                                 max-height: 75px;
+                                overflow: hidden;
                                 padding-right: 15px;
                                 width: 100%;
-                                overflow: hidden;
 
                                 p {
                                     height: 100%;
@@ -300,13 +300,13 @@ $brandcolorsoftcoursedefault: orange;
                             }
 
                             .softcourse-section-info {
+                                align-items: center;
                                 display: flex;
                                 height: 30px;
-                                width: 100%;
-                                align-items: center;
                                 justify-content: center;
                                 margin-bottom: 0;
                                 margin-top: auto;
+                                width: 100%;
                             }
 
                             .fa-leanpub {
