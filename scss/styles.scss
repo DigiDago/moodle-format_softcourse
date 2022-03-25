@@ -84,6 +84,10 @@ $brandcolorsoftcoursedefault: orange;
 
                             .softcourse-section-img {
 
+                                span {
+                                    z-index: 0;
+                                }
+
                                 .delete-img,
                                 .update-img,
                                 span {
