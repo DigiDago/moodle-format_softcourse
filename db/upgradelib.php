@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * This method finds all courses in 'softcourse' format that have actual number of sections
  * bigger than their 'numsections' course format option.
