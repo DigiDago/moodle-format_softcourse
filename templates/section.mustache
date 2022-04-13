@@ -92,12 +92,12 @@
         <span><i class="fa fa-play"></i>  <span>{{ start }}</span></span>
         {{#update_img}}
             <i class="fa fa-edit update-img" data-toggle="tooltip" title="{{ update_img }}">
-                <input type="file" data-sectionid="{{ id }}" data-courseid="{{ courseid }}"
+                <input type="file" data-sectionid="{{ num }}" data-courseid="{{ courseid }}"
                        class="section-file">
             </i>
 
             <i class="fa fa-trash delete-img" data-toggle="tooltip" title="{{ delete_img }}">
-                <input type="button" data-sectionid="{{ id }}" data-courseid="{{ courseid }}"
+                <input type="button" data-sectionid="{{ num }}" data-courseid="{{ courseid }}"
                        class="section-delete-file">
             </i>
         {{/update_img}}

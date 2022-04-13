@@ -509,7 +509,7 @@ function format_softcourse_pluginfile($course, $cm, $context, $filearea, $args, 
         $fs = get_file_storage();
         $file = $fs->get_file_by_hash(sha1($fullpath));
         if ($file) {
-            send_stored_file($file, $lifetime, 0, $forcedownload, $options);
+            send_stored_file($file, null, 0, $forcedownload, $options);
             return true;
         }
     }
