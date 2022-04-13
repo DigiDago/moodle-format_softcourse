@@ -120,8 +120,9 @@ class section extends section_base {
 
         // Render the iamge section.
         $fs = get_file_storage();
-        $file = $fs->get_area_files($context->id, 'format_softcourse', 'sectionimage', $data->id,
+        $file = $fs->get_area_files($context->id, 'format_softcourse', 'sectionimage', $data->num,
             "itemid, filepath, filename", false);
+
         if ($file) {
             $data->urlimg = \moodle_url::make_pluginfile_url(
                 end($file)->get_contextid(),
