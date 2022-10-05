@@ -85,8 +85,8 @@ class section extends section_base {
             }
         }
 
-        // We check case were section are hidden.
-        // We check case were section have only one hidden activity.
+        // We check case where section are hidden.
+        // We check case where section have only one hidden activity.
         if ($data->visible == 0 || $data->uservisible == false || $data->available == false) {
             $data->skip = true;
             return $data;
