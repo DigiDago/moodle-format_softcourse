@@ -26,6 +26,7 @@
 namespace format_softcourse\output;
 
 use core_courseformat\output\section_renderer;
+use html_writer;
 use moodle_page;
 use context_course;
 use stdClass;
@@ -58,7 +59,6 @@ class renderer extends section_renderer {
      *
      * @param moodle_page $page
      * @param string $target one of rendering target constants
-     * @throws moodle_exception
      */
     public function __construct(moodle_page $page, $target) {
         parent::__construct($page, $target);
@@ -96,7 +96,6 @@ class renderer extends section_renderer {
     }
 
     public function render_content($widget) {
-        global $COURSE;
 
         $context = context_course::instance($this->course->id);
         $data = $widget->export_for_template($this);
@@ -110,7 +109,8 @@ class renderer extends section_renderer {
             $options = new stdClass();
             $options->noclean = true;
             $options->overflowdiv = true;
-            $data->coursesummary = format_text($COURSE->summary, 1, $options);
+            $introduction = $this->courseformat->get_format_options()['introduction'];
+            $data->courseintroduction = format_text($introduction, 1, $options);
 
             return $this->render_from_template('format_softcourse/content', $data);
         }
@@ -121,7 +121,7 @@ class renderer extends section_renderer {
      *
      * @return string HTML to output.
      */
-    protected function start_section_list() {
+    public function start_section_list(): string {
         return html_writer::start_tag('ul', array('class' => 'softcourse'));
     }
 
@@ -130,7 +130,7 @@ class renderer extends section_renderer {
      *
      * @return string HTML to output.
      */
-    protected function end_section_list() {
+    public function end_section_list(): string {
         return html_writer::end_tag('ul');
     }
 
@@ -139,7 +139,7 @@ class renderer extends section_renderer {
      *
      * @return string the page title
      */
-    protected function page_title() {
+    public function page_title(): string {
         return get_string('topicoutline');
     }
 
