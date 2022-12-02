@@ -38,13 +38,15 @@
         <div id="softcourse-summary">{{{ courseintroduction }}}</div>
     {{/courseintroduction}}
     {{#initialsection}}
-        <a class="btn btn-secondary" id="softcourse-start-button"
-            {{#disabledStart}} aria-disabled="{{disabledStart}}" {{/disabledStart}}
-            {{#start_url}} href="{{ start_url }}" {{/start_url}}
-            {{^start_url}} href="#" {{/start_url}}
-        >
-            {{ start }}
-        </a>
+        {{^skip}}
+            <a class="btn btn-secondary" id="softcourse-start-button"
+                {{#disabledStart}} aria-disabled="{{disabledStart}}" {{/disabledStart}}
+                {{#start_url}} href="{{ start_url }}" {{/start_url}}
+                {{^start_url}} href="#" {{/start_url}}
+            >
+                {{ start }}
+            </a>
+        {{/skip}}
     {{/initialsection}}
     {{> format_softcourse/sections }}
 </div>
@@ -86,7 +88,6 @@
                         // Use slic() to prevent copy reference.
                         fulltext[i] = wordArray.slice();
                     }
-                    console.log(el);
                     <!--    var p = container.querySelector('p');-->
                     <!--    var divh = container.clientHeight;-->
                     <!--    while (p.offsetHeight > divh)-->
