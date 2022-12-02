@@ -112,6 +112,10 @@ class renderer extends section_renderer {
             $introduction = $this->courseformat->get_format_options()['introduction'];
             $data->courseintroduction = format_text($introduction, 1, $options);
 
+            if ($this->courseformat->get_format_options()['hideallsections'] == 1) {
+                $data->sections = false;
+            }
+
             return $this->render_from_template('format_softcourse/content', $data);
         }
     }

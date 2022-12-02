@@ -66,22 +66,21 @@ class section extends section_base {
             $cm = $modinfo->get_cm($cm->cmitem->id);
             $idsection = $cm->get_section_info()->section;
             // Hide the section 0 if the course format option is set to "Hide the section 0".
-            if (!($idsection == 0 && $format->get_format_options()['hidesectionzero'] == 1)) {
+
+            if ( !($idsection == 0 && $format->get_format_options()['hidesectionzero'] == 1) ) {
                 $info = $modinfo->get_section_info_all()[$idsection];
-                if ($data) {
-                    $data->idsection = $idsection;
-                    $data->name = $info->name;
-                    $summary = new stdClass();
-                    $summary->summarytext = $info->summary;
-                    $data->summary = $summary;
-                    $data->uservisible = $info->uservisible;
-                    $data->visible = $info->visible;
-                    $data->available = $info->available;
-                }
+                $data->idsection = $idsection;
+                $data->name = $info->name;
+                $summary = new stdClass();
+                $summary->summarytext = $info->summary;
+                $data->summary = $summary;
+                $data->uservisible = $info->uservisible;
+                $data->visible = $info->visible;
+                $data->available = $info->available;
                 $data->cmlist->cms[$key]->cminfo = $cm;
+                $data->skip = false;
             } else {
                 $data->skip = true;
-                return $data;
             }
         }
 
