@@ -130,6 +130,7 @@ class renderer extends section_renderer {
                     foreach ($data->sections as $section) {
                         if ($section->skip != true && $section->start_url != null) {
                             $data->start_url = $section->start_url;
+                            break;
                         }
                     }
                 }
