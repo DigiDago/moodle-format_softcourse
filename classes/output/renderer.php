@@ -111,6 +111,30 @@ class renderer extends section_renderer {
             $options->overflowdiv = true;
             $introduction = $this->courseformat->get_format_options()['introduction'];
             $data->courseintroduction = format_text($introduction, 1, $options);
+            $data->start_url = $data->initialsection->start_url;
+
+            if ($this->courseformat->get_format_options()['hideallsections'] == 1) {
+
+                if (!$data->start_url) {
+                    foreach ($data->sections as $section) {
+                        if ($section->skip != true && $section->start_url != null) {
+                            $data->start_url = $section->start_url;
+                            break;
+                        }
+                    }
+                }
+                $data->sections = false;
+
+            } else {
+                if (!$data->start_url) {
+                    foreach ($data->sections as $section) {
+                        if ($section->skip != true && $section->start_url != null) {
+                            $data->start_url = $section->start_url;
+                            break;
+                        }
+                    }
+                }
+            }
 
             return $this->render_from_template('format_softcourse/content', $data);
         }
