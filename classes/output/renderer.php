@@ -61,7 +61,10 @@ class renderer extends section_renderer {
      * @param string $target one of rendering target constants
      */
     public function __construct(moodle_page $page, $target) {
-        parent::__construct($page, $target);
+        parent::__construct(
+            $page,
+            $target,
+        );
         $this->course = $page->course;
         $this->courseformat = course_get_format($this->course);
         $this->modinfo = get_fast_modinfo($this->course);
@@ -92,7 +95,12 @@ class renderer extends section_renderer {
      * @return string HTML to output.
      */
     public function section_title_without_link($section, $course) {
-        return $this->render(course_get_format($course)->inplace_editable_render_section_name($section, false));
+        return $this->render(
+            course_get_format($course)->inplace_editable_render_section_name(
+                $section,
+                false,
+            ),
+        );
     }
 
     public function render_content($widget) {
@@ -100,9 +108,15 @@ class renderer extends section_renderer {
         $context = context_course::instance($this->course->id);
         $data = $widget->export_for_template($this);
 
-        if ($this->page->user_is_editing() and has_capability('moodle/course:update', $context)) {
+        if ($this->page->user_is_editing() && has_capability(
+                'moodle/course:update',
+                $context,
+            )) {
             // Base template.
-            return $this->render_from_template('core_courseformat/local/content', $data);
+            return $this->render_from_template(
+                'core_courseformat/local/content',
+                $data,
+            );
         } else {
             // Our template.
             // Get course summary.
@@ -110,8 +124,17 @@ class renderer extends section_renderer {
             $options->noclean = true;
             $options->overflowdiv = true;
             $introduction = $this->courseformat->get_format_options()['introduction'];
-            $data->courseintroduction = format_text($introduction, 1, $options);
-            $data->start_url = $data->initialsection->start_url;
+            $data->courseintroduction = format_text(
+                $introduction,
+                1,
+                $options,
+            );
+
+            if ($data->initialsection) {
+                $data->start_url = $data->initialsection->start_url;
+            } else {
+                $data->start_url = null;
+            }
 
             if ($this->courseformat->get_format_options()['hideallsections'] == 1) {
 
@@ -136,7 +159,10 @@ class renderer extends section_renderer {
                 }
             }
 
-            return $this->render_from_template('format_softcourse/content', $data);
+            return $this->render_from_template(
+                'format_softcourse/content',
+                $data,
+            );
         }
     }
 
@@ -146,7 +172,10 @@ class renderer extends section_renderer {
      * @return string HTML to output.
      */
     public function start_section_list(): string {
-        return html_writer::start_tag('ul', array('class' => 'softcourse'));
+        return html_writer::start_tag(
+            'ul',
+            [ 'class' => 'softcourse' ],
+        );
     }
 
     /**
@@ -177,59 +206,105 @@ class renderer extends section_renderer {
      */
     protected function section_edit_control_items($course, $section, $onsectionpage = false) {
         if (!$this->page->user_is_editing()) {
-            return array();
+            return [];
         }
 
         $coursecontext = context_course::instance($course->id);
 
         if ($onsectionpage) {
-            $url = course_get_url($course, $section->section);
+            $url = course_get_url(
+                $course,
+                $section->section,
+            );
         } else {
             $url = course_get_url($course);
         }
-        $url->param('sesskey', sesskey());
+        $url->param(
+            'sesskey',
+            sesskey(),
+        );
 
-        $controls = array();
-        if ($section->section && has_capability('moodle/course:setcurrentsection', $coursecontext)) {
+        $controls = [];
+        if ($section->section && has_capability(
+                'moodle/course:setcurrentsection',
+                $coursecontext,
+            )) {
             if ($course->marker == $section->section) {  // Show the "light globe" on/off.
-                $url->param('marker', 0);
+                $url->param(
+                    'marker',
+                    0,
+                );
                 $markedthissection = get_string('markedthistopic');
                 $highlightoff = get_string('highlightoff');
-                $controls['highlight'] = array('url' => $url, "icon" => 'i/marked',
+                $controls['highlight'] = [
+                    'url' => $url,
+                    "icon" => 'i/marked',
                     'name' => $highlightoff,
-                    'pixattr' => array('class' => '', 'alt' => $markedthissection),
-                    'attr' => array('class' => 'editing_highlight', 'title' => $markedthissection,
-                        'data-action' => 'removemarker'));
+                    'pixattr' => [
+                        'class' => '',
+                        'alt' => $markedthissection
+                    ],
+                    'attr' => [
+                        'class' => 'editing_highlight',
+                        'title' => $markedthissection,
+                        'data-action' => 'removemarker'
+                    ]
+                ];
             } else {
-                $url->param('marker', $section->section);
+                $url->param(
+                    'marker',
+                    $section->section,
+                );
                 $markthissection = get_string('markedthistopic');
                 $highlight = get_string('highlight');
-                $controls['highlight'] = array('url' => $url, "icon" => 'i/marker',
+                $controls['highlight'] = [
+                    'url' => $url,
+                    "icon" => 'i/marker',
                     'name' => $highlight,
-                    'pixattr' => array('class' => '', 'alt' => $markthissection),
-                    'attr' => array('class' => 'editing_highlight', 'title' => $markthissection,
-                        'data-action' => 'setmarker'));
+                    'pixattr' => [
+                        'class' => '',
+                        'alt' => $markthissection
+                    ],
+                    'attr' => [
+                        'class' => 'editing_highlight',
+                        'title' => $markthissection,
+                        'data-action' => 'setmarker'
+                    ]
+                ];
             }
         }
 
-        $parentcontrols = parent::section_edit_control_items($course, $section, $onsectionpage);
+        $parentcontrols = parent::section_edit_control_items(
+            $course,
+            $section,
+            $onsectionpage,
+        );
 
         // If the edit key exists, we are going to insert our controls after it.
-        if (array_key_exists("edit", $parentcontrols)) {
-            $merged = array();
+        if (array_key_exists(
+            "edit",
+            $parentcontrols,
+        )) {
+            $merged = [];
             // We can't use splice because we are using associative arrays.
             // Step through the array and merge the arrays.
             foreach ($parentcontrols as $key => $action) {
                 $merged[$key] = $action;
                 if ($key == "edit") {
                     // If we have come to the edit key, merge these controls here.
-                    $merged = array_merge($merged, $controls);
+                    $merged = array_merge(
+                        $merged,
+                        $controls,
+                    );
                 }
             }
 
             return $merged;
         } else {
-            return array_merge($controls, $parentcontrols);
+            return array_merge(
+                $controls,
+                $parentcontrols,
+            );
         }
     }
 }
