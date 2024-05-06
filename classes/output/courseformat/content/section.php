@@ -55,8 +55,10 @@ class section extends section_base {
         $completioninfo = new completion_info($course);
         $context = context_course::instance($course->id);
 
-        // If section have no mods we skip.
-        if (!$data->cmlist->cms) {
+        // If section has no mods or cmlist itself is not set or empty, then we skip.
+        if (!isset($data->cmlist)
+            || empty($data->cmlist)
+            || !$data->cmlist->cms) {
             $data->skip = true;
             return $data;
         }

@@ -117,32 +117,29 @@ class format_softcourse extends core_courseformat\base {
      * @return null|moodle_url
      */
     public function get_view_url($section, $options = array()) {
-        global $CFG;
         $course = $this->get_course();
-        $url = new moodle_url('/course/view.php', array('id' => $course->id));
-        $sr = null;
-        if (array_key_exists('sr', $options)) {
-            $sr = $options['sr'];
-        }
-        if (is_object($section)) {
+        $url = new moodle_url('/course/view.php', ['id' => $course->id]);
+
+        if (array_key_exists('sr', $options) && !is_null($options['sr'])) {
+            $sectionno = $options['sr'];
+        } elseif (is_object($section)) {
             $sectionno = $section->section;
         } else {
             $sectionno = $section;
         }
-        if ($sectionno !== null) {
-            $usercoursedisplay = COURSE_DISPLAY_MULTIPAGE;
-            if ($sr !== null) {
-                $sectionno = $sr;
+
+        if ($this->uses_sections() && $sectionno !== null) {
+            // The url includes the parameter to expand the section by default.
+            if (!array_key_exists('expanded', $options)) {
+                $options['expanded'] = true;
             }
-            if ($sectionno != 0) {
-                $url->param('section', $sectionno);
-            } else {
-                if (empty($CFG->linkcoursesections) && !empty($options['navigation'])) {
-                    return null;
-                }
-                $url->set_anchor('section-' . $sectionno);
+            if ($options['expanded']) {
+                // This parameter is being set by default.
+                $url->param('expandsection', $sectionno);
             }
+            $url->set_anchor('section-'.$sectionno);
         }
+
         return $url;
     }
 
