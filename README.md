@@ -1,52 +1,118 @@
-Introduction
-============
-Softcourse is a course format for Moodle. Softcourse is a course format that display sections with only an image and an optional text on the course homepage.
+# moodle-format_softcourse
 
-Required version of Moodle
-==========================
-This version works with Moodle version 2018050800 and above within the 3.5 branch until the
-next release.
+## Plugin Overview
 
-Please ensure that your hardware and software complies with 'Requirements' in 'Installing Moodle' on
-'docs.moodle.org/35/en/Installing_Moodle'.
+Softcourse is an innovative course format plugin for Moodle that enhances the visual presentation and organization of course content. It displays sections with images and optional text on the course homepage, providing a more engaging and intuitive navigation experience for learners.
 
-Installation
-============
- 1. Ensure you have the version of Moodle as stated above in 'Required version of Moodle'.  This is essential as the
-    format relies on underlying core code that is out of our control.
- 2. Put Moodle in 'Maintenance Mode' (docs.moodle.org/en/admin/setting/maintenancemode) so that there are no 
-    users using it bar you as the administrator - if you have not already done so.
- 3. Copy 'softcourse' to '/course/format/' if you have not already done so.
- 4. Login as an administrator and follow standard the 'plugin' update notification.  If needed, go to
-    'Site administration' -> 'Notifications' if this does not happen.
- 5.  Put Moodle out of Maintenance Mode.
+## Plugin Objectives
 
-Upgrade Instructions
-====================
- 1. Ensure you have the version of Moodle as stated above in 'Required version of Moodle'.  This is essential as the
-    format relies on underlying core code that is out of my control.
- 2. Put Moodle in 'Maintenance Mode' so that there are no users using it bar you as the administrator.
- 3. In '/course/format/' move old 'softcourse' directory to a backup folder outside of Moodle.
- 4. Follow installation instructions above.
- 5. If automatic 'Purge all caches' appears not to work by lack of display etc. then perform a manual 'Purge all caches'
-    under 'Home -> Site administration -> Development -> Purge all caches'.
- 6. Put Moodle out of Maintenance Mode.
+The main objectives of the Softcourse format are:
 
-Uninstallation
-==============
- 1. Put Moodle in 'Maintenance Mode' so that there are no users using it bar you as the administrator.
- 2. It is recommended but not essential to change all of the courses that use the format to another.  If this is
-    not done Moodle will pick the last format in your list of formats to use but display in 'Edit settings' of the
-    course the first format in the list.  You can then set the desired format.
- 3. In '/course/format/' remove the folder 'softcourse'.
- 5. Put Moodle out of Maintenance Mode.
+1. Enhance Visual Appeal: Present course sections with images and text for a more attractive course layout.
+2. Improve Navigation: Offer an intuitive way for students to navigate through course content.
+3. Increase Engagement: Create a more interactive and engaging course homepage to motivate learners.
+4. Customize Course Presentation: Provide teachers with options to tailor the course appearance to their needs.
+5. Simplify Course Structure: Organize course content in a clear, visually-oriented manner.
 
-Version Information
+## Features
+
+- Display course sections as image cards with optional text
+- Customizable section images
+- Option to hide all sections or only section zero
+- Customizable course introduction
+- Compatible with Moodle's course index for easy navigation
+- Progression tracking for each section
+- "Start" button for quick access to section content
+- Activity count display for each section
+- Responsive design, compatible with various themes including Boost
+
+## Requirements
+
+- Moodle 3.5 or later (check version.php for specific version requirements)
+- PHP 7.0 or later
+
+## Installation
+
+1. Download the plugin from GitHub or the Moodle plugins directory.
+2. Extract the contents to /course/format/softcourse in your Moodle installation.
+3. Log in as an administrator and visit the notifications page to complete the installation.
+4. Go to Site administration > Plugins > Course formats > Manage course formats and ensure that "Soft Course format" is enabled.
+
+## Usage
+
+1. Create a new course or edit an existing one.
+2. In the course settings, select "Soft Course format" as the course format.
+3. Customize the course sections, adding images and descriptions as desired.
+4. Save the changes and view the course to see the new layout.
+
+## Configuration
+
+The plugin offers several configuration options:
+
+- Hide all sections: Option to hide all course sections on the main page.
+- Hide section zero: Option to hide the general section (section 0) of the course.
+- Course introduction: Add an introduction text to be displayed on the course page.
+- Section images: Upload and manage images for each course section.
+
+## Customization
+
+You can further customize the appearance of the Softcourse format using CSS. Refer to the plugin's CSS files for specific selectors and classes.
+
+## Compatibility
+
+Softcourse is compatible with Moodle 3.5 and later versions, including Moodle 4.0. It has been tested with various Moodle themes, including Boost.
+
+## Known Issues
+
+- Text may be truncated if there are multiple paragraphs in the section description. Consider limiting the character count in section summaries.
+
+## Contributing
+
+Contributions to the Softcourse format are welcome. Please submit pull requests to the GitHub repository.
+
+## Support
+
+If you encounter any issues or have questions, please use the GitHub issue tracker or contact the maintainers.
+
+## License
+
+This plugin is licensed under the GNU GPL v3 or later. See the LICENSE file for details.
+
+## Maintainer
+
+The Softcourse format is currently maintained by:
+
+Pimenko
+- Email: contact@pimenko.com
+- GitHub: https://github.com/DigiDago/moodle-format_softcourse
+
+## Acknowledgements
+
+Softcourse was developed by Pimenko to enhance the learning experience in Moodle courses.
+
+
+
+
+About Pimenko
 ===================
-See Changes.md.
 
+Pimenko is a leading company specializing in Moodle development and e-learning solutions. With a team of experienced developers and e-learning experts, we are committed to creating innovative and high-quality plugins that enhance the Moodle experience for educators and learners alike.
 
-Us
-==
-Pimenko Team
+### Our Expertise
 
+- Custom Moodle development
+- Moodle plugin creation and maintenance
+- E-learning platform optimization
+- Moodle theme development
+- Learning analytics solutions
+
+### Connect with Us
+
+- **Website**: [https://www.pimenko.com](https://www.pimenko.com)
+- **Email**: contact@pimenko.com
+- **GitHub**: [https://github.com/DigiDago](https://github.com/DigiDago)
+- **LinkedIn**: [Pimenko LinkedIn Profile](https://www.linkedin.com/company/pimenko/)
+
+We are passionate about improving e-learning experiences through technology. If you have any questions about our services or need custom Moodle solutions, don't hesitate to reach out!
+
+@copyright Pimenko https://www.pimenko.com
