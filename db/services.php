@@ -26,37 +26,37 @@
 defined('MOODLE_INTERNAL') || die();
 
 // We defined the web service functions to install.
-$functions = array(
-    'format_softcourse_update_section_image' => array(
-        'classname'     => 'format_softcourse_external',
-        'methodname'    => 'update_section_image',
-        'classpath'     => 'course/format/softcourse/externallib.php',
-        'description'   => 'Update the section image',
-        'type'          => 'write',
-        'capabilities'  => 'moodle/course:update',
-        'ajax'          => true
-    ),
-    'format_softcourse_delete_section_image' => array(
-        'classname'     => 'format_softcourse_external',
-        'methodname'    => 'delete_section_image',
-        'classpath'     => 'course/format/softcourse/externallib.php',
-        'description'   => 'Delete the section image',
-        'type'          => 'write',
-        'capabilities'  => 'moodle/course:update',
-        'ajax'          => true
-    )
-);
+$functions = [
+    'format_softcourse_update_section_image' => [
+        'classname' => 'format_softcourse_external',
+        'methodname' => 'update_section_image',
+        'classpath' => 'course/format/softcourse/externallib.php',
+        'description' => 'Update the section image',
+        'type' => 'write',
+        'capabilities' => 'moodle/course:update',
+        'ajax' => true,
+    ],
+    'format_softcourse_delete_section_image' => [
+        'classname' => 'format_softcourse_external',
+        'methodname' => 'delete_section_image',
+        'classpath' => 'course/format/softcourse/externallib.php',
+        'description' => 'Delete the section image',
+        'type' => 'write',
+        'capabilities' => 'moodle/course:update',
+        'ajax' => true,
+    ],
+];
 
 // We define the services to install as pre-build services. A pre-build service is not editable by administrator.
-$services = array(
-    'Update the section image' => array(
-        'functions'         => array ('format_softcourse_update_section_image'),
-        'restrictedusers'   => 0,
-        'enabled'           => 1
-    ),
-    'Delete the section image' => array(
-        'functions'         => array ('format_softcourse_delete_section_image'),
-        'restrictedusers'   => 0,
-        'enabled'           => 1
-    )
-);
+$services = [
+    'Update the section image' => [
+        'functions' => [ 'format_softcourse_update_section_image' ],
+        'restrictedusers' => 0,
+        'enabled' => 1,
+    ],
+    'Delete the section image' => [
+        'functions' => [ 'format_softcourse_delete_section_image' ],
+        'restrictedusers' => 0,
+        'enabled' => 1,
+    ],
+];

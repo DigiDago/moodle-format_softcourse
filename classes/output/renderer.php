@@ -103,6 +103,12 @@ class renderer extends section_renderer {
         );
     }
 
+    /**
+     * Renders the content of a widget based on user editing capabilities and course format options.
+     *
+     * @param mixed $widget The widget to render content for.
+     * @return string The rendered content based on the widget and user capabilities.
+     */
     public function render_content($widget) {
 
         $context = context_course::instance($this->course->id);
@@ -242,13 +248,13 @@ class renderer extends section_renderer {
                     'name' => $highlightoff,
                     'pixattr' => [
                         'class' => '',
-                        'alt' => $markedthissection
+                        'alt' => $markedthissection,
                     ],
                     'attr' => [
                         'class' => 'editing_highlight',
                         'title' => $markedthissection,
-                        'data-action' => 'removemarker'
-                    ]
+                        'data-action' => 'removemarker',
+                    ],
                 ];
             } else {
                 $url->param(
@@ -263,13 +269,13 @@ class renderer extends section_renderer {
                     'name' => $highlight,
                     'pixattr' => [
                         'class' => '',
-                        'alt' => $markthissection
+                        'alt' => $markthissection,
                     ],
                     'attr' => [
                         'class' => 'editing_highlight',
                         'title' => $markthissection,
-                        'data-action' => 'setmarker'
-                    ]
+                        'data-action' => 'setmarker',
+                    ],
                 ];
             }
         }
