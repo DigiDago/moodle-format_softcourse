@@ -24,6 +24,11 @@
 
 namespace format_softcourse\privacy;
 
+/**
+ * Privacy Subsystem implementation for the given provider class.
+ *
+ * @package    YourPackageName
+ */
 class provider implements \core_privacy\local\metadata\null_provider {
 
     /**
@@ -32,7 +37,7 @@ class provider implements \core_privacy\local\metadata\null_provider {
      *
      * @return  string
      */
-    public static function get_reason() : string {
+    public static function get_reason(): string {
         return 'privacy:metadata';
     }
 }
