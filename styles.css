@@ -24,11 +24,11 @@
     padding-top: 0;
 }
 
-#page-course-view-softcourse #region-main .course-content #softcourse-introduction {
+#page-course-view-softcourse #region-main .course-content .softcourse-introduction {
     padding: 30px;
 }
 
-#page-course-view-softcourse #region-main .course-content #softcourse-introduction #softcourse-start-button {
+#page-course-view-softcourse #region-main .course-content .softcourse-introduction #softcourse-start-button {
     -moz-appearance: button;
     -webkit-appearance: button;
     appearance: button;
@@ -39,7 +39,7 @@
     width: 100%;
 }
 
-#page-course-view-softcourse #region-main .course-content #softcourse-introduction #softcourse-start-button[aria-disabled=true] {
+#page-course-view-softcourse #region-main .course-content .softcourse-introduction #softcourse-start-button[aria-disabled=true] {
     cursor: not-allowed;
     display: inline-block;
     /* For IE11/ MS Edge bug */
