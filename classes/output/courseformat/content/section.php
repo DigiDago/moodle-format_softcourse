@@ -157,7 +157,7 @@ class section extends section_base {
                 $context->id,
                 'format_softcourse',
                 'sectionimage',
-                $data->num,
+                $data->id,
                 "itemid, filepath, filename",
                 false,
         );
@@ -181,14 +181,13 @@ class section extends section_base {
         // Get completion of cms.
         foreach ($data->cmlist->cms as $cm) {
 
-            // Check if $cm is a subsection
             if ($cm->cminfo->modname == 'subsection') {
                 // Loop through modules in the subsection
                 $sectionid = $cm->cminfo->get_custom_data()['sectionid'];
                 $sectionnum = get_fast_modinfo($course->id)->get_section_info_by_id($sectionid);
                 $sectionmods = $sectionnum->get_sequence_cm_infos();
-                foreach ($sectionmods as $subsecmodule) {
 
+                foreach ($sectionmods as $subsecmodule) {
                     // Assuming $module, $data, $completioninfo, $nbcompletion, $nbcomplete are already defined
                     [
                             $data,
@@ -257,9 +256,16 @@ class section extends section_base {
     function get_completion($cm, $data, $completioninfo, $nbcompletion, $nbcomplete) {
 
         // Determine if the desired information is in $cm or $cm->cminfo
-        $cminfo = property_exists($cm, 'cminfo') ? $cm->cminfo : false;
+        $cminfo = null;
+        if (is_object($cm)) {
+            if ($cm instanceof \cm_info) {
+                $cminfo = $cm;
+            } else if (property_exists($cm, 'cminfo') && $cm->cminfo instanceof \cm_info) {
+                $cminfo = $cm->cminfo;
+            }
+        }
 
-        if ($cminfo !== false) {
+        if ($cminfo !== null) {
 
             if ((isset($cminfo->available) && $cminfo->available) &&
                     (($cminfo->uservisible && !$cminfo->is_stealth() && $cminfo->modname != 'label') || !empty($cm->url)) &&
