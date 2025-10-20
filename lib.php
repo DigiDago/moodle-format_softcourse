@@ -567,35 +567,39 @@ class format_softcourse extends core_courseformat\base {
         } else {
             $allformatoptions = $this->section_format_options(true);
         }
-        $data = array_intersect_key(
-            $rawdata,
-            $allformatoptions,
-        );
+        $data = array_intersect_key($rawdata, $allformatoptions);
         foreach ($data as $key => $value) {
-            $option = $allformatoptions[$key] + [
-                    'type' => PARAM_RAW,
-                    'element_type' => null,
-                    'element_attributes' => [
-                        [
-                        ],
-                    ],
-                ];
-            if ($option['element_type'][0] == 'editor') {
-                $data[$key] = clean_param(
-                    $value['text'],
-                    $option['type'],
-                );
+            $option = $allformatoptions[$key] + ['type' => PARAM_RAW, 'element_type' => null, 'element_attributes' => [[]]];
+
+            if (substr($key, -7) == '_editor') {
+                // Suffix '_editor' indicates that the element is an editor.
+                $name = substr($key, 0, -7);
+                if (is_string($data[$key])) {
+                    $data[$name]            = clean_param($data[$key], $option['type'] ?? PARAM_RAW);
+                    $data[$name . 'format'] = 1;
+                } else {
+                    $data[$name]            = clean_param($data[$key]['text'], $option['type'] ?? PARAM_RAW);
+                    $data[$name . 'format'] = clean_param($data[$key]['format'], PARAM_INT);
+                }
+                unset($data[$key]);
+            } elseif ($key == 'introduction') {
+                // TODO rework this : introduction should be named 'introduction_editor' and not 'introduction'.
+                // Also fix data structure of introduction element.
+                if(is_string($data[$key])) {
+                    $data[$name]            = clean_param($data[$key], $option['type'] ?? PARAM_RAW);
+                    $data[$name . 'format'] = 1;
+                } else {
+                    $data[$key] = clean_param(
+                        $value['text'],
+                        $option['type'],
+                    );
+                }
+                unset($data[$key]);
             } else {
-                $data[$key] = clean_param(
-                    $value,
-                    $option['type'],
-                );
+                $data[$key] = clean_param($data[$key], $option['type'] ?? PARAM_RAW);
             }
 
-            if ($option['element_type'] === 'select' && !array_key_exists(
-                    $data[$key],
-                    $option['element_attributes'][0],
-                )) {
+            if ($option['element_type'] === 'select' && !array_key_exists($data[$key], $option['element_attributes'][0])) {
                 // Value invalid for select element, skip.
                 unset($data[$key]);
             }
