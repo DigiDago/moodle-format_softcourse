@@ -86,5 +86,66 @@ function xmldb_format_softcourse_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2019103100, 'format', 'softcourse');
     }
 
+    if ($oldversion < 2025100801) {
+        // Migration des fichiers sectionimage: itemid = sectionnum -> itemid = sectionid (recréation + suppression de l'original).
+        $fs = get_file_storage();
+
+        $sql = "SELECT f.id AS fileid, s.id AS sectionid
+                  FROM {files} f
+            INNER JOIN {context} ctx ON ctx.id = f.contextid AND ctx.contextlevel = :ctxlevel
+            INNER JOIN {course} c ON c.id = ctx.instanceid AND c.format = :format
+            INNER JOIN {course_sections} s ON s.course = c.id AND f.itemid = s.section
+                 WHERE f.component = :component
+                   AND f.filearea = :filearea
+                   AND f.filename <> '.'";
+        $params = [
+            'ctxlevel'  => CONTEXT_COURSE,
+            'format'    => 'softcourse',
+            'component' => 'format_softcourse',
+            'filearea'  => 'sectionimage',
+        ];
+
+        $records = $DB->get_records_sql($sql, $params);
+
+        if (!empty($records)) {
+            $transaction = $DB->start_delegated_transaction();
+            foreach ($records as $rec) {
+                $storedfile = $fs->get_file_by_id($rec->fileid);
+                if (!$storedfile || $storedfile->is_directory()) {
+                    continue;
+                }
+
+                // Vérifie si le fichier existe déjà à la destination (même chemin/nom).
+                $exists = $fs->file_exists(
+                    $storedfile->get_contextid(),
+                    $storedfile->get_component(),
+                    $storedfile->get_filearea(),
+                    $rec->sectionid,
+                    $storedfile->get_filepath(),
+                    $storedfile->get_filename()
+                );
+
+                if (!$exists) {
+                    // Recrée le fichier avec le nouvel itemid (sectionid).
+                    $filerecord = [
+                        'contextid' => $storedfile->get_contextid(),
+                        'component' => $storedfile->get_component(),
+                        'filearea'  => $storedfile->get_filearea(),
+                        'itemid'    => $rec->sectionid,
+                        'filepath'  => $storedfile->get_filepath(),
+                        'filename'  => $storedfile->get_filename(),
+                    ];
+                    $fs->create_file_from_storedfile($filerecord, $storedfile);
+                }
+
+                // Supprime l'ancien fichier (itemid = sectionnum).
+                $storedfile->delete();
+            }
+            $transaction->allow_commit();
+        }
+
+        upgrade_plugin_savepoint(true, 2025100801, 'format', 'softcourse');
+    }
+
     return true;
 }

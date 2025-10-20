@@ -50,7 +50,8 @@ class format_softcourse_external extends external_api {
      *               - 'status': Boolean indicating if the update was successful.
      */
     public static function update_section_image($courseid, $sectionid, $imagedata, $filename): array {
-        global $CFG;
+        global $CFG, $DB;
+
         $params = self::validate_parameters(
             self::update_section_image_parameters(),
             [
@@ -73,8 +74,9 @@ class format_softcourse_external extends external_api {
         if ($context) {
             $course = get_course($params['courseid']);
             $modinfo = get_fast_modinfo($course);
+            $sectionrecord = $DB->get_record('course_sections', ['id' => $params['sectionid']], '*', MUST_EXIST);
             $coursesection = $modinfo->get_section_info(
-                $params['sectionid'],
+                $sectionrecord->section,
                 MUST_EXIST,
             );
 
@@ -188,6 +190,8 @@ class format_softcourse_external extends external_api {
      *               - 'status': Boolean indicating if the deletion was successful.
      */
     public static function delete_section_image($courseid, $sectionid): array {
+        global $DB;
+
         $params = self::validate_parameters(
             self::delete_section_image_parameters(),
             [
@@ -212,8 +216,9 @@ class format_softcourse_external extends external_api {
         if ($context) {
             $course = get_course($params['courseid']);
             $modinfo = get_fast_modinfo($course);
+            $sectionrecord = $DB->get_record('course_sections', ['id' => $params['sectionid']], '*', MUST_EXIST);
             $coursesection = $modinfo->get_section_info(
-                $params['sectionid'],
+                $sectionrecord->section,
                 MUST_EXIST,
             );
 
