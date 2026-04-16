@@ -114,28 +114,36 @@ class renderer extends section_renderer {
         $context = context_course::instance($this->course->id);
         $data = $widget->export_for_template($this);
 
+        // Get course summary.
+        $options = new stdClass();
+        $options->noclean = true;
+        $options->overflowdiv = true;
+        $introduction = $this->courseformat->get_format_options()['introduction'] ?? '';
+        $data->courseintroduction = format_text(
+            $introduction,
+            FORMAT_HTML,
+            $options,
+        );
+
         if ($this->page->user_is_editing() && has_capability(
                 'moodle/course:update',
                 $context,
             )) {
             // Base template.
-            return $this->render_from_template(
+            $content = $this->render_from_template(
                 'core_courseformat/local/content',
                 $data,
             );
+            if ($data->courseintroduction) {
+                $content = html_writer::div(
+                    $data->courseintroduction,
+                    'softcourse-introduction mb-3',
+                    ['id' => 'softcourse-summary']
+                ) . $content;
+            }
+            return $content;
         } else {
             // Our template.
-            // Get course summary.
-            $options = new stdClass();
-            $options->noclean = true;
-            $options->overflowdiv = true;
-            $introduction = $this->courseformat->get_format_options()['introduction'];
-            $data->courseintroduction = format_text(
-                $introduction,
-                1,
-                $options,
-            );
-
             if ($data->initialsection) {
                 $data->start_url = $data->initialsection->start_url;
             } else {

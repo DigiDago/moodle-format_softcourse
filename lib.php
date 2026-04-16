@@ -307,28 +307,32 @@ class format_softcourse extends core_courseformat\base {
         }
 
         // Managing of image in the introduction.
-        if (isset($data['introduction']) && $introductiondraftid = file_get_submitted_draft_itemid('introduction')) {
+        if (isset($data['introduction'])) {
             $context = context_course::instance($this->courseid);
-            $options = [ 'subdirs' => false ];
+            if (is_array($data['introduction'])) {
+                if ($introductiondraftid = file_get_submitted_draft_itemid('introduction')) {
+                    $options = ['subdirs' => false];
 
-            // Retrieve the image in the draftfilearea and put it into the introduction filearea of the plugin.
-            $data['introduction']['text'] = file_save_draft_area_files(
-                $introductiondraftid,
-                $context->id,
-                'format_softcourse',
-                'introduction',
-                time(),
-                null,
-                $data['introduction']['text'],
-            );
-            $data['introduction']['text'] = file_rewrite_pluginfile_urls(
-                $data['introduction']['text'],
-                'pluginfile.php',
-                $context->id,
-                'format_softcourse',
-                'introduction',
-                time(),
-            );
+                    // Retrieve the image in the draftfilearea and put it into the introduction filearea of the plugin.
+                    $data['introduction']['text'] = file_save_draft_area_files(
+                        $introductiondraftid,
+                        $context->id,
+                        'format_softcourse',
+                        'introduction',
+                        0,
+                        $options,
+                        $data['introduction']['text'],
+                    );
+                }
+                $data['introduction'] = file_rewrite_pluginfile_urls(
+                    $data['introduction']['text'],
+                    'pluginfile.php',
+                    $context->id,
+                    'format_softcourse',
+                    'introduction',
+                    0,
+                );
+            }
         }
 
         return $this->update_format_options($data);
@@ -585,16 +589,14 @@ class format_softcourse extends core_courseformat\base {
             } elseif ($key == 'introduction') {
                 // TODO rework this : introduction should be named 'introduction_editor' and not 'introduction'.
                 // Also fix data structure of introduction element.
-                if(is_string($data[$key])) {
-                    $data[$name]            = clean_param($data[$key], $option['type'] ?? PARAM_RAW);
-                    $data[$name . 'format'] = 1;
+                if (is_string($data[$key])) {
+                    $data[$key] = clean_param($data[$key], $option['type'] ?? PARAM_RAW);
                 } else {
                     $data[$key] = clean_param(
-                        $value['text'],
-                        $option['type'],
+                        $value['text'] ?? '',
+                        $option['type'] ?? PARAM_RAW,
                     );
                 }
-                unset($data[$key]);
             } else {
                 $data[$key] = clean_param($data[$key], $option['type'] ?? PARAM_RAW);
             }
@@ -651,12 +653,13 @@ function format_softcourse_inplace_editable($itemtype, $itemid, $newvalue) {
  */
 function format_softcourse_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
     if ($filearea == 'sectionimage' || $filearea == 'introduction') {
+        $itemid = (int) array_shift($args);
         $relativepath = implode(
             '/',
             $args,
         );
         $contextid = $context->id;
-        $fullpath = "/$contextid/format_softcourse/$filearea/$relativepath";
+        $fullpath = "/$contextid/format_softcourse/$filearea/$itemid/$relativepath";
         $fs = get_file_storage();
         $file = $fs->get_file_by_hash(sha1($fullpath));
         if ($file) {
@@ -668,6 +671,24 @@ function format_softcourse_pluginfile($course, $cm, $context, $filearea, $args, 
                 $options,
             );
             return true;
+        }
+
+        // Fallback for introduction if itemid 0 not found, try to find any file in the area.
+        // This is for backward compatibility with courses where itemid was set to time().
+        if ($filearea == 'introduction' && $itemid === 0) {
+            $files = $fs->get_area_files($contextid, 'format_softcourse', 'introduction', false, 'itemid DESC', false);
+            foreach ($files as $f) {
+                if ($f->get_filename() === $relativepath) {
+                    send_stored_file(
+                        $f,
+                        null,
+                        0,
+                        $forcedownload,
+                        $options,
+                    );
+                    return true;
+                }
+            }
         }
     }
 }
