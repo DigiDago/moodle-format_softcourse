@@ -15,16 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Specialised restore for format_softcourse
- *
- * @package   format_softcourse
- * @category  backup
- * @copyright 2021 Pimenko <contact@pimneko.com>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-/**
- * Specialised restore for format_softcourse
+ * Specialised restore for format_softcourse.
  *
  * Processes 'numsections' from the old backup files and hides sections that used to be "orphaned"
  *
@@ -34,7 +25,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class restore_format_softcourse_plugin extends restore_format_plugin {
-
     /** @var int */
     protected $originalnumsections = 0;
 
@@ -61,11 +51,14 @@ class restore_format_softcourse_plugin extends restore_format_plugin {
         // Since this method is executed before the restore we can do some pre-checks here.
         // In case of merging backup into existing course find the current number of sections.
         $target = $this->step->get_task()->get_target();
-        if (($target == backup::TARGET_CURRENT_ADDING || $target == backup::TARGET_EXISTING_ADDING) &&
-                $this->need_restore_numsections()) {
+        if (
+            ($target == backup::TARGET_CURRENT_ADDING || $target == backup::TARGET_EXISTING_ADDING) &&
+            $this->need_restore_numsections()
+        ) {
             $maxsection = $DB->get_field_sql(
                 'SELECT max(section) FROM {course_sections} WHERE course = ?',
-                [$this->step->get_task()->get_courseid()]);
+                [$this->step->get_task()->get_courseid()]
+            );
             $this->originalnumsections = (int)$maxsection;
         }
 
@@ -77,7 +70,6 @@ class restore_format_softcourse_plugin extends restore_format_plugin {
      * Dummy process method
      */
     public function process_dummy_course() {
-
     }
 
     /**
@@ -86,7 +78,31 @@ class restore_format_softcourse_plugin extends restore_format_plugin {
      * This method is only executed if course configuration was overridden
      */
     public function after_restore_course() {
-        global $DB;
+        global $DB, $CFG;
+
+        $this->add_related_files('format_softcourse', 'introduction', null);
+        $this->add_related_files('format_softcourse', 'sectionimage', null);
+
+        $courseid = $this->step->get_task()->get_courseid();
+        $newcontext = \context_course::instance($courseid);
+
+        $record = $DB->get_record('course_format_options', [
+            'courseid' => $courseid,
+            'format' => 'softcourse',
+            'name' => 'introduction',
+        ]);
+
+        if ($record && !empty($record->value)) {
+            $newvalue = preg_replace(
+                '/\$@PLUGINFILEBYCONTEXT\*\d+@\$/',
+                $CFG->wwwroot . '/pluginfile.php/' . $newcontext->id,
+                $record->value
+            );
+            if ($newvalue !== $record->value) {
+                $record->value = $newvalue;
+                $DB->update_record('course_format_options', $record);
+            }
+        }
 
         if (!$this->need_restore_numsections()) {
             // Backup file was made in Moodle 3.3 or later, we don't need to process 'numsecitons'.
@@ -110,8 +126,10 @@ class restore_format_softcourse_plugin extends restore_format_plugin {
             if ($this->step->get_task()->get_setting_value($key . '_included')) {
                 $sectionnum = (int)$section->title;
                 if ($sectionnum > $numsections && $sectionnum > $this->originalnumsections) {
-                    $DB->execute("UPDATE {course_sections} SET visible = 0 WHERE course = ? AND section = ?",
-                        [$this->step->get_task()->get_courseid(), $sectionnum]);
+                    $DB->execute(
+                        "UPDATE {course_sections} SET visible = 0 WHERE course = ? AND section = ?",
+                        [$this->step->get_task()->get_courseid(), $sectionnum]
+                    );
                 }
             }
         }

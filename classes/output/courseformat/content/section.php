@@ -38,7 +38,6 @@ use stdClass;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class section extends section_base {
-
     /** @var course_format the course format */
     protected $format;
 
@@ -71,7 +70,6 @@ class section extends section_base {
                 $data->insertafter = true;
             }
             return $data;
-
         }
 
         // Prepare some cm_info we will need further.
@@ -99,25 +97,31 @@ class section extends section_base {
 
         // We check case where section are hidden.
         // We check case where section have only one hidden activity.
-        if ((isset($data->visible) && $data->visible == 0) || (isset($data->uservisible) && $data->uservisible == false) ||
-                (isset($data->available) && $data->available == false)) {
+        if (
+            (isset($data->visible) && $data->visible == 0) || (isset($data->uservisible) && $data->uservisible == false) ||
+                (isset($data->available) && $data->available == false)
+        ) {
             $data->skip = true;
             return $data;
-        } else if (isset($data->cmlist) && count($data->cmlist->cms) == 1 &&
-                ((isset($data->cmlist->cms[0]->cminfo->visible) && $data->cmlist->cms[0]->cminfo->visible == 0) ||
-                        (isset($data->cmlist->cms[0]->cminfo->visibleoncoursepage) &&
-                                $data->cmlist->cms[0]->cminfo->visibleoncoursepage == 0) ||
-                        (isset($data->cmlist->cms[0]->cminfo->uservisible) && $data->cmlist->cms[0]->cminfo->uservisible == false) ||
-                        (isset($data->cmlist->cms[0]->cminfo->available) && $data->cmlist->cms[0]->cminfo->available == false))) {
+        } else if (
+            isset($data->cmlist) && count($data->cmlist->cms) == 1 &&
+            (
+                (isset($data->cmlist->cms[0]->cminfo->visible) && $data->cmlist->cms[0]->cminfo->visible == 0) ||
+                (isset($data->cmlist->cms[0]->cminfo->visibleoncoursepage) &&
+                    $data->cmlist->cms[0]->cminfo->visibleoncoursepage == 0) ||
+                (isset($data->cmlist->cms[0]->cminfo->uservisible) && $data->cmlist->cms[0]->cminfo->uservisible == false) ||
+                (isset($data->cmlist->cms[0]->cminfo->available) && $data->cmlist->cms[0]->cminfo->available == false)
+            )
+        ) {
             $data->skip = true;
             return $data;
         }
 
         if (isset($data->name)) {
             $data->name = format_string(
-                    $data->name,
-                    true,
-                    ['context' => context_course::instance($course->id)],
+                $data->name,
+                true,
+                ['context' => context_course::instance($course->id)],
             );
         }
 
@@ -126,50 +130,52 @@ class section extends section_base {
         $options->noclean = true;
         $options->overflowdiv = true;
         $data->summary->summarytext = format_text(
-                $data->summary->summarytext,
-                1,
-                $options,
+            $data->summary->summarytext,
+            1,
+            $options,
         );
         $data->countactivitiestooltip = get_string(
-                'countactivities',
-                'format_softcourse',
+            'countactivities',
+            'format_softcourse',
         );
         $data->countactivities = 0;
 
         // Check capability to edit/delete softcourse section picture.
-        if (has_capability(
+        if (
+            has_capability(
                 'moodle/course:update',
                 $context,
-        )) {
+            )
+        ) {
             $data->update_img = get_string(
-                    'update_img',
-                    'format_softcourse',
+                'update_img',
+                'format_softcourse',
             );
             $data->delete_img = get_string(
-                    'delete_img',
-                    'format_softcourse',
+                'delete_img',
+                'format_softcourse',
             );
         }
 
         // Render the iamge section.
         $fs = get_file_storage();
         $file = $fs->get_area_files(
-                $context->id,
-                'format_softcourse',
-                'sectionimage',
-                $data->num,
-                "itemid, filepath, filename",
-                false,
+            $context->id,
+            'format_softcourse',
+            'sectionimage',
+            $data->num,
+            "itemid, filepath, filename",
+            false,
         );
 
         if ($file) {
             $data->urlimg = \moodle_url::make_pluginfile_url(
-                    end($file)->get_contextid(),
-                    end($file)->get_component(),
-                    end($file)->get_filearea(),
-                    end($file)->get_itemid(),
-                    end($file)->get_filepath(),
-                    end($file)->get_filename(),
+                end($file)->get_contextid(),
+                end($file)->get_component(),
+                end($file)->get_filearea(),
+                end($file)->get_itemid(),
+                end($file)->get_filepath(),
+                end($file)->get_filename(),
             );
         }
 
@@ -180,40 +186,38 @@ class section extends section_base {
 
         // Get completion of cms.
         foreach ($data->cmlist->cms as $cm) {
-
-            // Check if $cm is a subsection
+            // Check if $cm is a subsection.
             if ($cm->cminfo->modname == 'subsection') {
-                // Loop through modules in the subsection
+                // Loop through modules in the subsection.
                 $sectionid = $cm->cminfo->get_custom_data()['sectionid'];
                 $sectionnum = get_fast_modinfo($course->id)->get_section_info_by_id($sectionid);
                 $sectionmods = $sectionnum->get_sequence_cm_infos();
                 foreach ($sectionmods as $subsecmodule) {
-
-                    // Assuming $module, $data, $completioninfo, $nbcompletion, $nbcomplete are already defined
+                    // Assuming $module, $data, $completioninfo, $nbcompletion, $nbcomplete are already defined.
                     [
-                            $data,
-                            $nbcompletion,
-                            $nbcomplete
-                    ] = $this->get_completion(
-                            $subsecmodule,
-                            $data,
-                            $completioninfo,
-                            $nbcompletion,
-                            $nbcomplete,
-                    );
-                }
-            } else {
-                // Assuming $cm, $data, $completioninfo, $nbcompletion, $nbcomplete are already defined
-                [
                         $data,
                         $nbcompletion,
                         $nbcomplete
-                ] = $this->get_completion(
-                        $cm,
+                    ] = $this->get_completion(
+                        $subsecmodule,
                         $data,
                         $completioninfo,
                         $nbcompletion,
                         $nbcomplete,
+                    );
+                }
+            } else {
+                // Assuming $cm, $data, $completioninfo, $nbcompletion, $nbcomplete are already defined.
+                [
+                    $data,
+                    $nbcompletion,
+                    $nbcomplete
+                ] = $this->get_completion(
+                    $cm,
+                    $data,
+                    $completioninfo,
+                    $nbcompletion,
+                    $nbcomplete,
                 );
             }
         }
@@ -221,8 +225,8 @@ class section extends section_base {
         // Count the percent of cm complete.
         if ($nbcompletion != 0) {
             $data->progression = get_string(
-                    'progression',
-                    'format_softcourse',
+                'progression',
+                'format_softcourse',
             );
             $percentcomplete = $nbcomplete * 100 / $nbcompletion;
             $data->progression_percent = intval($percentcomplete);
@@ -231,8 +235,8 @@ class section extends section_base {
         if ($data->start_url == null) {
             $data->disabledStart = 'true';
         }
-
-        //This is to add an add section(if you want to search go to /course/format/topics/classes/output/courseformat/content/section.php)
+        // This is to add an add section(if you want to search go to
+        // /course/format/topics/classes/output/courseformat/content/section.php).
         if (!$this->format->get_sectionnum()) {
             $addsectionclass = $format->get_output_classname('content\\addsection');
             $addsection = new $addsectionclass($format);
@@ -254,16 +258,16 @@ class section extends section_base {
      *
      * @return array An array containing updated data object, total completions, and total completed modules
      */
-    function get_completion($cm, $data, $completioninfo, $nbcompletion, $nbcomplete) {
-
-        // Determine if the desired information is in $cm or $cm->cminfo
+    public function get_completion($cm, $data, $completioninfo, $nbcompletion, $nbcomplete) {
+        // Determine if the desired information is in $cm or $cm->cminfo.
         $cminfo = property_exists($cm, 'cminfo') ? $cm->cminfo : false;
 
         if ($cminfo !== false) {
-
-            if ((isset($cminfo->available) && $cminfo->available) &&
+            if (
+                (isset($cminfo->available) && $cminfo->available) &&
                     (($cminfo->uservisible && !$cminfo->is_stealth() && $cminfo->modname != 'label') || !empty($cm->url)) &&
-                    $data->first_cm_url == '') {
+                    $data->first_cm_url == ''
+            ) {
                 if ($cminfo->modname == 'resource') {
                     $cminfo->url->param('forceview', 1);
                 }
@@ -279,9 +283,10 @@ class section extends section_base {
 
             if (isset($cminfo)) {
                 $nbcomplete += $completioninfo->get_data($cminfo, true)->completionstate;
-
-                if ($cminfo->deletioninprogress == 0 && $cminfo->visible == 1 && $cminfo->modname != "label" &&
-                        $cminfo->visibleoncoursepage == 1 && $cminfo->uservisible && $cminfo->available == true) {
+                if (
+                    $cminfo->deletioninprogress == 0 && $cminfo->visible == 1 && $cminfo->modname != "label" &&
+                    $cminfo->visibleoncoursepage == 1 && $cminfo->uservisible && $cminfo->available == true
+                ) {
                     $data->countactivities += 1;
                 }
             }
@@ -289,7 +294,7 @@ class section extends section_base {
         return [
                 $data,
                 $nbcompletion,
-                $nbcomplete
+                $nbcomplete,
         ];
     }
 }
