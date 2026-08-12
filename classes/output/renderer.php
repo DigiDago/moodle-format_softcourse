@@ -38,7 +38,6 @@ use stdClass;
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends section_renderer {
-
     /**
      * @var stdClass Course
      */
@@ -114,10 +113,12 @@ class renderer extends section_renderer {
         $context = context_course::instance($this->course->id);
         $data = $widget->export_for_template($this);
 
-        if ($this->page->user_is_editing() && has_capability(
+        if (
+            $this->page->user_is_editing() && has_capability(
                 'moodle/course:update',
                 $context,
-            )) {
+            )
+        ) {
             // Base template.
             return $this->render_from_template(
                 'core_courseformat/local/content',
@@ -143,7 +144,6 @@ class renderer extends section_renderer {
             }
 
             if ($this->courseformat->get_format_options()['hideallsections'] == 1) {
-
                 if (!$data->start_url) {
                     foreach ($data->sections as $section) {
                         if ($section->skip != true && $section->start_url != null) {
@@ -153,7 +153,6 @@ class renderer extends section_renderer {
                     }
                 }
                 $data->sections = false;
-
             } else {
                 if (!$data->start_url) {
                     foreach ($data->sections as $section) {
@@ -231,10 +230,12 @@ class renderer extends section_renderer {
         );
 
         $controls = [];
-        if ($section->section && has_capability(
+        if (
+            $section->section && has_capability(
                 'moodle/course:setcurrentsection',
                 $coursecontext,
-            )) {
+            )
+        ) {
             if ($course->marker == $section->section) {  // Show the "light globe" on/off.
                 $url->param(
                     'marker',
@@ -287,10 +288,7 @@ class renderer extends section_renderer {
         );
 
         // If the edit key exists, we are going to insert our controls after it.
-        if (array_key_exists(
-            "edit",
-            $parentcontrols,
-        )) {
+        if (array_key_exists("edit", $parentcontrols)) {
             $merged = [];
             // We can't use splice because we are using associative arrays.
             // Step through the array and merge the arrays.
