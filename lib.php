@@ -36,7 +36,6 @@ use core\output\inplace_editable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class format_softcourse extends core_courseformat\base {
-
     /**
      * Returns true if this course format uses sections.
      *
@@ -123,10 +122,9 @@ class format_softcourse extends core_courseformat\base {
             [ 'id' => $course->id ],
         );
 
-        if (array_key_exists(
-                'sr',
-                $options,
-            ) && !is_null($options['sr'])) {
+        if (
+            array_key_exists('sr', $options) && !is_null($options['sr'])
+        ) {
             $sectionno = $options['sr'];
         } else if (is_object($section)) {
             $sectionno = $section->section;
@@ -134,12 +132,11 @@ class format_softcourse extends core_courseformat\base {
             $sectionno = $section;
         }
 
-        if ($this->uses_sections() && $sectionno !== null) {
+        if (
+            $this->uses_sections() && $sectionno !== null
+        ) {
             // The url includes the parameter to expand the section by default.
-            if (!array_key_exists(
-                'expanded',
-                $options,
-            )) {
+            if (!array_key_exists('expanded', $options)) {
                 $options['expanded'] = true;
             }
             if ($options['expanded']) {
@@ -244,10 +241,12 @@ class format_softcourse extends core_courseformat\base {
                 null,
                 PARAM_INT,
             );
-            if ($selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') && $PAGE->url->compare(
+            if (
+                $selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') && $PAGE->url->compare(
                     new moodle_url('/course/view.php'),
                     URL_MATCH_BASE,
-                )) {
+                )
+            ) {
                 $navigation->includesectionnum = $selectedsection;
             }
         }
@@ -292,14 +291,8 @@ class format_softcourse extends core_courseformat\base {
             $oldcourse = (array) $oldcourse;
             $options = $this->course_format_options();
             foreach ($options as $key => $unused) {
-                if (!array_key_exists(
-                    $key,
-                    $data,
-                )) {
-                    if (array_key_exists(
-                        $key,
-                        $oldcourse,
-                    )) {
+                if (!array_key_exists($key, $data)) {
+                    if (array_key_exists($key, $oldcourse)) {
                         $data[$key] = $oldcourse[$key];
                     }
                 }
@@ -592,10 +585,9 @@ class format_softcourse extends core_courseformat\base {
                 );
             }
 
-            if ($option['element_type'] === 'select' && !array_key_exists(
-                    $data[$key],
-                    $option['element_attributes'][0],
-                )) {
+            if (
+                $option['element_type'] === 'select' && !array_key_exists($data[$key], $option['element_attributes'][0])
+            ) {
                 // Value invalid for select element, skip.
                 unset($data[$key]);
             }
