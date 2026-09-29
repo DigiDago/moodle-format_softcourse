@@ -38,7 +38,6 @@ use stdClass;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class section extends section_base {
-
     /** @var course_format the course format */
     protected $format;
 
@@ -75,7 +74,7 @@ class section extends section_base {
 
         // Single pass: initialize section fields once, attach cminfo, and compute completion in the same loop.
         $hidesectionzero = (int) ($format->get_format_options()['hidesectionzero'] ?? 0) === 1;
-        $sectionFieldsSet = false;
+        $sectionfieldsset = false;
 
         $nbcomplete = 0;
         $nbcompletion = 0;
@@ -93,7 +92,7 @@ class section extends section_base {
             }
 
             // Initialize section-level data only once (avoid overwriting on subsequent iterations).
-            if (!$sectionFieldsSet) {
+            if (!$sectionfieldsset) {
                 $info = $modinfo->get_section_info($idsection);
                 $data->idsection = $idsection;
                 $data->name = $info->name ?? null;
@@ -102,7 +101,7 @@ class section extends section_base {
                 $data->visible = (int) ($info->visible ?? 0);
                 $data->available = (bool) ($info->available ?? false);
                 $data->skip = false;
-                $sectionFieldsSet = true;
+                $sectionfieldsset = true;
             }
 
             // Attach cminfo so templates and later logic can access full CM data.
@@ -148,8 +147,10 @@ class section extends section_base {
         }
 
         // If the section itself is hidden or not available, skip rendering it.
-        if ((isset($data->visible) && (int) $data->visible === 0) || (isset($data->uservisible) && $data->uservisible === false) ||
-            (isset($data->available) && $data->available === false)) {
+        if (
+            (isset($data->visible) && (int) $data->visible === 0) || (isset($data->uservisible) && $data->uservisible === false) ||
+            (isset($data->available) && $data->available === false)
+        ) {
             $data->skip = true;
             return $data;
         }
@@ -157,11 +158,11 @@ class section extends section_base {
         // If there is only one CM and it is hidden/unavailable on the course page, skip.
         if (isset($data->cmlist) && isset($data->cmlist->cms) && count($data->cmlist->cms) === 1) {
             $only = $data->cmlist->cms[0]->cminfo ?? null;
-            $onlyHiddenOrUnavailable = ($only && isset($only->visible) && (int) $only->visible === 0) ||
+            $onlyhiddenorunavailable = ($only && isset($only->visible) && (int) $only->visible === 0) ||
                 ($only && isset($only->visibleoncoursepage) && (int) $only->visibleoncoursepage === 0) ||
                 ($only && isset($only->uservisible) && $only->uservisible === false) ||
                 ($only && isset($only->available) && $only->available === false);
-            if ($onlyHiddenOrUnavailable) {
+            if ($onlyhiddenorunavailable) {
                 $data->skip = true;
                 return $data;
             }
@@ -199,10 +200,7 @@ class section extends section_base {
         );
 
         // Capability checks for section image edit/delete actions.
-        if (has_capability(
-            'moodle/course:update',
-            $context,
-        )) {
+        if (has_capability('moodle/course:update', $context)) {
             $data->update_img = get_string(
                 'update_img',
                 'format_softcourse',
@@ -266,29 +264,29 @@ class section extends section_base {
      *
      * @param object $cm The course module object, which may include or reference cm_info.
      * @param stdClass $data The data object containing details about activities and URLs.
-     * @param \completion_info $completioninfo The completion information object
+     * @param \completion_info $completioninfo The completion information object.
+     * @param int $nbcompletion The total number of completion items.
+     * @param int $nbcomplete The number of completed items.
+     * @return void
      */
-    function get_completion($cm, $data, $completioninfo, $nbcompletion, $nbcomplete) {
-
-        // Determine if the desired information is in $cm or $cm->cminfo
+    public function get_completion($cm, $data, $completioninfo, $nbcompletion, $nbcomplete) {
+        // Determine if the desired information is in $cm or $cm->cminfo.
         $cminfo = null;
         if (is_object($cm)) {
             if ($cm instanceof \cm_info) {
                 $cminfo = $cm;
-            } else if (property_exists(
-                    $cm,
-                    'cminfo',
-                ) && $cm->cminfo instanceof \cm_info) {
+            } else if (property_exists($cm, 'cminfo') && $cm->cminfo instanceof \cm_info) {
                 $cminfo = $cm->cminfo;
             }
         }
 
         if ($cminfo !== null) {
-
-            if ($cminfo->get_user_visible() &&
+            if (
+                $cminfo->get_user_visible() &&
                 (isset($cminfo->available) && $cminfo->available) &&
                 (($cminfo->uservisible && !$cminfo->is_stealth() && $cminfo->modname != 'label') || !empty($cm->url)) &&
-                $data->first_cm_url == '') {
+                $data->first_cm_url == ''
+            ) {
                 if ($cminfo->modname == 'resource') {
                     $cminfo->url->param(
                         'forceview',
@@ -311,8 +309,10 @@ class section extends section_base {
                     true,
                 )->completionstate;
 
-                if ($cminfo->deletioninprogress == 0 && $cminfo->visible == 1 && $cminfo->modname != "label" &&
-                    $cminfo->visibleoncoursepage == 1 && $cminfo->uservisible && $cminfo->available == true) {
+                if (
+                    $cminfo->deletioninprogress == 0 && $cminfo->visible == 1 && $cminfo->modname != "label" &&
+                    $cminfo->visibleoncoursepage == 1 && $cminfo->uservisible && $cminfo->available == true
+                ) {
                     $data->countactivities += 1;
                 }
             }
@@ -320,7 +320,7 @@ class section extends section_base {
         return [
             $data,
             $nbcompletion,
-            $nbcomplete
+            $nbcomplete,
         ];
     }
 }

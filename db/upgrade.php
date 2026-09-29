@@ -34,7 +34,6 @@ function xmldb_format_softcourse_upgrade($oldversion) {
     require_once($CFG->dirroot . '/course/format/softcourse/db/upgradelib.php');
 
     if ($oldversion < 2017020200) {
-
         // Remove 'numsections' option and hide or delete orphaned sections.
         format_softcourse_upgrade_remove_numsections();
 
@@ -48,7 +47,6 @@ function xmldb_format_softcourse_upgrade($oldversion) {
     // Put any upgrade step following this.
 
     if ($oldversion < 2018030900) {
-
         // During upgrade to Moodle 3.3 it could happen that general section (section 0) became 'invisible'.
         // It should always be visible.
         $DB->execute("UPDATE {course_sections} SET visible=1 WHERE visible=0 AND section=0 AND course IN
@@ -57,7 +55,6 @@ function xmldb_format_softcourse_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2018030900, 'format', 'softcourse');
     }
     if ($oldversion < 2019103100) {
-
         // Get all sections 0 of courses having softcourse course format.
         $sectionsrequest = 'SELECT s.id, s.course, s.summary
                             FROM {course_sections} s

@@ -34,12 +34,10 @@ use core_courseformat\output\local\content as content_base;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class content extends content_base {
-
     /**
      * @var bool Topic format has add section after each topic.
      *
      * The responsible for the buttons is core_courseformat\output\local\content\section.
      */
     protected $hasaddsection = true;
-
 }
