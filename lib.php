@@ -36,7 +36,6 @@ use core\output\inplace_editable;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class format_softcourse extends core_courseformat\base {
-
     /**
      * Returns true if this course format uses sections.
      *
@@ -123,10 +122,9 @@ class format_softcourse extends core_courseformat\base {
             [ 'id' => $course->id ],
         );
 
-        if (array_key_exists(
-                'sr',
-                $options,
-            ) && !is_null($options['sr'])) {
+        if (
+            array_key_exists('sr', $options) && !is_null($options['sr'])
+        ) {
             $sectionno = $options['sr'];
         } else if (is_object($section)) {
             $sectionno = $section->section;
@@ -136,10 +134,7 @@ class format_softcourse extends core_courseformat\base {
 
         if ($this->uses_sections() && $sectionno !== null) {
             // The url includes the parameter to expand the section by default.
-            if (!array_key_exists(
-                'expanded',
-                $options,
-            )) {
+            if (!array_key_exists('expanded', $options)) {
                 $options['expanded'] = true;
             }
             if ($options['expanded']) {
@@ -244,10 +239,12 @@ class format_softcourse extends core_courseformat\base {
                 null,
                 PARAM_INT,
             );
-            if ($selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') && $PAGE->url->compare(
+            if (
+                $selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') && $PAGE->url->compare(
                     new moodle_url('/course/view.php'),
                     URL_MATCH_BASE,
-                )) {
+                )
+            ) {
                 $navigation->includesectionnum = $selectedsection;
             }
         }
@@ -292,14 +289,8 @@ class format_softcourse extends core_courseformat\base {
             $oldcourse = (array) $oldcourse;
             $options = $this->course_format_options();
             foreach ($options as $key => $unused) {
-                if (!array_key_exists(
-                    $key,
-                    $data,
-                )) {
-                    if (array_key_exists(
-                        $key,
-                        $oldcourse,
-                    )) {
+                if (!array_key_exists($key, $data)) {
+                    if (array_key_exists($key, $oldcourse)) {
                         $data[$key] = $oldcourse[$key];
                     }
                 }
@@ -307,28 +298,32 @@ class format_softcourse extends core_courseformat\base {
         }
 
         // Managing of image in the introduction.
-        if (isset($data['introduction']) && $introductiondraftid = file_get_submitted_draft_itemid('introduction')) {
+        if (isset($data['introduction'])) {
             $context = context_course::instance($this->courseid);
-            $options = [ 'subdirs' => false ];
+            if (is_array($data['introduction'])) {
+                if ($introductiondraftid = file_get_submitted_draft_itemid('introduction')) {
+                    $options = ['subdirs' => false];
 
-            // Retrieve the image in the draftfilearea and put it into the introduction filearea of the plugin.
-            $data['introduction']['text'] = file_save_draft_area_files(
-                $introductiondraftid,
-                $context->id,
-                'format_softcourse',
-                'introduction',
-                time(),
-                null,
-                $data['introduction']['text'],
-            );
-            $data['introduction']['text'] = file_rewrite_pluginfile_urls(
-                $data['introduction']['text'],
-                'pluginfile.php',
-                $context->id,
-                'format_softcourse',
-                'introduction',
-                time(),
-            );
+                    // Retrieve the image in the draftfilearea and put it into the introduction filearea of the plugin.
+                    $data['introduction']['text'] = file_save_draft_area_files(
+                        $introductiondraftid,
+                        $context->id,
+                        'format_softcourse',
+                        'introduction',
+                        0,
+                        $options,
+                        $data['introduction']['text'],
+                    );
+                }
+                $data['introduction'] = file_rewrite_pluginfile_urls(
+                    $data['introduction']['text'],
+                    'pluginfile.php',
+                    $context->id,
+                    'format_softcourse',
+                    'introduction',
+                    0,
+                );
+            }
         }
 
         return $this->update_format_options($data);
@@ -561,41 +556,43 @@ class format_softcourse extends core_courseformat\base {
      * @param int|null $sectionid null if it is course format option
      * @return array array of options that have valid values
      */
-    protected function validate_format_options(array $rawdata, int $sectionid = null): array {
+    protected function validate_format_options(array $rawdata, ?int $sectionid = null): array {
         if (!$sectionid) {
             $allformatoptions = $this->course_format_options(true);
         } else {
             $allformatoptions = $this->section_format_options(true);
         }
-        $data = array_intersect_key(
-            $rawdata,
-            $allformatoptions,
-        );
+        $data = array_intersect_key($rawdata, $allformatoptions);
         foreach ($data as $key => $value) {
-            $option = $allformatoptions[$key] + [
-                    'type' => PARAM_RAW,
-                    'element_type' => null,
-                    'element_attributes' => [
-                        [
-                        ],
-                    ],
-                ];
-            if ($option['element_type'][0] == 'editor') {
-                $data[$key] = clean_param(
-                    $value['text'],
-                    $option['type'],
-                );
+            $option = $allformatoptions[$key] + ['type' => PARAM_RAW, 'element_type' => null, 'element_attributes' => [[]]];
+
+            if (substr($key, -7) == '_editor') {
+                // Suffix '_editor' indicates that the element is an editor.
+                $name = substr($key, 0, -7);
+                if (is_string($data[$key])) {
+                    $data[$name]            = clean_param($data[$key], $option['type'] ?? PARAM_RAW);
+                    $data[$name . 'format'] = 1;
+                } else {
+                    $data[$name]            = clean_param($data[$key]['text'], $option['type'] ?? PARAM_RAW);
+                    $data[$name . 'format'] = clean_param($data[$key]['format'], PARAM_INT);
+                }
+                unset($data[$key]);
+            } else if ($key == 'introduction') {
+                // TODO MDL-99999 rework this : introduction should be named 'introduction_editor' and not 'introduction'.
+                // Also fix data structure of introduction element.
+                if (is_string($data[$key])) {
+                    $data[$key] = clean_param($data[$key], $option['type'] ?? PARAM_RAW);
+                } else {
+                    $data[$key] = clean_param(
+                        $value['text'] ?? '',
+                        $option['type'] ?? PARAM_RAW,
+                    );
+                }
             } else {
-                $data[$key] = clean_param(
-                    $value,
-                    $option['type'],
-                );
+                $data[$key] = clean_param($data[$key], $option['type'] ?? PARAM_RAW);
             }
 
-            if ($option['element_type'] === 'select' && !array_key_exists(
-                    $data[$key],
-                    $option['element_attributes'][0],
-                )) {
+            if ($option['element_type'] === 'select' && !array_key_exists($data[$key], $option['element_attributes'][0])) {
                 // Value invalid for select element, skip.
                 unset($data[$key]);
             }
@@ -647,12 +644,13 @@ function format_softcourse_inplace_editable($itemtype, $itemid, $newvalue) {
  */
 function format_softcourse_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = []) {
     if ($filearea == 'sectionimage' || $filearea == 'introduction') {
+        $itemid = (int) array_shift($args);
         $relativepath = implode(
             '/',
             $args,
         );
         $contextid = $context->id;
-        $fullpath = "/$contextid/format_softcourse/$filearea/$relativepath";
+        $fullpath = "/$contextid/format_softcourse/$filearea/$itemid/$relativepath";
         $fs = get_file_storage();
         $file = $fs->get_file_by_hash(sha1($fullpath));
         if ($file) {
@@ -664,6 +662,24 @@ function format_softcourse_pluginfile($course, $cm, $context, $filearea, $args, 
                 $options,
             );
             return true;
+        }
+
+        // Fallback for introduction if itemid 0 not found, try to find any file in the area.
+        // This is for backward compatibility with courses where itemid was set to time().
+        if ($filearea == 'introduction' && $itemid === 0) {
+            $files = $fs->get_area_files($contextid, 'format_softcourse', 'introduction', false, 'itemid DESC', false);
+            foreach ($files as $f) {
+                if ($f->get_filename() === $relativepath) {
+                    send_stored_file(
+                        $f,
+                        null,
+                        0,
+                        $forcedownload,
+                        $options,
+                    );
+                    return true;
+                }
+            }
         }
     }
 }
