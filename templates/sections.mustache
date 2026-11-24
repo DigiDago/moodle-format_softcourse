@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_softcourse/templates/sections
+    @template format_softcourse/sections
 
     Block template for softcourse sections
 
@@ -28,21 +28,56 @@
     * initialsection object section
     * sections object of section
         * skip bool
+
+    Example context (json):
+    {
+        "initialsection": {
+            "id": 34,
+            "num": 0,
+            "skip": false,
+            "first_cm_url": "#",
+            "summary": {
+                "summarytext": "General section"
+            },
+            "countactivitiestooltip": "Count of activities",
+            "countactivities": 1
+        },
+        "sections": [
+            {
+                "id": 35,
+                "num": 1,
+                "skip": false,
+                "name": "Section 1",
+                "first_cm_url": "#",
+                "summary": {
+                    "summarytext": "Summary text!"
+                },
+                "countactivitiestooltip": "Count of activities",
+                "countactivities": 2,
+                "progression": "Progression",
+                "progression_percent": 50
+            }
+        ]
+    }
 }}
 
 <div id="softcourse-sections">
-    <ul id="softcourse-tabs">
+    <ul id="softcourse-tabs" role="tablist">
         {{$ initialsection }}
             {{#initialsection}}
                 {{^skip}}
+                <li role="tab" id="softcourse-section-{{ id }}" class="softcourse-section card position-relative">
                     {{> format_softcourse/section }}
+                </li>
                 {{/skip}}
             {{/initialsection}}
         {{/ initialsection}}
         {{$ sections }}
             {{# sections}}
                 {{^skip}}
+                <li role="tab" id="softcourse-section-{{ id }}" class="softcourse-section card position-relative">
                     {{> format_softcourse/section }}
+                </li>
                 {{/skip}}
             {{/sections}}
         {{/ sections}}
