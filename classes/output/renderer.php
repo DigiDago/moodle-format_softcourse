@@ -241,7 +241,8 @@ class renderer extends section_renderer {
                 $coursecontext,
             )
         ) {
-            if ($course->marker == $section->section) {  // Show the "light globe" on/off.
+            // Show the "light globe" on/off.
+            if ($course->marker == $section->section) {
                 $url->param(
                     'marker',
                     0,

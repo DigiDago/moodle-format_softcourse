@@ -20,6 +20,10 @@
  * @copyright  2019 Pimenko <contact@pimenko.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+/* eslint-disable camelcase */
+// The names below (get_config, swap_sections, process_sections, container_node...)
+// are required by the Moodle core YUI course format API and cannot be renamed.
 define(['jquery', 'core/ajax', 'theme_boost/bootstrap/tooltip'], function($, ajax) {
     /**
      * Updating of an image of a section.
@@ -112,10 +116,10 @@ define(['jquery', 'core/ajax', 'theme_boost/bootstrap/tooltip'], function($, aja
          */
         M.course.format.get_config = function() {
             return {
-                container_node : 'ul',
-                container_class : 'softcourse',
-                section_node : 'li',
-                section_class : 'section'
+                container_node: 'ul',
+                container_class: 'softcourse',
+                section_node: 'li',
+                section_class: 'section'
             };
         };
 
@@ -128,8 +132,8 @@ define(['jquery', 'core/ajax', 'theme_boost/bootstrap/tooltip'], function($, aja
          */
         M.course.format.swap_sections = function(Y, node1, node2) {
             let CSS = {
-                COURSECONTENT : 'course-content',
-                SECTIONADDMENUS : 'section_add_menus'
+                COURSECONTENT: 'course-content',
+                SECTIONADDMENUS: 'section_add_menus'
             };
 
             let sectionlist = Y.Node.all('.' + CSS.COURSECONTENT + ' ' + M.course.format.get_section_selector(Y));
@@ -148,10 +152,10 @@ define(['jquery', 'core/ajax', 'theme_boost/bootstrap/tooltip'], function($, aja
          */
         M.course.format.process_sections = function(Y, sectionlist, response, sectionfrom, sectionto) {
             let CSS = {
-                SECTIONNAME : 'sectionname'
+                SECTIONNAME: 'sectionname'
             },
             SELECTORS = {
-                SECTIONLEFTSIDE : '.left .section-handle .icon'
+                SECTIONLEFTSIDE: '.left .section-handle .icon'
             };
 
             if (response.action === 'move') {

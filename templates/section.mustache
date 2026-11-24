@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_softcourse/templates/section
+    @template format_softcourse/section
 
     Block template for softcourse section
 
@@ -24,7 +24,7 @@
     Classes required for JS:
     * none
 
-    Context variables required for this template:
+    Example context (json):
     {
         "num": 3,
         "id": 35,
@@ -85,7 +85,6 @@
     }
 }}
 
-<li role="tab" id="softcourse-section-{{ id }}" class="softcourse-section card position-relative">
     <a href="{{#first_cm_url}}{{ first_cm_url }}{{/first_cm_url}}" class="stretched-link"></a>
     <div class="softcourse-section-img {{#urlimg}} not-empty with_gradient{{/urlimg}}"
         {{#urlimg}} style="background-image: url({{ urlimg }})" {{/urlimg}}>
@@ -118,4 +117,3 @@
             {{/progression}}
         </div>
     </div>
-</li>
