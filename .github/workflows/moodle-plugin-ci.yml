@@ -1,0 +1,199 @@
+name: Moodle Plugin CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - dev
+      - 'MOODLE_*_DEV'
+  pull_request:
+    branches:
+      - main
+      - master
+      - dev
+      - 'MOODLE_*_DEV'
+      - 'MOODLE_*_STABLE'
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      moodle-branches: ${{ steps.set-matrix.outputs.moodle-branches }}
+      run-tests: ${{ steps.set-matrix.outputs.run-tests }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v5
+        with:
+          path: plugin
+
+      - id: set-matrix
+        env:
+          BRANCH: ${{ github.base_ref || github.ref_name }}
+        shell: bash
+        run: |
+          echo "Target branch detected: $BRANCH"
+
+          SUPPORTED=$(sed -nE 's/.*\$plugin->supported[[:space:]]*=[[:space:]]*\[([0-9]+),[[:space:]]*([0-9]+)\].*/\1 \2/p' plugin/version.php)
+          if [[ -z "$SUPPORTED" ]]; then
+            # No $plugin->supported: the Moodle versions are chosen from the branch name only.
+            echo "No \$plugin->supported in version.php: versions chosen from the branch name."
+            SUPPORTED="405 503"
+          fi
+          read -r MIN_SUPPORTED MAX_SUPPORTED <<< "$SUPPORTED"
+
+          DEFAULT_VERSIONS=(405 500 501 502 503)
+          MOODLE_BRANCHES=()
+
+          add_supported_version() {
+            local version="$1"
+            if (( version >= MIN_SUPPORTED && version <= MAX_SUPPORTED )); then
+              MOODLE_BRANCHES+=("MOODLE_${version}_STABLE")
+            fi
+          }
+
+          if [[ "$BRANCH" =~ ^MOODLE_([0-9]{3})_STABLE$ ]]; then
+            add_supported_version "${BASH_REMATCH[1]}"
+          elif [[ "$BRANCH" =~ ^MOODLE_([0-9]{3})_DEV$ ]]; then
+            add_supported_version "${BASH_REMATCH[1]}"
+          elif [[ "$BRANCH" =~ ^MOODLE_([0-9])0X_DEV$ ]]; then
+            MAJOR="${BASH_REMATCH[1]}"
+            for VERSION in "${DEFAULT_VERSIONS[@]}"; do
+              if [[ "$VERSION" == "$MAJOR"* ]]; then
+                add_supported_version "$VERSION"
+              fi
+            done
+          else
+            for VERSION in "${DEFAULT_VERSIONS[@]}"; do
+              add_supported_version "$VERSION"
+            done
+          fi
+
+          if ((${#MOODLE_BRANCHES[@]} == 0)); then
+            echo 'moodle-branches=["MOODLE_405_STABLE"]' >> "$GITHUB_OUTPUT"
+            echo "run-tests=false" >> "$GITHUB_OUTPUT"
+          else
+            printf -v JSON ',"%s"' "${MOODLE_BRANCHES[@]}"
+            JSON="[${JSON:1}]"
+            echo "moodle-branches=$JSON" >> "$GITHUB_OUTPUT"
+            echo "run-tests=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  test:
+    needs: setup
+    if: needs.setup.outputs.run-tests == 'true'
+    name: Test for ${{ matrix.moodle-branch }} (${{ matrix.database }})
+    runs-on: ubuntu-22.04
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: 'postgres'
+          POSTGRES_HOST_AUTH_METHOD: 'trust'
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 3
+      mariadb:
+        image: mariadb:11.4
+        env:
+          MYSQL_USER: 'root'
+          MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+          MYSQL_CHARACTER_SET_SERVER: 'utf8mb4'
+          MYSQL_COLLATION_SERVER: 'utf8mb4_unicode_ci'
+        ports:
+          - 3306:3306
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval 10s --health-timeout 5s --health-retries 3
+
+    strategy:
+      fail-fast: false
+      matrix:
+        moodle-branch: ${{ fromJson(needs.setup.outputs.moodle-branches) }}
+        database: [pgsql, mariadb]
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v5
+        with:
+          path: plugin
+
+      - name: Determine PHP Version
+        id: php-version
+        env:
+          MOODLE_BRANCH: ${{ matrix.moodle-branch }}
+        shell: bash
+        run: |
+          case "$MOODLE_BRANCH" in
+            MOODLE_405*) PHP="8.1" ;;
+            MOODLE_50[0-1]*) PHP="8.2" ;;
+            MOODLE_50[2-3]*) PHP="8.3" ;;
+            *) echo "::error::Unsupported Moodle branch: $MOODLE_BRANCH"; exit 1 ;;
+          esac
+          echo "php=$PHP" >> "$GITHUB_OUTPUT"
+          echo "Selected PHP $PHP for $MOODLE_BRANCH"
+
+      - name: Setup PHP ${{ steps.php-version.outputs.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ steps.php-version.outputs.php }}
+          ini-values: max_input_vars=5000
+          coverage: none
+
+      - name: Initialise moodle-plugin-ci
+        run: |
+          composer create-project -n --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
+          echo $(cd ci/bin; pwd) >> $GITHUB_PATH
+          echo $(cd ci/vendor/bin; pwd) >> $GITHUB_PATH
+          sudo locale-gen en_AU.UTF-8
+          echo "NVM_DIR=$HOME/.nvm" >> $GITHUB_ENV
+
+      - name: Install moodle-plugin-ci
+        run: moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1
+        env:
+          DB: ${{ matrix.database }}
+          MOODLE_BRANCH: ${{ matrix.moodle-branch }}
+
+      - name: PHP Lint
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phplint
+
+      - name: PHP Mess Detector
+        continue-on-error: true
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpmd
+
+      - name: Moodle Code Checker
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci codechecker
+
+      - name: Moodle PHPDoc Checker
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpdoc
+
+      - name: Validating
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci validate
+
+      - name: Check upgrade savepoints
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci savepoints
+
+      - name: Mustache Lint
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci mustache
+
+      - name: Grunt
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci grunt --max-lint-warnings 0
+
+      - name: PHPUnit tests
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci phpunit --fail-on-warning
+
+      - name: Behat tests
+        if: ${{ !cancelled() }}
+        run: moodle-plugin-ci behat --tags "@format_softcourse"
+
+      - name: Mark cancelled jobs as failed
+        if: ${{ cancelled() }}
+        run: exit 1
