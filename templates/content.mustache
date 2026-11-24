@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template format_softcourse/templates/content
+    @template format_softcourse/content
 
     Block template for softcourse content
 
@@ -31,6 +31,12 @@
     * disabledStart string
     * initialsection object section
     * sections object of section
+
+    Example context (json):
+    {
+    "uniqid": "softcourse",
+    "sectionreturn": 0
+    }
 }}
 
 <div id="{{uniqid}}-course-format" class="card softcourse-introduction">
@@ -54,8 +60,8 @@
         component.init('{{uniqid}}-course-format', {}, {{sectionreturn}});
     });
 
-    document.body.addEventListener('click', function (event) {
-        // filter out clicks on any other elements
+    document.body.addEventListener('click', function(event) {
+        // Filter out clicks on any other elements.
         if (event.target.nodeName == 'A' && event.target.getAttribute('aria-disabled') == 'true') {
             event.preventDefault();
         }
@@ -65,19 +71,19 @@
     // This value will be use for backup text.
     var fulltext = [];
     texttruncate('softcourse-section-summary');
-
+    /* eslint-disable max-depth */
     function texttruncate(id) {
         var selector = document.getElementsByClassName(id);
-        if (selector != null && selector.length > 0) {
+        if (selector !== null && selector.length > 0) {
             var truncate = false;
 
             for (var i = 0; i < selector.length; i++) {
                 var el = selector[i];
-                if (el != null && el.innerHTML.length > 0) {
+                if (el !== null && el.innerHTML.length > 0) {
                     // Backup text.
                     var wordArray = '';
                     if (fulltext[i]) {
-                        if(el.innerHTML != fulltext[i].join(' ')) {
+                        if (el.innerHTML !== fulltext[i].join(' ')) {
                             el.innerHTML = fulltext[i].join(' ');
                         }
                         wordArray = fulltext[i].slice();
@@ -86,15 +92,13 @@
                         // Use slic() to prevent copy reference.
                         fulltext[i] = wordArray.slice();
                     }
-                    <!--    var p = container.querySelector('p');-->
-                    <!--    var divh = container.clientHeight;-->
-                    <!--    while (p.offsetHeight > divh)-->
-                    while(el.querySelector('div').offsetHeight > el.clientHeight) {
+
+                    while (el.querySelector('div').offsetHeight > el.clientHeight) {
                         wordArray.pop();
                         el.innerHTML = wordArray.join(' ');
                         truncate = true;
-                        if(truncate) {
-                            if(el.querySelector('div').lastChild.tagName) {
+                        if (truncate) {
+                            if (el.querySelector('div').lastChild.tagName) {
                             el.querySelector('div').lastChild.innerHTML += '...';
                             } else {
                             el.querySelector('div').innerHTML += '...';
@@ -105,9 +109,9 @@
             }
         }
     }
+    /* eslint-enable max-depth */
 
-
-    require(['jquery'], function ($) {
+    require(['jquery'], function($) {
         var rtime;
         var timeout = false;
         var delta = 200;

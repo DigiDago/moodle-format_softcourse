@@ -193,7 +193,7 @@ class section extends section_base {
                 $sectionnum = get_fast_modinfo($course->id)->get_section_info_by_id($sectionid);
                 $sectionmods = $sectionnum->get_sequence_cm_infos();
                 foreach ($sectionmods as $subsecmodule) {
-                    // Assuming $module, $data, $completioninfo, $nbcompletion, $nbcomplete are already defined.
+                    // Add the completion of each module of the subsection.
                     [
                         $data,
                         $nbcompletion,
@@ -207,7 +207,7 @@ class section extends section_base {
                     );
                 }
             } else {
-                // Assuming $cm, $data, $completioninfo, $nbcompletion, $nbcomplete are already defined.
+                // Add the completion of this course module.
                 [
                     $data,
                     $nbcompletion,
