@@ -58,6 +58,15 @@ class format_softcourse extends core_courseformat\base {
     }
 
     /**
+     * Determines whether the course format supports linear navigation.
+     *
+     * @return bool True if linear navigation is supported, false otherwise.
+     */
+    public static function uses_linear_navigation(): bool {
+        return true;
+    }
+
+    /**
      * Returns true if this course format is compatible with content components.
      *
      * Using components means the content elements can watch the frontend course state and
@@ -116,6 +125,20 @@ class format_softcourse extends core_courseformat\base {
      * @return null|moodle_url
      */
     public function get_view_url($section, $options = []) {
+        // Linear navigation (Moodle 5.3+) asks for a section URL with 'navigation' => true.
+        // Soft Course has no section page: go to the course page, scrolled to the section card.
+        global $PAGE;
+        if (!empty($options['navigation']) && $section !== null && !$PAGE->user_is_editing()) {
+            $url = new moodle_url('/course/view.php', ['id' => $this->get_courseid()]);
+            if (!is_object($section) || !isset($section->id)) {
+                $section = get_fast_modinfo($this->get_courseid())->get_section_info($section);
+            }
+            if ($section) {
+                $url->set_anchor('softcourse-section-' . $section->id);
+            }
+            return $url;
+        }
+
         $course = $this->get_course();
         $url = new moodle_url(
             '/course/view.php',
