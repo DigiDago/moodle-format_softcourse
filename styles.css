@@ -390,3 +390,18 @@
 #page-course-view-softcourse.editing ul.softcourse li.section .summary {
     padding: 1rem;
 }
+
+/* Section card targeted by linear navigation (Previous / Next). */
+.softcourse-section:target {
+    scroll-margin-top: 80px;
+    animation: softcourse-section-highlight 3s ease-out forwards;
+}
+
+@keyframes softcourse-section-highlight {
+    0%, 30% {
+        box-shadow: 0 0 0 3px var(--bs-primary, #0f6cbf);
+    }
+    100% {
+        box-shadow: 0 0 0 3px transparent;
+    }
+}
